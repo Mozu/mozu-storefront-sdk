@@ -30,6 +30,6 @@
     "chai-as-promised": "~3.3.1",
     "grunt-jsdoc": "~0.5.1"
   },
-  "main": "./dist/mozu-sdk.min"
+  "main": "./dist/mozu-javascript-sdk.min"
 }
 

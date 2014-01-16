@@ -35,3 +35,4 @@ This should work on all platforms.
 *   Real NodeJS support (AJAX replaced with HttpRequest, tests written with Nock)
 *   Support for Admin services
 *   Full method documentation
+*   Updated Getting Started guide

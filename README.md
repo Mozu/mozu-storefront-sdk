@@ -4,7 +4,7 @@ The Mozu JavaScript SDK provides a JavaScript API for connecting to Mozu web ser
 
 ## Development requirements
 
-*   NodeJS > 0.8
+*   NodeJS >= 0.8
 *   GruntJS > 0.4
 *   `grunt-cli` installed globally
 
@@ -12,9 +12,17 @@ The Mozu JavaScript SDK provides a JavaScript API for connecting to Mozu web ser
 
 *   Native JSON or json2.js. In the Core theme this library is provided by the Mozu-Require module loader.
 
+## NodeJS requirements
+
+*   NodeJS >= 0.10
+*   [microevent](https://npmjs.org/package/microevent)
+*   [uritemplate](https://npmjs.org/package/uritemplate)
+*   [when](https://npmjs.org/package/when)
+*   [xmlhttprequest](https://npmjs.org/package/xmlhttprequest)
+
 ## Build
 
-Though it's not a working Node library yet, it uses NPM for packaging and testing.
+Uses NPM for packaging and testing.
 
     $ npm install -g grunt-cli
     $ npm install
@@ -85,6 +93,6 @@ define(['mozu-javascript-sdk/dist/mozu-javascript-sdk.min'], function(Mozu) {
 
 ## Planned
 
-*   Real NodeJS support (AJAX replaced with HttpRequest, tests written with Nock)
+*   Real NodeJS testing (Nock)
 *   Support for Admin services
 *   Full method documentation

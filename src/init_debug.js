@@ -17,4 +17,6 @@ _init.ApiObject.prototype.inspect = function () {
     return JSON.stringify(this.data, true, 2);
 };
 
+_init.ApiContext.__debug__ = true;
+
 module.exports = _init;

@@ -11,18 +11,14 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        toExport: 'Mozu',
-        exportAs: 'Mozu',
-
         releasetemp: '<%= pkg.name %>.tmp',
 
         banner: grunt.file.read("src/banner.tpl"),
-        
-        bower: {
-            install: {
-                cleanup: true
-            }
-        },
+
+        toExport: "MozuSDK",
+
+        testPlatform: './tests/sdk.js',
+       
         clean: {
             dist: {
                 src: ['dist']
@@ -31,24 +27,38 @@ module.exports = function (grunt) {
                 src: ['<%= releasetemp %>']
             },
             test: {
-                src: ['<%= concat.test.dest %>']
+                src: ['<%= testPlatform %>']
+            }
+        },
+        browserify: {
+            debug: {
+                files: {
+                    '<%= testPlatform %>': ['./src/init_debug.js']
+                },
+                options: {
+                    debug: true,
+                    standalone: "<%= toExport %>",
+                    bare: true,
+                    exclude: "xmlhttprequest"
+                }
+            },
+            dist: {
+                files: {
+                    '<%= releasetemp %>': ['./src/init.js']
+                },
+                options: {
+                    standalone: '<%= toExport %>',
+                    bare: true,
+                    exclude: "xmlhttprequest"
+                }
             }
         },
         concat: {
             options: {
-                banner: '<%= banner %>' + grunt.file.read('src/wrap_header.tpl'),
-                footer: grunt.file.read('src/wrap_footer.tpl')
-            },
-            dist: {
-                src: allScripts,
-                dest: '<%= releasetemp %>'
-            },
-            test: {
-                src: allScripts.concat('src/init_debug.js'),
-                dest: './tests/sdk.js'
+                banner: '<%= banner %>'
             },
             debug: {
-                src: allScripts.concat('src/init_debug.js'),
+                src: '<%= testPlatform %>',
                 dest: './dist/<%= pkg.name %>.debug.js'
             }
         },
@@ -57,7 +67,7 @@ module.exports = function (grunt) {
                 options: {
                     banner: '<%= banner %>'
                 },
-                src: '<%= concat.dist.dest %>',
+                src: '<%= releasetemp %>',
                 dest: '<%= pkg.main %>.js'
             }
         },
@@ -96,16 +106,16 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-jsdoc');
+    grunt.loadNpmTasks('grunt-browserify');
 
 
-    grunt.registerTask('test', ['concat:test', 'connect:server', 'mocha', 'clean:test']);
-    grunt.registerTask('dist', ['clean:dist', 'concat:dist', 'concat:debug', 'uglify', 'clean:tmp']);
-    grunt.registerTask('testbrowser', ['concat:test', 'connect:browser']);
-    grunt.registerTask('default', ['bower', 'test', 'dist']);
+    grunt.registerTask('test', ['browserify:debug', 'connect:server', 'mocha']);
+    grunt.registerTask('dist', ['clean:dist', 'browserify:dist', 'concat:debug', 'uglify', 'clean:tmp']);
+    grunt.registerTask('testbrowser', ['browserify:debug', 'connect:browser']);
+    grunt.registerTask('default', ['test', 'dist', 'clean:test']);
 
 };

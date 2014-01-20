@@ -5,6 +5,15 @@
 
     var MicroEvent = require('microevent');
     var isNode = typeof process === "object" && process.title === "node";
+    var XHR;
+    var getXHR = isNode ? function() {
+        XHR = XHR || require('xmlhttprequest').XMLHttpRequest;
+        return new XHR();
+    } : (window.XMLHttpRequest ? function() {
+        return new XMLHttpRequest();
+    } : function() {
+        return new window.ActiveXObject("Microsoft.XMLHTTP");
+    });
     var utils = {
         extend: function () {
             var src, copy, name, options,
@@ -135,16 +144,10 @@
             };
         }()),
 
-        request: isNode ? function(method, url, headers, data, success, failure, iframePath) {
-            console.log(this, arguments, "request");
-        } : function (method, url, headers, data, success, failure, iframePath) {
+        request: function (method, url, headers, data, success, failure, iframePath) {
             if (typeof data !== "string") data = JSON.stringify(data);
-            var xhr;
-            if (iframePath) {
-                xhr = new IframeXHR(iframePath);
-            } else {
-                xhr = new (window.XMLHttpRequest ? window.XMLHttpRequest : window.ActiveXObject("Microsoft.XMLHTTP"))();
-            }
+            
+            var xhr = iframePath ? (new IframeXHR(iframePath)) : getXHR();
 
             var timeout = setTimeout(function () {
                 clearTimeout(timeout);

@@ -1,5 +1,7 @@
 ﻿describe('Mozu SDK', function () {
 
+    var Mozu = MozuSDK;
+
     // current service URLs
     var ServiceUrls = {
         BadUrl: 'A_BAD_URL',
@@ -35,7 +37,7 @@
                     product: {
                         productCode: 'hai'
                     }
-                } 
+                }
             ],
             total: 200
         },
@@ -97,7 +99,9 @@
             expect(Mozu.Tenant(1)).to.be.an.instanceof(Mozu.ApiContext);
             expect(Mozu.Site(22)).to.be.an.instanceof(Mozu.ApiContext);
             expect(Mozu.MasterCatalog(22)).to.be.an.instanceof(Mozu.ApiContext);
-        });        it("should expose a Store function that can set all these properties in an object-initializer style", function () {
+        });
+
+        it("should expose a Store function that can set all these properties in an object-initializer style", function () {
             expect(Mozu.Store({
                 tenant: 1,
                 site: 22,
@@ -184,16 +188,16 @@
             var req;
 
             before(function () {
-                sinon.spy(Mozu.Utils, 'ajax');
+                sinon.spy(Mozu.Utils, 'request');
             });
 
             after(function () {
-                Mozu.Utils.ajax.restore();
+                Mozu.Utils.request.restore();
             });
 
-            it("should run an ajax request", function () {
+            it("should run an http request", function () {
                 req = api.request('GET', ServiceUrls.productService);
-                expect(Mozu.Utils.ajax).to.have.been.calledOnce;
+                expect(Mozu.Utils.request).to.have.been.calledOnce;
             });
 
             it("should return a Promises/A compliant interface", function () {
@@ -219,7 +223,9 @@
                 }
                 api.on('request', onRequest);
                 api.request("GET", requestConf);
-            });            it("should fail a promise when requests fail", function () {
+            });
+
+            it("should fail a promise when requests fail", function () {
                 return expect(api.request('GET', ServiceUrls.BadUrl, {})).to.be.rejected;
             });
 
@@ -242,13 +248,13 @@
         describe("has an api.get method, that", function () {
 
             beforeEach(function () {
-                sinon.spy(Mozu.Utils, "ajax");
+                sinon.spy(Mozu.Utils, "request");
                 sinon.spy(Mozu.ApiReference, "getRequestConfig");
 
             });
 
             afterEach(function () {
-                Mozu.Utils.ajax.restore();
+                Mozu.Utils.request.restore();
                 Mozu.ApiReference.getRequestConfig.restore();
             });
 
@@ -273,7 +279,7 @@
                 var promise = api.get('product', { productCode: Fixtures.SampleProductCode });
 
                 expect(Mozu.ApiReference.getRequestConfig).to.have.been.calledWith("get", "product", { productCode: Fixtures.SampleProductCode }, api.context);
-                expect(Mozu.Utils.ajax).to.have.been.calledWithMatch(/GET/, new RegExp(Fixtures.SampleProductUrl + ".*"));
+                expect(Mozu.Utils.request).to.have.been.calledWithMatch(/GET/, new RegExp(Fixtures.SampleProductUrl + ".*"));
 
                 return Mozu.Utils.when.all([
                     expect(promise).to.be.fulfilled,
@@ -291,7 +297,7 @@
                 var promise = api.get("product", Fixtures.SampleProductCode);
 
                 expect(Mozu.ApiReference.getRequestConfig).to.have.been.calledWith("get", "product", Fixtures.SampleProductCode, api.context);
-                expect(Mozu.Utils.ajax).to.have.been.calledWithMatch(/GET/, new RegExp(ServiceUrls.productService + Fixtures.SampleProductCode + ".*"));
+                expect(Mozu.Utils.request).to.have.been.calledWithMatch(/GET/, new RegExp(ServiceUrls.productService + Fixtures.SampleProductCode + ".*"));
 
                 return Mozu.Utils.when.all([
                       expect(promise).to.be.fulfilled,
@@ -308,7 +314,7 @@
                 var promise = api.get("cart");
 
                 expect(Mozu.ApiReference.getRequestConfig).to.have.been.calledWith("get", "cart");
-                expect(Mozu.Utils.ajax).to.have.been.calledWithMatch(/GET/, new RegExp(ServiceUrls.cartService + "current"));
+                expect(Mozu.Utils.request).to.have.been.calledWithMatch(/GET/, new RegExp(ServiceUrls.cartService + "current"));
 
                 return Mozu.Utils.when.all([
                       expect(promise).to.be.fulfilled,
@@ -383,11 +389,11 @@
         describe("has a 'createSync' method that", function () {
             var syncProd;
             before(function () {
-                sinon.spy(Mozu.Utils, 'ajax');
+                sinon.spy(Mozu.Utils, 'request');
                 sinon.spy(Mozu.ApiReference, "getRequestConfig");
             });
             after(function () {
-                Mozu.Utils.ajax.restore();
+                Mozu.Utils.request.restore();
                 Mozu.ApiReference.getRequestConfig.restore();
             });
 
@@ -396,13 +402,13 @@
                 expect(api.createSync('product', {})).to.be.an.instanceof(Mozu.ApiObject).with.a.property('type').that.equal('product');
                 expect(syncProd = api.createSync('product', Fixtures.SampleProduct)).to.have.a.property('data').that.deep.equal(Fixtures.SampleProduct);
                 expect(api.createSync('cart')).to.have.a.property('unsynced').that.is.true;
-                expect(Mozu.Utils.ajax).not.to.have.been.called;
+                expect(Mozu.Utils.request).not.to.have.been.called;
             });
 
             it("produces sync objects that act just like asynchronously returned ones", function () {
                 var promise = syncProd.get();
                 expect(Mozu.ApiReference.getRequestConfig).to.have.been.calledWith("get", "product", syncProd.data, api.context);
-                expect(Mozu.Utils.ajax).to.have.been.calledWithMatch(/GET/, new RegExp(Fixtures.SampleProductUrl + ".*"));
+                expect(Mozu.Utils.request).to.have.been.calledWithMatch(/GET/, new RegExp(Fixtures.SampleProductUrl + ".*"));
                 return expect(promise).to.be.fulfilled;
             });
         });
@@ -417,11 +423,11 @@
         describe("fulfills its promises with an ApiObject object, that", function () {
 
             beforeEach(function () {
-                sinon.spy(Mozu.Utils, "ajax");
+                sinon.spy(Mozu.Utils, "request");
             });
 
             afterEach(function () {
-                Mozu.Utils.ajax.restore();
+                Mozu.Utils.request.restore();
             });
 
             it("should contain the original json at a 'data' property", function () {

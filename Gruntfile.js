@@ -39,7 +39,7 @@ module.exports = function (grunt) {
                     debug: true,
                     standalone: "<%= toExport %>",
                     bare: true,
-                    exclude: "xmlhttprequest"
+                    external: ["xmlhttprequest"]
                 }
             },
             dist: {
@@ -49,7 +49,7 @@ module.exports = function (grunt) {
                 options: {
                     standalone: '<%= toExport %>',
                     bare: true,
-                    exclude: "xmlhttprequest"
+                    external: ["xmlhttprequest"]
                 }
             }
         },

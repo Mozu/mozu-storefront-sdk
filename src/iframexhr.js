@@ -1,4 +1,5 @@
 ﻿// BEGIN IFRAMEXHR
+var utils = require('./utils');
 var IframeXHR = (function (window, document, undefined) {
 
     var hasPostMessage = window.postMessage && navigator.userAgent.indexOf("Opera") === -1,

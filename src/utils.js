@@ -6,6 +6,7 @@
     var MicroEvent = require('microevent');
     var isNode = typeof process === "object" && process.title === "node";
     var XHR;
+    var IframeXHR;
     var getXHR = isNode ? function() {
         XHR = XHR || require('xmlhttprequest').XMLHttpRequest;
         return new XHR();
@@ -147,7 +148,13 @@
         request: function (method, url, headers, data, success, failure, iframePath) {
             if (typeof data !== "string") data = JSON.stringify(data);
             
-            var xhr = iframePath ? (new IframeXHR(iframePath)) : getXHR();
+            var xhr;
+            if (iframePath) {
+                IframeXHR = IframeXHR || require('./iframexhr');
+                xhr = new IframeXHR(iframePath);
+            } else {
+                xhr = getXHR();
+            }
 
             var timeout = setTimeout(function () {
                 clearTimeout(timeout);

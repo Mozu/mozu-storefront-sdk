@@ -24,6 +24,7 @@ module.exports = (function (window, document, undefined) {
                 var self = this;
                 this.messageListener = function (e) {
                     if (!e) e = window.event;
+                    if (e && e.data === "process-tick") return; // browserify clogs up this channel
                     if (!validateOrigin(self, e.origin)) throw new Error("Origin " + e.origin + " does not match required origin " + self.frameOrigin);
                     if (e.data === "ready") return self.postMessage();
                     self.update(e.data);

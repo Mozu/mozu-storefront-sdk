@@ -1,0 +1,488 @@
+{
+  "products": {
+    "template": "{+productService}{?_*}",
+    "shortcutParam": "filter",
+    "defaultParams": {
+      "startIndex": 0,
+      "pageSize": 15
+    },
+    "collectionOf": "product"
+  },
+  "categories": {
+    "template": "{+categoryService}{?_*}",
+    "shortcutParam": "filter",
+    "defaultParams": {
+      "startIndex": 0,
+      "pageSize": 15
+    },
+    "collectionOf": "category"
+  },
+  "category": {
+    "template": "{+categoryService}{id}(?allowInactive}",
+    "shortcutParam": "Id",
+    "defaultParams": {
+      "allowInactive": false
+    }
+  },
+  "search": {
+    "template": "{+searchService}search{?query,filter,facetTemplate,facetTemplateSubset,facet,facetFieldRangeQuery,facetHierPrefix,facetHierValue,facetHierDepth,facetStartIndex,facetPageSize,facetSettings,facetValueFilter,sortBy,pageSize,PageSize,startIndex,StartIndex}",
+    "shortcutParam": "query",
+    "defaultParams": {
+      "startIndex": 0,
+      "query": "*:*",
+      "pageSize": 15
+    },
+    "collectionOf": "product"
+  },
+  "customers": {
+    "collectionOf": "customer"
+  },
+  "orders": {
+    "template": "{+orderService}{?_*}",
+    "defaultParams": {
+      "startIndex": 0,
+      "pageSize": 5
+    },
+    "collectionOf": "order"
+  },
+  "product": {
+    "get": {
+      "template": "{+productService}{productCode}?{&allowInactive*}",
+      "shortcutParam": "productCode",
+      "defaultParams": {
+        "allowInactive": false
+      }
+    },
+    "configure": {
+      "verb": "POST",
+      "template": "{+productService}{productCode}/configure{?includeOptionDetails}",
+      "defaultParams": {
+        "includeOptionDetails": true
+      },
+      "includeSelf": true
+    },
+    "add-to-cart": {
+      "verb": "POST",
+      "includeSelf": {
+        "asProperty": "product"
+      },
+      "overridePostData": [
+        "product",
+        "quantity",
+        "fulfillmentLocationCode",
+        "fulfillmentMethod"
+      ],
+      "shortcutParam": "quantity",
+      "returnType": "cartitem",
+      "template": "{+cartService}current/items/"
+    },
+    "get-inventory": {
+      "template": "{+productService}{productCode}/locationinventory{?locationCodes}",
+      "includeSelf": true,
+      "shortcutParam": "locationcodes",
+      "returnType": "string"
+    }
+  },
+  "location": {
+    "get": {
+      "template": "{+locationService}locationUsageTypes/SP/locations/{code}",
+      "shortcutParam": "code"
+    }
+  },
+  "locations": {
+    "defaultParams": {
+      "pageSize": 15
+    },
+    "collectionOf": "location",
+    "get": {
+      "template": "{+locationService}locationUsageTypes/SP/locations/{?startIndex,sortBy,pageSize,filter}"
+    },
+    "get-by-lat-long": {
+      "template": "{+locationService}locationUsageTypes/SP/locations/?filter=geo near({latitude},{longitude}){&startIndex,sortBy,pageSize}"
+    }
+  },
+  "cart": {
+    "get": "{+cartService}current",
+    "get-summary": "{+cartService}summary",
+    "add-product": {
+      "verb": "POST",
+      "returnType": "cartitem",
+      "template": "{+cartService}current/items/"
+    },
+    "empty": {
+      "verb": "DELETE",
+      "template": "{+cartService}current/items/"
+    },
+    "checkout": {
+      "verb": "POST",
+      "template": "{+orderService}?cartId={id}",
+      "returnType": "order",
+      "noBody": true,
+      "includeSelf": true
+    }
+  },
+  "cartitem": {
+    "defaults": {
+      "template": "{+cartService}current/items/{id}",
+      "shortcutParam": "id"
+    },
+    "update-quantity": {
+      "verb": "PUT",
+      "template": "{+cartService}current/items{/id,quantity}",
+      "shortcutParam": "quantity",
+      "includeSelf": true,
+      "noBody": true
+    }
+  },
+  "customer": {
+    "template": "{+customerService}{id}",
+    "shortcutParam": "id",
+    "includeSelf": true,
+    "create": {
+      "verb": "POST",
+      "template": "{+customerService}add-account-and-login",
+      "returnType": "login"
+    },
+    "create-storefront": {
+      "useIframeTransport": "{+storefrontUserService}../../receiver",
+      "verb": "POST",
+      "template": "{+storefrontUserService}create",
+      "returnType": "login"
+    },
+    "login": {
+      "useIframeTransport": "{+customerService}../../receiver",
+      "verb": "POST",
+      "template": "{+customerService}../authtickets",
+      "returnType": "login"
+    },
+    "login-storefront": {
+      "useIframeTransport": "{+storefrontUserService}../../receiver",
+      "verb": "POST",
+      "template": "{+storefrontUserService}login",
+      "returnType": "login"
+    },
+    "update": {
+      "verb": "PUT",
+      "template": "{+customerService}{id}",
+      "includeSelf": true
+    },
+    "reset-password": {
+      "verb": "POST",
+      "template": "{+customerService}reset-password",
+      "returnType": "string"
+    },
+    "reset-password-storefront": {
+      "useIframeTransport": "{+storefrontUserService}../../receiver",
+      "verb": "POST",
+      "template": "{+storefrontUserService}resetpassword",
+      "returnType": "string"
+    },
+    "change-password": {
+      "verb": "POST",
+      "template": "{+customerService}{id}/change-password",
+      "includeSelf": true
+    },
+    "get-orders": {
+      "template": "{+orderService}?filter=OrderNumber ne null",
+      "includeSelf": true,
+      "returnType": "orders"
+    },
+    "get-cards": {
+      "template": "{+customerService}{id}/cards",
+      "includeSelf": true,
+      "returnType": "accountcards"
+    },
+    "add-card": {
+      "verb": "POST",
+      "template": "{+customerService}{customer.id}/cards",
+      "includeSelf": {
+        "asProperty": "customer"
+      },
+      "returnType": "accountcard"
+    },
+    "update-card": {
+      "verb": "PUT",
+      "template": "{+customerService}{customer.id}/cards/{id}",
+      "includeSelf": {
+        "asProperty": "customer"
+      },
+      "returnType": "accountcard"
+    },
+    "delete-card": {
+      "verb": "DELETE",
+      "template": "{+customerService}{customer.id}/cards/{id}",
+      "shortcutParam": "id",
+      "includeSelf": {
+        "asProperty": "customer"
+      },
+      "returnType": "accountcard"
+    },
+    "add-contact": {
+      "verb": "POST",
+      "template": "{+customerService}{id}/contacts",
+      "includeSelf": true,
+      "returnType": "contact"
+    },
+    "get-contacts": {
+      "template": "{+customerService}{id}/contacts",
+      "includeSelf": true,
+      "returnType": "contacts"
+    },
+    "delete-contact": {
+      "verb": "DELETE",
+      "template": "{+customerService}{customer.id}/contacts/{id}",
+      "shortcutParam": "id",
+      "includeSelf": {
+        "asProperty": "customer"
+      },
+      "returnType": "contact"
+    },
+    "get-credits": {
+      "template": "{+creditService}",
+      "returnType": "storecredits"
+    }
+  },
+  "storecredit": {
+    "associate-to-shopper": {
+      "verb": "PUT",
+      "template": "{+creditService}{code}/associate-to-shopper",
+      "includeSelf": true
+    }
+  },
+  "storecredits": {
+    "template": "{+creditService}",
+    "collectionOf": "storecredit"
+  },
+  "contact": {
+    "template": "{+customerService}{accountId}/contacts/{id}",
+    "includeSelf": true
+  },
+  "contacts": {
+    "collectionOf": "contact"
+  },
+  "login": "{+userService}login",
+  "address": {
+    "validate-address": {
+      "verb": "POST",
+      "template": "{+addressValidationService}",
+      "includeSelf": {
+        "asProperty": "address"
+      },
+      "overridePostData": true,
+      "returnType": "address"
+    }
+  },
+  "order": {
+    "template": "{+orderService}{id}",
+    "includeSelf": true,
+    "create": {
+      "template": "{+orderService}{?cartId*}",
+      "shortcutParam": "cartId",
+      "noBody": true
+    },
+    "update-shipping-info": {
+      "template": "{+orderService}{id}/fulfillmentinfo",
+      "verb": "PUT",
+      "returnType": "shipment",
+      "includeSelf": true
+    },
+    "set-user-id": {
+      "verb": "PUT",
+      "template": "{+orderService}{id}/users",
+      "noBody": true,
+      "includeSelf": true,
+      "returnType": "user"
+    },
+    "create-payment": {
+      "verb": "POST",
+      "template": "{+orderService}{id}/payments/actions",
+      "includeSelf": true
+    },
+    "perform-payment-action": {
+      "verb": "POST",
+      "template": "{+orderService}{id}/payments/{paymentId}/actions",
+      "includeSelf": true,
+      "shortcutParam": "paymentId",
+      "returnType": "string"
+    },
+    "apply-coupon": {
+      "verb": "PUT",
+      "template": "{+orderService}{id}/coupons/{couponCode}",
+      "shortcutParam": "couponCode",
+      "includeSelf": true,
+      "noBody": true,
+      "returnType": "coupon"
+    },
+    "remove-coupon": {
+      "verb": "DELETE",
+      "template": "{+orderService}{id}/coupons/{couponCode}",
+      "shortcutParam": "couponCode",
+      "includeSelf": true
+    },
+    "remove-all-coupons": {
+      "verb": "DELETE",
+      "template": "{+orderService}{id}/coupons",
+      "includeSelf": true
+    },
+    "get-available-actions": {
+      "template": "{+orderService}{id}/actions",
+      "includeSelf": true,
+      "returnType": "orderactions"
+    },
+    "perform-order-action": {
+      "verb": "POST",
+      "template": "{+orderService}{id}/actions",
+      "shortcutParam": "actionName",
+      "overridePostData": [
+        "actionName"
+      ],
+      "includeSelf": true
+    },
+    "add-order-note": {
+      "verb": "POST",
+      "template": "{+orderService}{id}/notes",
+      "includeSelf": true,
+      "returnType": "ordernote"
+    }
+  },
+  "rma": {
+    "create": {
+      "verb": "POST",
+      "template": "{+returnService}"
+    }
+  },
+  "rmas": {
+    "template": "{+returnService}{?_*}",
+    "defaultParams": {
+      "startIndex": 0,
+      "pageSize": 5
+    },
+    "collectionOf": "rma"
+  },
+  "shipment": {
+    "defaults": {
+      "template": "{+orderService}{orderId}/fulfillmentinfo",
+      "includeSelf": true
+    },
+    "get-shipping-methods": {
+      "template": "{+orderService}{orderId}/shipments/methods",
+      "returnType": "shippingmethods"
+    }
+  },
+  "payment": {
+    "create": {
+      "template": "{+orderService}{orderId}/payments/actions",
+      "includeSelf": true
+    }
+  },
+  "accountcard": {
+    "template": "{+customerService}{id}/cards"
+  },
+  "accountcards": {
+    "collectionOf": "accountcard"
+  },
+  "creditcard": {
+    "defaults": {
+      "useIframeTransport": "{+paymentService}../../Assets/mozu_receiver.html"
+    },
+    "save": {
+      "verb": "POST",
+      "template": "{+paymentService}",
+      "returnType": "string"
+    },
+    "update": {
+      "verb": "PUT",
+      "template": "{+paymentService}{cardId}",
+      "returnType": "string"
+    },
+    "del": {
+      "verb": "DELETE",
+      "shortcutParam": "cardId",
+      "template": "{+paymentService}{cardId}"
+    }
+  },
+  "creditcards": {
+    "collectionOf": "creditcard"
+  },
+  "ordernote": {
+    "template": "{+orderService}{orderId}/notes/{id}"
+  },
+  "document": {
+    "get": {
+      "template": "{+cmsService}{/documentListName,documentId}/{?version,status}",
+      "shortcutParam": "documentId",
+      "defaultParams": {
+        "documentListName": "default"
+      }
+    }
+  },
+  "documentbyname": {
+    "get": {
+      "template": "{+cmsService}{documentListName}/documentTree/{documentName}/{?folderPath,version,status}",
+      "shortcutParam": "documentName",
+      "defaultParams": {
+        "documentListName": "default"
+      }
+    }
+  },
+  "addressschemas": "{+referenceService}addressschemas",
+  "wishlist": {
+    "get": {
+      "template": "{+wishlistService}{id}",
+      "includeSelf": true
+    },
+    "get-by-name": {
+      "template": "{+wishlistService}customers/{customerAccountId}/{name}",
+      "includeSelf": true
+    },
+    "get-default": {
+      "template": "{+wishlistService}customers/{customerAccountId}/my_wishlist",
+      "includeSelf": true
+    },
+    "create-default": {
+      "verb": "POST",
+      "template": "{+wishlistService}",
+      "defaultParams": {
+        "name": "my_wishlist",
+        "typeTag": "default"
+      },
+      "overridePostData": true
+    },
+    "add-item": {
+      "verb": "POST",
+      "template": "{+wishlistService}{id}/items/",
+      "includeSelf": true
+    },
+    "delete-all-items": {
+      "verb": "DELETE",
+      "template": "{+wishlistService}{id}/items/"
+    },
+    "delete-item": {
+      "verb": "DELETE",
+      "template": "{+wishlistService}{id}/items/{itemId}",
+      "includeSelf": true,
+      "shortcutParam": "itemId"
+    },
+    "edit-item": {
+      "verb": "PUT",
+      "template": "{+wishlistService}{id}/items/{itemId}",
+      "includeSelf": true
+    },
+    "add-item-to-cart": {
+      "verb": "POST",
+      "returnType": "cartitem",
+      "template": "{+cartService}current/items/"
+    },
+    "get-items-by-name": {
+      "returnType": "wishlistitems",
+      "template": "{+wishlistService}customers/{customerAccountId}/{name}/items{?startIndex,pageSize,sortBy,filter}",
+      "defaultParams": {
+        "sortBy": "UpdateDate asc"
+      },
+      "includeSelf": true
+    }
+  },
+  "wishlists": {
+    "collectionOf": "wishlist"
+  }
+}

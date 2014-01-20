@@ -219,7 +219,7 @@
             });
         },
 
-        when: require('when/build/when.browserify-debug'),
+        when: require('when'),
         uritemplate: require('uritemplate'),
 
         addEvents: function (ctor) {

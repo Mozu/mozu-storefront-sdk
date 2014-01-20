@@ -1,4 +1,5 @@
-﻿ApiCollection.types.locations = (function () {
+﻿var utils = require('../utils');
+module.exports = (function () {
 
     // haversine
     // By Nick Justice (niix)

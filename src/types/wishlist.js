@@ -1,4 +1,6 @@
-﻿ApiObject.types.wishlist = (function() {
+﻿var errors = require('../errors'),
+    utils = require('../utils');
+module.exports = (function() {
 
     errors.register({
         'NO_ITEMS_IN_WISHLIST': 'No items in wishlist.',

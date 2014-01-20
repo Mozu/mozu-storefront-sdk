@@ -1,4 +1,4 @@
-﻿ApiObject.types.shipment = {
+﻿module.exports = {
     getShippingMethodsFromContact: function (contact) {
         var self = this;
         return self.update({ fulfillmentContact: self.prop('fulfillmentContact') }).then(function () {

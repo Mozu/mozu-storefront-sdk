@@ -1,5 +1,7 @@
 ﻿// BEGIN OBJECT
-var ApiCollection = (function () {
+
+var utils = require('./utils');
+var ApiObject = require('./object');
 
     function convertItem(raw) {
         return ApiObject.create(this.itemType, raw, this.api);
@@ -18,7 +20,7 @@ var ApiCollection = (function () {
                 self.add(raw.items);
             }
         });
-    }
+    };
 
     ApiCollectionConstructor.prototype = utils.extend(new ApiObject(), {
         isCollection: true,
@@ -92,14 +94,16 @@ var ApiCollection = (function () {
         }
     });
 
-    ApiCollectionConstructor.types = {};
+    ApiCollectionConstructor.types = {
+        locations: require('./types/locations')
+    };
     ApiCollectionConstructor.hydratedTypes = {};
 
     ApiCollectionConstructor.getHydratedType = ApiObject.getHydratedType;
 
     ApiCollectionConstructor.create = function (type, data, api, itemType) {
         return new (type in this.types ? this.types[type] : this)(type, data, api, itemType);
-    }
+    };
 
     ApiCollectionConstructor.create = function (typeName, rawJSON, api, itemType) {
         var ApiCollectionType = this.getHydratedType(typeName);
@@ -107,9 +111,8 @@ var ApiCollection = (function () {
         return new ApiCollectionType(typeName, rawJSON, api, itemType);
     };
 
-    return ApiCollectionConstructor;
+    module.exports = ApiCollectionConstructor;
 
-}());
 // END OBJECT
 
 /***********/

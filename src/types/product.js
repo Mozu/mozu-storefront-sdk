@@ -1,4 +1,7 @@
-﻿ApiObject.types.product = {
+﻿var errors = require('../errors');
+var utils = require('../utils');
+var CONSTANTS = require('../constants/default');
+module.exports = {
     addToWishlist: function (payload) {
         var self = this;
         var list = this.api.createSync('wishlist', { customerAccountId: payload.customerAccountId });

@@ -1,4 +1,6 @@
-﻿ApiObject.types.customer = (function () {
+﻿var utils = require('../utils');
+var errors = require('../errors');
+module.exports = (function () {
     return {
         postconstruct: function() {
             var self = this;

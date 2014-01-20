@@ -1,10 +1,11 @@
 ﻿// BEGIN UTILS
 // Many of these poached from lodash
-var utils = (function () {
 
     var maxFlattenDepth = 20;
 
-    return {
+    var MicroEvent = require('microevent');
+    var isNode = typeof process === "object" && process.title === "node";
+    var utils = {
         extend: function () {
             var src, copy, name, options,
                 target = arguments[0],
@@ -64,7 +65,7 @@ var utils = (function () {
                 if (this.construct) this.construct.apply(this, arguments);
                 parent.apply(this, arguments);
                 if (this.postconstruct) this.postconstruct.apply(this, arguments);
-            }
+            };
             ApiInheritedObject.prototype = utils.extend(new parent(), more);
             return ApiInheritedObject;
         },
@@ -72,7 +73,7 @@ var utils = (function () {
             var newArr = [], len = arr.length;
             scope = scope || window;
             for (var i = 0; i < len; i++) {
-                newArr[i] = fn.call(scope, arr[i])
+                newArr[i] = fn.call(scope, arr[i]);
             }
             return newArr;
         },
@@ -95,7 +96,7 @@ var utils = (function () {
                     if (arr[i] === val) return i;
                 }
                 return -1;
-            }
+            };
         }(Array.prototype.indexOf)),
         formatString: function(tpt) {
             var formatted = tpt, otherArgs = utils.slice(arguments, 1);
@@ -107,7 +108,7 @@ var utils = (function () {
         setOp: function(proto, fnName) {
             proto[fnName] = function (conf) {
                 return this.api.action(this, fnName, conf);
-            }
+            };
         },
         getType: (function () {
             var reType = /\[object (\w+)\]/;
@@ -131,10 +132,12 @@ var utils = (function () {
                 rstr = "$1-$2";
             return function (str) {
                 return str.replace(rcase, rstr).toLowerCase();
-            }
+            };
         }()),
 
-        ajax: function (method, url, headers, data, success, failure, iframePath) {
+        request: isNode ? function(method, url, headers, data, success, failure, iframePath) {
+            console.log(this, arguments, "request");
+        } : function (method, url, headers, data, success, failure, iframePath) {
             if (typeof data !== "string") data = JSON.stringify(data);
             var xhr;
             if (iframePath) {
@@ -216,11 +219,8 @@ var utils = (function () {
             });
         },
 
-        // the sdk build uses a super-slim override of "define" that pushes AMD deps into an array.
-        // this allows us to cleanly vendor AMD-compatible scripts without polluting scope.
-        // only downside is, you have to refer to the build script (Gruntfile) to see what order you brought them in.
-        when: amds[0],
-        uritemplate: amds[1],
+        when: require('when/build/when.browserify-debug'),
+        uritemplate: require('uritemplate'),
 
         addEvents: function (ctor) {
             MicroEvent.mixin(ctor);
@@ -229,7 +229,8 @@ var utils = (function () {
             ctor.prototype.fire = ctor.prototype.trigger;
         }
     };
-}());
+
+    module.exports = utils;
 // END UTILS
 
 /*********/

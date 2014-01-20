@@ -1,3 +1,5 @@
 ﻿// BEGIN INIT
-var Mozu = new ApiContext();
+var ApiContext = require('./context');
+var initialGlobalContext = new ApiContext();
+module.exports = initialGlobalContext;
 // END INIT

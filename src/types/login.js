@@ -1,4 +1,4 @@
-﻿ApiObject.types.login = {
+﻿module.exports = {
     postconstruct: function (type, json) {
         var accessToken;
         if (json.authTicket && json.authTicket.accessToken) {

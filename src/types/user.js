@@ -1,4 +1,4 @@
-﻿ApiObject.types.user = {
+﻿module.exports = {
     postconstruct: function () {
         var self = this;
         this.on('sync', function (json) {

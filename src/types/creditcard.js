@@ -1,4 +1,6 @@
-﻿ApiObject.types.creditcard = (function() {
+﻿var utils = require('../utils');
+var errors = require('../errors');
+module.exports = (function() {
 
     errors.register({
         'CARD_TYPE_MISSING': 'Card type missing.',

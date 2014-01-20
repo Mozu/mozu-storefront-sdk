@@ -1,4 +1,8 @@
-﻿ApiObject.types.order = (function() {
+﻿var errors = require('../errors');
+var CONSTANTS = require('../constants/default');
+var utils = require('../utils');
+var ApiReference = require('../reference');
+module.exports = (function() {
 
     errors.register({
         'BILLING_INFO_MISSING': 'Billing info missing.',

@@ -101,9 +101,9 @@
       "template": "{+locationService}locationUsageTypes/SP/locations/?filter=geo near({latitude},{longitude}){&startIndex,sortBy,pageSize}"
     }
   },
+  "cartsummary": "{+cartService}summary",
   "cart": {
     "get": "{+cartService}current",
-    "get-summary": "{+cartService}summary",
     "add-product": {
       "verb": "POST",
       "returnType": "cartitem",

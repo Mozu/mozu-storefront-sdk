@@ -37,6 +37,7 @@ utils.addEvents(ApiObjectConstructor);
 
 ApiObjectConstructor.types = {
     cart: require('./types/cart'),
+    cartsummary: require('./types/cartsummary'),
     creditcard: require('./types/creditcard'),
     customer: require('./types/customer'),
     login: require('./types/login'),

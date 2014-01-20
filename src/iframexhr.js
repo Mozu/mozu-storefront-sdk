@@ -1,6 +1,6 @@
 ﻿// BEGIN IFRAMEXHR
 var utils = require('./utils');
-var IframeXHR = (function (window, document, undefined) {
+module.exports = (function (window, document, undefined) {
 
     var hasPostMessage = window.postMessage && navigator.userAgent.indexOf("Opera") === -1,
         firefoxVersion = (function () {
@@ -131,5 +131,5 @@ var IframeXHR = (function (window, document, undefined) {
 
     return IframeXMLHttpRequest;
 
-}(this, this.document));
+}(window, document));
 // END IFRAMEXHR

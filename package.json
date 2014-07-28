@@ -18,10 +18,11 @@
     "url": "https://github.com/Mozu/mozu-javascript-sdk.git"
   },
   "dependencies": {
-    "microevent": "~1",
     "uritemplate": "*",
     "when": "~2.7.1",
-    "xmlhttprequest": "~1.6.0"
+    "xmlhttprequest": "~1.6.0",
+    "request": "^2.39.0",
+    "node.extend": "^1.0.10"
   },
   "devDependencies": {
     "grunt": "~0.4.0",

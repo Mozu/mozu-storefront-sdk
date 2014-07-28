@@ -9,7 +9,7 @@ function makeHeaders(headers) {
   return hdrs;
 }
 
-return function(conf) {
+module.exports = function(conf) {
   var deferred = when.defer();
   request({
     proxy: 'http://127.0.0.1:8888',
@@ -17,7 +17,7 @@ return function(conf) {
     method: conf.method,
     uri: conf.url,
     json: conf.body,
-    headers: conf.contextHeaders
+    headers: makeHeaders(conf.context)
   }, function(error, message, response) {
     if (error) deferred.reject(error);
     deferred.resolve(response);

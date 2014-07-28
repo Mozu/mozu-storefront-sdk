@@ -3,7 +3,6 @@ var extend = require('node.extend'),
 
 function Client(cfg) {
   extend(this, cfg);
-  this.context = cfg.context || {};
 }
 
 extend(Client.prototype, {

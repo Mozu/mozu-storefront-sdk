@@ -25,23 +25,23 @@ function AuthTicket(json) {
   }
 }
 
-function getAuthTicket(client) {
+function getAuthTicket(context) {
   return request({
     method: 'POST', 
-    url: client.host + "/api/platform/applications/authtickets", 
+    url: context.baseUrl + "/api/platform/applications/authtickets", 
     body: {
-      applicationId: client.appId,
-      sharedSecret: client.sharedSecret
+      applicationId: context.appId,
+      sharedSecret: context.sharedSecret
     }
   }).then(function(json) {
     return new AuthTicket(json);
   });
 }
 
-function refreshTicket(client, ticket) {
+function refreshTicket(context, ticket) {
   return request({
     method: 'PUT',
-    url: client.host + "/api/platform/applications/authtickets/refresh-ticket", 
+    url: context.baseUrl + "/api/platform/applications/authtickets/refresh-ticket", 
     body: {
       refreshToken: ticket.refreshToken
     }
@@ -52,16 +52,16 @@ function refreshTicket(client, ticket) {
 
 var developerAuthTicketUrl = '{+homePod}/api/platform/developer/authtickets/{?developerAccountId}';
 
-function getDeveloperAuthTicket(client) {
-  return getAppClaims(client).then(function(claims) {
+function getDeveloperAuthTicket(context) {
+  return getAppClaims(context).then(function(claims) {
     return request({
-      method: 'PUT',
-      url: makeUrl(client, developerAuthTicketUrl, {}),
+      method: 'POST',
+      url: makeUrl(context, developerAuthTicketUrl, {}),
       body: {
-        developerAccountId: client.developerAccountId,
-        userAuthInfo: client.developerAccount,
+        developerAccountId: context.developerAccountId,
+        userAuthInfo: context.developerAccount,
       },
-      contextHeaders: {
+      context: {
         'app-claims': claims
       }
     })
@@ -70,12 +70,12 @@ function getDeveloperAuthTicket(client) {
   })
 }
 
-function refreshDeveloperAuthTicket(client, ticket) {
+function refreshDeveloperAuthTicket(context, ticket) {
   return request({
     method: 'PUT',
-    url: makeUrl(client, developerAuthTicketUrl, {}),
+    url: makeUrl(context, developerAuthTicketUrl, {}),
     body: {
-      developerAccountId: client.developerAccountId,
+      developerAccountId: context.developerAccountId,
       existingAuthTicket: ticket
     }
   }).then(function(json) {
@@ -85,17 +85,17 @@ function refreshDeveloperAuthTicket(client, ticket) {
 
 function makeClaimMemoizer(requester, refresher) {
   var claimCache = {};
-  return function(client) {
+  return function(context) {
     var now = new Date(),
-        cached = claimCache[appId],
+        cached = claimCache[context.appId],
         cacheAndReturnAccessToken = function(ticket) {
-          claimCache[appId] = ticket;
+          claimCache[context.appId] = ticket;
           return ticket.accessToken;
         };
     if (!cached || (cached.refreshTokenExpiration < now && cached.accessTokenExpiration < now)) {
-      return requester(client).then(cacheAndReturnAccessToken);
+      return requester(context).then(cacheAndReturnAccessToken);
     } else if (cached.accessTokenExpiration < now && cached.refreshTokenExpiration > now) {
-      return refresher(client, cached).then(cacheAndReturnAccessToken);
+      return refresher(context, cached).then(cacheAndReturnAccessToken);
     } else {
       return when(cached.accessToken);
     }

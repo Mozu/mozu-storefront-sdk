@@ -33,7 +33,7 @@ module.exports = {
     if (!cfg || !cfg.appId || !cfg.sharedSecret  || !cfg.baseUrl) {
       cfg = extend(getConfig(), cfg);
     }
-    return new Client(cfg);
+    return new Client({context: cfg});
   }
 }
 // END INIT

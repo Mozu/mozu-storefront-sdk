@@ -5,5 +5,7 @@ var templateCache = {};
 
 module.exports = function makeUrl(context, tpt, obj) {
   var template = templateCache[tpt] || (templateCache[tpt] = uritemplate.parse(tpt));
-  return template.expand(extend({ homePod: context.baseUrl, tenantPod: context.tenantPodUrl }, obj));
+  var ctx = extend({ homePod: context.baseUrl, tenantPod: context.tenantPodUrl }, context, obj);
+  console.log(tpt, ctx, context);
+  return template.expand(ctx);
 }

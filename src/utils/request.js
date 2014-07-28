@@ -20,6 +20,7 @@ module.exports = function(conf) {
     headers: makeHeaders(conf.context)
   }, function(error, message, response) {
     if (error) deferred.reject(error);
+    if (message.statusCode >= 400 && message.statusCode < 600) deferred.reject(response);
     deferred.resolve(response);
   })
   return deferred.promise;

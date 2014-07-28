@@ -2,7 +2,7 @@
   "appId": "12345",
   "sharedSecret": "9bfa2898adb14767aa936472e16a44be",
   "baseUrl": "https://home.mozu-qa.com",
-  "developerAccountId": "907e3523d71f49feb210e018b631661e",
+  "developerAccountId": "6",
   "developerAccount": {
     "emailAddress": "MozuQA@volusion.com",
     "password": "qateam1!"

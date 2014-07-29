@@ -1,10 +1,10 @@
 {
-  "appId": "12345",
-  "sharedSecret": "9bfa2898adb14767aa936472e16a44be",
-  "baseUrl": "https://home.mozu-qa.com",
-  "developerAccountId": "6",
+  "appId": "7b6f9d4b9497404da8a8a37600f1fe10",
+  "sharedSecret": "9964c0520cc0468397faa37600f1fe10",
+  "baseUrl": "https://home.mozu.com",
+  "developerAccountId": "273",
   "developerAccount": {
-    "emailAddress": "MozuQA@volusion.com",
-    "password": "qateam1!"
+    "emailAddress": "james_zetlen@volusion.com",
+    "password": "Volusion123!"
   }
 }

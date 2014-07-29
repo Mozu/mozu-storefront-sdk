@@ -9,7 +9,7 @@ extend(Client.prototype, {
   // commerce: makeAccessor('./commerce/client'),
   // content: makeAccessor('./content/client'),
   // event: makeAccessor('./event/client'),
-  platform: makeAccessor('platform/client')
+  platform: makeAccessor('platform')
 });
 
 module.exports = Client;

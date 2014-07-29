@@ -57,10 +57,7 @@ function getDeveloperAuthTicket(context) {
     return request({
       method: 'POST',
       url: makeUrl(context, developerAuthTicketUrl, {}),
-      body: {
-        developerAccountId: context.developerAccountId,
-        userAuthInfo: context.developerAccount,
-      },
+      body: context.developerAccount,
       context: {
         'app-claims': claims
       }
@@ -74,10 +71,7 @@ function refreshDeveloperAuthTicket(context, ticket) {
   return request({
     method: 'PUT',
     url: makeUrl(context, developerAuthTicketUrl, {}),
-    body: {
-      developerAccountId: context.developerAccountId,
-      existingAuthTicket: ticket
-    }
+    body: ticket
   }).then(function(json) {
     return new AuthTicket(json);
   })

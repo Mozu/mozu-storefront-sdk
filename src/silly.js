@@ -4,7 +4,7 @@ var util = require('util'),
 // client.context.tenant = 2544;
 // client.context['master-catalog'] = 1;
 
-client.platform().developer().getAllApplications().then(function(res) {
+client.platform().developer().applications().getAllApplications().then(function(res) {
   console.log(util.inspect(res));
 }, function(err) {
   console.log(util.inspect(err));

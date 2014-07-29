@@ -1,5 +1,4 @@
-var Reference = require('./reference'),
-  request = require('./utils/request'),
+var request = require('./utils/request'),
   makeUrl = require('./utils/make-url'),
   when = require('when');
 

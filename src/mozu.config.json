@@ -1,7 +1,7 @@
 {
   "appId": "7b6f9d4b9497404da8a8a37600f1fe10",
   "sharedSecret": "9964c0520cc0468397faa37600f1fe10",
-  "baseUrl": "https://home.mozu.com",
+  "baseUrl": "https://home.mozu.com/",
   "developerAccountId": "273",
   "developerAccount": {
     "emailAddress": "james_zetlen@volusion.com",

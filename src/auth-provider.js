@@ -27,11 +27,12 @@ function AuthTicket(json) {
 function getAuthTicket(context) {
   return request({
     method: 'POST', 
-    url: context.baseUrl + "/api/platform/applications/authtickets", 
+    url: context.baseUrl + "api/platform/applications/authtickets", 
     body: {
       applicationId: context.appId,
       sharedSecret: context.sharedSecret
-    }
+    },
+    context: context
   }).then(function(json) {
     return new AuthTicket(json);
   });
@@ -40,10 +41,11 @@ function getAuthTicket(context) {
 function refreshTicket(context, ticket) {
   return request({
     method: 'PUT',
-    url: context.baseUrl + "/api/platform/applications/authtickets/refresh-ticket", 
+    url: context.baseUrl + "api/platform/applications/authtickets/refresh-ticket", 
     body: {
       refreshToken: ticket.refreshToken
-    }
+    },
+    context: context
   }).then(function(json) {
     return new AuthTicket(json);
   })
@@ -58,7 +60,7 @@ function getDeveloperAuthTicket(context) {
       url: makeUrl(context, developerAuthTicketUrl, {}),
       body: context.developerAccount,
       context: {
-        'app-claims': claims
+        'x-vol-app-claims': claims
       }
     })
   }).then(function(json) {

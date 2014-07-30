@@ -1,12 +1,13 @@
 var sub = require('../../utils/sub'),
-    makeAccessor = require('../../utils/make-accessor'),
     makeMethod = require('../../utils/make-method'),
+    makeAccessor = require('../../utils/make-accessor'),
+    constants = require('../../constants'),
     Client = require('../../client');
 
 module.exports = sub(Client, {
   getAllApplications: makeMethod({
-    requiresDeveloperAuth: true,
-    method: "GET",
+    scope: constants.scopes.DEVELOPER,
+    method: constants.verbs.GET,
     url: "{+homePod}api/platform/developer/applications/{?_*}"
   })
 });

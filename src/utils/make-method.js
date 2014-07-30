@@ -2,31 +2,31 @@ var extend = require('node.extend'),
     request = require('./request'),
     makeUrl = require('./make-url'),
     pipeline = require('when/pipeline'),
-    AppAuthenticator = require('../appauthenticator');
+    constants = require('../constants'),
+    AuthProvider = require('../auth-provider');
 
 module.exports = function(defaults) {
   return function(body) {
     var self = this,
-        tasks = [], 
-        conf = extend({}, defaults, {
-          url: makeUrl(this.context, defaults.url, body),
-          context: defaults.headers || {},
-          body: body
-        });
-    if (conf.requiresDeveloperAuth) {
+        tasks = [];
+    if (defaults.scope & constants.scopes.DEVELOPER) {
       tasks.push(function() {
-        return AppAuthenticator.getDeveloperUserClaims(self.context).then(function(claims) {
-          conf.context['user-claims'] = claims;
+        return AuthProvider.getDeveloperUserClaims(self.context).then(function(claims) {
+          self.setUserClaims(claims);
         });
       });
     }
     tasks.push(function() {
-      return AppAuthenticator.getAppClaims(self.context).then(function(claims) {
-        conf.context['app-claims'] = claims;
+      return AuthProvider.getAppClaims(self.context).then(function(claims) {
+        self.setAppClaims(claims);
       });
     });
     tasks.push(function() {
-      return request(conf);
+      return request(extend({}, defaults, {
+        url: makeUrl(self.context, defaults.url, body),
+        context: self.context,
+        body: body
+      }));
     });
     return pipeline(tasks);
   }

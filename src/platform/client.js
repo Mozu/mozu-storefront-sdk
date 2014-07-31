@@ -5,5 +5,6 @@ var sub = require('../utils/sub'),
 module.exports = sub(Client, {
   adminuser: makeAccessor('platform/adminuser/client'),
   applications: makeAccessor('platform/applications/client'),
-  developer: makeAccessor('platform/developer/client')
+  developer: makeAccessor('platform/developer/client'),
+  tenants: makeAccessor('platform/developer/tenants')
 });

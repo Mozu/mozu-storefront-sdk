@@ -2,6 +2,7 @@ var request = require('request'),
     constants = require('../constants'),
     scopes = constants.scopes,
     when = require('when'),
+    extend = require('node.extend'),
     APPCLAIMS = constants.headers.APPCLAIMS,
     USERCLAIMS = constants.headers.USERCLAIMS,
     TENANT = constants.headers.TENANT,
@@ -33,16 +34,15 @@ function makeContext(conf) {
   return headers;
 }
 
-module.exports = function(conf) {
-  var deferred = when.defer();
-  request({
-    proxy: 'http://127.0.0.1:8888',
-    strictSSL: false,
-    method: conf.method,
-    uri: conf.url,
-    json: conf.body,
-    headers: makeContext(conf)
-  }, function(error, message, response) {
+module.exports = function(options) {
+  var deferred = when.defer(),
+      conf = extend({}, options);
+  if (conf.body && typeof conf.body === "object") {
+    conf.json = conf.body;
+    delete conf.body;
+  }
+  conf.headers = makeContext(conf);
+  request(conf, function(error, message, response) {
     if (error) return deferred.reject(error);
     if (message && message.statusCode >= 400 && message.statusCode < 600) deferred.reject(response);
     deferred.resolve(response);

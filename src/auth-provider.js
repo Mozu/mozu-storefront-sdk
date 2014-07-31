@@ -1,6 +1,5 @@
-var request = require('./utils/request'),
-  makeUrl = require('./utils/make-url'),
-  when = require('when');
+var constants = require('./constants'),
+    when = require('when');
 
 /**
  * A promise that will resolve to an App Claims
@@ -23,81 +22,71 @@ function AuthTicket(json) {
     }
   }
 }
+AuthTicket.create = function(json) {
+  return new AuthTicket(json);
+}
 
-function getAuthTicket(context) {
-  return request({
-    method: 'POST', 
-    url: context.baseUrl + "api/platform/applications/authtickets", 
-    body: {
-      applicationId: context.appId,
-      sharedSecret: context.sharedSecret
-    },
-    context: context
-  }).then(function(json) {
-    return new AuthTicket(json);
+function getPlatformAuthTicket(client) {
+  return client.platform().applications().authtickets().authenticateApp({
+    applicationId: client.context.appId,
+    sharedSecret: client.context.sharedSecret
+  }).then(AuthTicket.create);
+}
+
+function refreshPlatformAuthTicket(client, ticket) {
+  return client.platform().applications().authtickets().refreshAppAuthTicket({
+    refreshToken: ticket.refreshToken
+  }).then(AuthTicket.create);
+}
+
+function getDeveloperAuthTicket(client) {
+  return client.platform().developer().authtickets().createDeveloperUserAuthTicket(client.context.developerAccount).then(AuthTicket.create);
+}
+
+function refreshDeveloperAuthTicket(client, ticket) {
+  return client.platform().developer().authtickets().refreshDeveloperAuthTicket(ticket).then(AuthTicket.create);
+}
+
+function getAdminUserAuthTicket(client) {
+  return client.platform().adminuser().authtickets().createUserAuthTicket({
+    tenantId: client.getTenant()
+  }, {
+    body: client.context.developerAccount
   });
 }
 
-function refreshTicket(context, ticket) {
-  return request({
-    method: 'PUT',
-    url: context.baseUrl + "api/platform/applications/authtickets/refresh-ticket", 
-    body: {
-      refreshToken: ticket.refreshToken
-    },
-    context: context
-  }).then(function(json) {
-    return new AuthTicket(json);
-  })
-}
-
-var developerAuthTicketUrl = '{+homePod}/api/platform/developer/authtickets/{?developerAccountId}';
-
-function getDeveloperAuthTicket(context) {
-  return getAppClaims(context).then(function(claims) {
-    return request({
-      method: 'POST',
-      url: makeUrl(context, developerAuthTicketUrl, {}),
-      body: context.developerAccount,
-      context: {
-        'x-vol-app-claims': claims
-      }
-    })
-  }).then(function(json) {
-    return new AuthTicket(json);
-  })
-}
-
-function refreshDeveloperAuthTicket(context, ticket) {
-  return request({
-    method: 'PUT',
-    url: makeUrl(context, developerAuthTicketUrl, {}),
+function refreshAdminUserAuthTicket(client, ticket) {
+  return client.platform().adminuser().authtickets().refreshAuthTicket({
+    tenantId: client.getTenant()
+  }, {
     body: ticket
-  }).then(function(json) {
-    return new AuthTicket(json);
-  })
+  }).then(AuthTicket.create);
 }
 
-function makeClaimMemoizer(requester, refresher) {
+function makeClaimMemoizer(requester, refresher, claimHeader) {
   var claimCache = {};
-  return function(context) {
+  return function(client) {
     var now = new Date(),
-        cached = claimCache[context.appId],
-        cacheAndReturnAccessToken = function(ticket) {
-          claimCache[context.appId] = ticket;
-          return ticket.accessToken;
+        cached = claimCache[client.context.appId],
+        cacheAndUpdateClient = function(ticket) {
+          claimCache[client.context.appId] = ticket;
+          client.context[claimHeader] = ticket.accessToken;
+          return client;
         };
     if (!cached || (cached.refreshTokenExpiration < now && cached.accessTokenExpiration < now)) {
-      return requester(context).then(cacheAndReturnAccessToken);
+      return requester(client).then(cacheAndUpdateClient);
     } else if (cached.accessTokenExpiration < now && cached.refreshTokenExpiration > now) {
-      return refresher(context, cached).then(cacheAndReturnAccessToken);
+      return refresher(client, cached).then(cacheAndUpdateClient);
     } else {
-      return when(cached.accessToken);
+      client.context[claimHeader] = cached.accessToken;
+      return when(client);
     }
   };
 }
 
-var getAppClaims = makeClaimMemoizer(getAuthTicket, refreshTicket);
+var addPlatformAppClaims = makeClaimMemoizer(getPlatformAuthTicket, refreshPlatformAuthTicket),
+    addDeveloperUserClaims = makeClaimMemoizer(getDeveloperAuthTicket, refreshDeveloperAuthTicket),
+    addAdminUserClaims = makeClaimMemoizer(getAdminUserAuthTicket, refreshAdminUserAuthTicket);
 
 /**
  * Get app claims string. Returns a promise because if necessary this will re-authenticate to acquire the string.
@@ -107,6 +96,7 @@ var getAppClaims = makeClaimMemoizer(getAuthTicket, refreshTicket);
  * @param {string} sharedSecret Shared Secret
  */
 module.exports = {
-  getAppClaims: getAppClaims,
-  getDeveloperUserClaims: makeClaimMemoizer(getDeveloperAuthTicket, refreshDeveloperAuthTicket)
+  addPlatformAppClaims: addPlatformAppClaims,
+  addDeveloperUserClaims: addDeveloperUserClaims,
+  addAdminUserClaims: addAdminUserClaims
 };

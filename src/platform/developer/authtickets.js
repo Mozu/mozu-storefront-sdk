@@ -5,16 +5,16 @@ var sub = require('../../utils/sub'),
     Client = require('../../client');
 
 module.exports = sub(Client, {
-  authenticateApp: makeMethod({
+  createDeveloperUserAuthTicket: makeMethod({
     method: constants.verbs.POST,
-    url: "{+homePod}api/platform/applications/authtickets/"
+    url: "{+homePod}api/platform/developer/authtickets/{?developerAccountId}"
   }),
-  refreshAppAuthTicket: makeMethod({
+  refreshDeveloperAuthTicket: makeMethod({
     method: constants.verbs.PUT,
-    url: "{+homePod}api/platform/applications/authtickets/refresh-ticket"
+    url: "{+homePod}api/platform/developer/authtickets/{?developerAccountId}"
   }),
-  deleteAppAuthTicket: makeMethod({
+  deleteUserAuthTicket: makeMethod({
     method: constants.verbs.DELETE,
-    url: "{+homePod}api/platform/applications/authtickets/{refreshToken}"
+    url: "{+homePod}api/platform/developer/authtickets/{?developerAccountId}"
   })
 });

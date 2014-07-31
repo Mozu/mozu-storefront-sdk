@@ -5,5 +5,6 @@ var sub = require('../../utils/sub'),
     Client = require('../../client');
 
 module.exports = sub(Client, {
+  authtickets: makeAccessor('platform/developer/authtickets'),
   applications: makeAccessor('platform/developer/applications')
 });

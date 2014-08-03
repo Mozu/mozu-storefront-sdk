@@ -4,11 +4,20 @@ var util = require('util'),
 // client.context.tenant = 2544;
 // client.context['master-catalog'] = 1;
 
-client.platform().developer().applications().getAllApplications(null, {
+
+
+client.platform().developer().applications().addPackageFile({
+  applicationVersionId: 8243,
+  packageId: 5339,
+  filepath: '/newdir/onoes.txt'
+}, {
   proxy: "http://127.0.0.1:8888",
-  strictSSL: false
+  strictSSL: false,
+  body: 'Oh noes!!'
 }).then(function(res) {
   console.log(util.inspect(res));
-}, function(err) {
-  console.log(util.inspect(err));
-})
+  console.log('success');
+}, function(res) {
+  console.log(util.inspect(res));
+  console.log('failure');
+});

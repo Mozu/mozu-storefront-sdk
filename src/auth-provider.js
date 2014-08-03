@@ -40,15 +40,15 @@ function refreshPlatformAuthTicket(client, ticket) {
 }
 
 function getDeveloperAuthTicket(client) {
-  return client.platform().developer().authtickets().createDeveloperUserAuthTicket(client.context.developerAccount).then(AuthTicket.create);
+  return client.root().platform().developer().authtickets().createDeveloperUserAuthTicket(client.context.developerAccount).then(AuthTicket.create);
 }
 
 function refreshDeveloperAuthTicket(client, ticket) {
-  return client.platform().developer().authtickets().refreshDeveloperAuthTicket(ticket).then(AuthTicket.create);
+  return client.root().platform().developer().authtickets().refreshDeveloperAuthTicket(ticket).then(AuthTicket.create);
 }
 
 function getAdminUserAuthTicket(client) {
-  return client.platform().adminuser().authtickets().createUserAuthTicket({
+  return client.root().platform().adminuser().authtickets().createUserAuthTicket({
     tenantId: client.getTenant()
   }, {
     body: client.context.developerAccount
@@ -56,7 +56,7 @@ function getAdminUserAuthTicket(client) {
 }
 
 function refreshAdminUserAuthTicket(client, ticket) {
-  return client.platform().adminuser().authtickets().refreshAuthTicket({
+  return client.root().platform().adminuser().authtickets().refreshAuthTicket({
     tenantId: client.getTenant()
   }, {
     body: ticket
@@ -84,9 +84,9 @@ function makeClaimMemoizer(requester, refresher, claimHeader) {
   };
 }
 
-var addPlatformAppClaims = makeClaimMemoizer(getPlatformAuthTicket, refreshPlatformAuthTicket),
-    addDeveloperUserClaims = makeClaimMemoizer(getDeveloperAuthTicket, refreshDeveloperAuthTicket),
-    addAdminUserClaims = makeClaimMemoizer(getAdminUserAuthTicket, refreshAdminUserAuthTicket);
+var addPlatformAppClaims = makeClaimMemoizer(getPlatformAuthTicket, refreshPlatformAuthTicket, constants.headers.APPCLAIMS),
+    addDeveloperUserClaims = makeClaimMemoizer(getDeveloperAuthTicket, refreshDeveloperAuthTicket, constants.headers.USERCLAIMS),
+    addAdminUserClaims = makeClaimMemoizer(getAdminUserAuthTicket, refreshAdminUserAuthTicket, "TODO--WHAT_HEADER!!?");
 
 /**
  * Get app claims string. Returns a promise because if necessary this will re-authenticate to acquire the string.

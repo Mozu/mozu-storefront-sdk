@@ -10,13 +10,17 @@ var extend = require('node.extend'),
 
 function Client(cfg) {
   extend(this, cfg);
+  this.defaultRequestOptions = this.defaultRequestOptions || {};
 }
 
 extend(Client.prototype, {
   // commerce: makeAccessor('./commerce/client'),
   // content: makeAccessor('./content/client'),
   // event: makeAccessor('./event/client'),
-  platform: makeAccessor('platform/client')
+  platform: makeAccessor('platform/client'),
+  root: function() {
+    return new Client(this);
+  },
 });
 
 function camelCase (str) {

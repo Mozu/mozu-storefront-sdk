@@ -14,18 +14,18 @@ module.exports = function(defaults) {
         return AuthProvider.addDeveloperUserClaims(self);
       });
     }
-    if (defaults.scope & (constants.scopes.TENANT | ~constants.scopes.SHOPPER) ) {
+    // if (defaults.scope & (constants.scopes.TENANT | ~constants.scopes.SHOPPER) ) {
+    //   tasks.push(function() {
+    //     return AuthProvider.addAdminUserClaims(self);
+    //   })
+    // }
+    if (!(defaults.scope & constants.scopes.NONE)) {
       tasks.push(function() {
-        return AuthProvider.addAdminUserClaims(self);
-      })
+        return AuthProvider.addPlatformAppClaims(self);
+      });
     }
     tasks.push(function() {
-      return AuthProvider.getAppClaims(self.context).then(function(claims) {
-        self.setAppClaims(claims);
-      });
-    });
-    tasks.push(function() {
-      return request(extend({}, defaults, {
+      return request(extend({}, defaults, self.defaultRequestOptions, {
         url: makeUrl(self.context, defaults.url, body),
         context: self.context,
         body: body

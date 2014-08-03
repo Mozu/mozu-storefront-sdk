@@ -4,6 +4,7 @@ var DEVELOPER = 1,
     SITE = 8,
     MASTERCATALOG = 16,
     CATALOG = 32,
+    NONE = 64,
     all,
     hOP = Object.prototype.hasOwnProperty;
 
@@ -19,7 +20,8 @@ all = {
     TENANT: TENANT,
     SITE: SITE,
     MASTERCATALOG: MASTERCATALOG,
-    CATALOG: CATALOG
+    CATALOG: CATALOG,
+    NONE: NONE
   },
   verbs: {
     GET: 'GET',

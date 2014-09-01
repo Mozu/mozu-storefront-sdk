@@ -4,7 +4,7 @@ The Mozu JavaScript SDK provides a JavaScript API for connecting to Mozu web ser
 
 ## Usage
 
-In order to pass context from layer to layer of the API, traverse the graph by calling each layer as a function instead of a plain dot lookup. For example, accessing Platform.AdminUser.Accounts would be `client.platform().adminuser().accounts()`, rather than `client.platformadminuser.accounts`.
+In order to pass context from layer to layer of the API, traverse the graph by calling each layer as a function instead of a plain dot lookup. For example, accessing Platform.AdminUser.Accounts would be `client.platform().adminuser().accounts()`, rather than `client.platform.adminuser.accounts`.
 
 ```js
 var client = require('mozu-javascript-sdk').client();

@@ -1,3 +1,8 @@
+[0.9.1](https://github.com/Mozu/mozu-javascript-sdk/releases/tag/v0.9.1) / 2014-09-02
+-------------------------------------------------------------------------------------
+
+*   **Changed** Everything. Ground-up rewrite to resemble the other SDKs more.
+
 [0.3.0](https://github.com/Mozu/mozu-javascript-sdk/releases/tag/v0.3.0) / 2014-01-20
 -------------------------------------------------------------------------------------
 

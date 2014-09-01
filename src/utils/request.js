@@ -34,6 +34,11 @@ function makeContext(conf) {
   return headers;
 }
 
+/**
+ * Make an HTTP request to the Mozu API. This method populates headers based on the scope of the supplied context.
+ * @param  {Object} options The request options, to be passed to the `request` module. Look up on NPM for details.
+ * @return {Promise<ApiResponse,ApiError>}         A Promise that will fulfill as the JSON response from the API, or reject with an error as JSON from the API.
+ */
 module.exports = function(options) {
   var deferred = when.defer(),
       conf = extend({}, options);

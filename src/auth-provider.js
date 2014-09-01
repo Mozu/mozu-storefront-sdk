@@ -84,13 +84,7 @@ var addPlatformAppClaims = makeClaimMemoizer(getPlatformAuthTicket, refreshPlatf
     addDeveloperUserClaims = makeClaimMemoizer(getDeveloperAuthTicket, refreshDeveloperAuthTicket, constants.headers.USERCLAIMS),
     addAdminUserClaims = makeClaimMemoizer(getAdminUserAuthTicket, refreshAdminUserAuthTicket, constants.headers.USERCLAIMS);
 
-/**
- * Get app claims string. Returns a promise because if necessary this will re-authenticate to acquire the string.
- * @return {AppClaimsPromise}
- * @param {string} host The host to use to access the platform service, e.g. `http://home.mozu.com` for normal production environments
- * @param {string} appId Application Id
- * @param {string} sharedSecret Shared Secret
- */
+
 module.exports = {
   addPlatformAppClaims: addPlatformAppClaims,
   addDeveloperUserClaims: addDeveloperUserClaims,

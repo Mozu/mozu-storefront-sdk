@@ -16,6 +16,7 @@ client.commerce().catalog().admin().products().getProducts().then(function(res) 
 }, function(err) {
   console.log(util.inspect(err));
 })
+```
 
 ## Development requirements
 

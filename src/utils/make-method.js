@@ -14,11 +14,11 @@ module.exports = function(defaults) {
         return AuthProvider.addDeveloperUserClaims(self);
       });
     }
-    // if (defaults.scope & (constants.scopes.TENANT | ~constants.scopes.SHOPPER) ) {
-    //   tasks.push(function() {
-    //     return AuthProvider.addAdminUserClaims(self);
-    //   })
-    // }
+    if (defaults.scope & constants.scopes.ADMINUSER) {
+      tasks.push(function() {
+        return AuthProvider.addAdminUserClaims(self);
+      })
+    }
     if (!(defaults.scope & constants.scopes.NONE)) {
       tasks.push(function() {
         return AuthProvider.addPlatformAppClaims(self);

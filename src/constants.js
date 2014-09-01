@@ -1,21 +1,26 @@
 var DEVELOPER = 1,
-    SHOPPER = 2,
-    TENANT = 4,
-    SITE = 8,
-    MASTERCATALOG = 16,
-    CATALOG = 32,
-    NONE = 64,
+    ADMINUSER = 2,
+    SHOPPER = 4,
+    TENANT = 8,
+    SITE = 16,
+    MASTERCATALOG = 32,
+    CATALOG = 64,
+    NONE = 128,
     all,
     hOP = Object.prototype.hasOwnProperty;
 
 // some contexts are always additive
+
+TENANT |= ADMINUSER;
 SITE |= TENANT;
+MASTERCATALOG |= TENANT;
 CATALOG |= MASTERCATALOG;
 SHOPPER |= SITE | CATALOG;
 
 all = {
   scopes: {
     DEVELOPER: DEVELOPER,
+    ADMINUSER: ADMINUSER,
     SHOPPER: SHOPPER,
     TENANT: TENANT,
     SITE: SITE,

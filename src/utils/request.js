@@ -16,7 +16,7 @@ function makeContext(conf) {
   context = conf.context;
   if (context[APPCLAIMS]) headers[APPCLAIMS] = context[APPCLAIMS];
   if (context[DATAVIEWMODE]) headers[DATAVIEWMODE] = context[DATAVIEWMODE];
-  if (conf.scope & (scopes.DEVELOPER | scopes.SHOPPER)) {
+  if (conf.scope & (scopes.DEVELOPER | scopes.ADMINUSER | scopes.SHOPPER)) {
     headers[USERCLAIMS] = context[USERCLAIMS];
   }
   if (conf.scope & scopes.TENANT) {

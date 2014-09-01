@@ -48,19 +48,15 @@ function refreshDeveloperAuthTicket(client, ticket) {
 }
 
 function getAdminUserAuthTicket(client) {
-  return client.root().platform().adminuser().authtickets().createUserAuthTicket({
-    tenantId: client.getTenant()
-  }, {
-    body: client.context.developerAccount
-  });
+  return client.root().platform().adminuser().authtickets().createUserAuthTicket(client.context.developerAccount).then(function(json) {
+    client.context.user = json.user;
+    if (json.availableTenants && json.availableTenants.length > 0) client.setAvailableTenants(json.availableTenants);
+    return AuthTicket.create(json);
+  })
 }
 
 function refreshAdminUserAuthTicket(client, ticket) {
-  return client.root().platform().adminuser().authtickets().refreshAuthTicket({
-    tenantId: client.getTenant()
-  }, {
-    body: ticket
-  }).then(AuthTicket.create);
+  return client.root().platform().adminuser().authtickets().refreshAuthTicket(ticket).then(AuthTicket.create);
 }
 
 function makeClaimMemoizer(requester, refresher, claimHeader) {
@@ -86,7 +82,7 @@ function makeClaimMemoizer(requester, refresher, claimHeader) {
 
 var addPlatformAppClaims = makeClaimMemoizer(getPlatformAuthTicket, refreshPlatformAuthTicket, constants.headers.APPCLAIMS),
     addDeveloperUserClaims = makeClaimMemoizer(getDeveloperAuthTicket, refreshDeveloperAuthTicket, constants.headers.USERCLAIMS),
-    addAdminUserClaims = makeClaimMemoizer(getAdminUserAuthTicket, refreshAdminUserAuthTicket, "TODO--WHAT_HEADER!!?");
+    addAdminUserClaims = makeClaimMemoizer(getAdminUserAuthTicket, refreshAdminUserAuthTicket, constants.headers.USERCLAIMS);
 
 /**
  * Get app claims string. Returns a promise because if necessary this will re-authenticate to acquire the string.

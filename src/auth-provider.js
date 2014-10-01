@@ -40,7 +40,10 @@ function refreshPlatformAuthTicket(client, ticket) {
 }
 
 function getDeveloperAuthTicket(client) {
-  return client.root().platform().developer().authtickets().createDeveloperUserAuthTicket(client.context.developerAccount).then(AuthTicket.create);
+  return client.root().platform().developer().authtickets().createDeveloperUserAuthTicket(client.context.developerAccount).then(function(json) {
+    if (json.availableTenants && json.availableTenants.length > 0) client.setAvailableTenants(json.availableTenants);
+    return AuthTicket.create(json);
+  });
 }
 
 function refreshDeveloperAuthTicket(client, ticket) {
@@ -48,7 +51,7 @@ function refreshDeveloperAuthTicket(client, ticket) {
 }
 
 function getAdminUserAuthTicket(client) {
-  return client.root().platform().adminuser().authtickets().createUserAuthTicket(client.context.developerAccount).then(function(json) {
+  return client.root().platform().adminuser().authtickets().createUserAuthTicket({ tenantId: client.getTenant() }, { body: client.context.developerAccount }).then(function(json) {
     client.context.user = json.user;
     if (json.availableTenants && json.availableTenants.length > 0) client.setAvailableTenants(json.availableTenants);
     return AuthTicket.create(json);

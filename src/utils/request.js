@@ -15,20 +15,22 @@ function makeContext(conf) {
   var headers = {},
   context = conf.context;
   if (context[APPCLAIMS]) headers[APPCLAIMS] = context[APPCLAIMS];
-  if (context[DATAVIEWMODE]) headers[DATAVIEWMODE] = context[DATAVIEWMODE];
+  if (context[DATAVIEWMODE]) {
+    headers[DATAVIEWMODE] = context[DATAVIEWMODE];
+  } 
   if (conf.scope & (scopes.DEVELOPER | scopes.ADMINUSER | scopes.SHOPPER)) {
     headers[USERCLAIMS] = context[USERCLAIMS];
   }
-  if (conf.scope & scopes.TENANT) {
+  if (((conf.scope & scopes.TENANT) == scopes.TENANT) && context[TENANT]) {
     headers[TENANT] = context[TENANT];
   }
-  if (conf.scope & scopes.SITE) {
+  if (((conf.scope & scopes.SITE) == scopes.SITE) && context[SITE]) {
     headers[SITE] = context[SITE];
   }
-  if (conf.scope & scopes.MASTERCATALOG) {
+  if (((conf.scope & scopes.MASTERCATALOG) == scopes.MASTERCATALOG) && context[MASTERCATALOG]) {
     headers[MASTERCATALOG] = context[MASTERCATALOG];
   }
-  if (conf.scope & scopes.CATALOG) {
+  if (((conf.scope & scopes.CATALOG) == scopes.CATALOG) && context[CATALOG]) {
     headers[CATALOG] = context[CATALOG];
   }
   return headers;

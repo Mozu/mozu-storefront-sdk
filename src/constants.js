@@ -40,9 +40,13 @@ all = {
     USERCLAIMS: 'user-claims',
     TENANT: 'tenant',
     SITE: 'site',
-    MASTERCATALOG: 'mastercatalog',
+    MASTERCATALOG: 'master-catalog',
     CATALOG: 'catalog',
     DATAVIEWMODE: 'dataview-mode'
+  },
+  dataViewModes: {
+    LIVE: 'Live',
+    PENDING: 'Pending'
   }
 };
 

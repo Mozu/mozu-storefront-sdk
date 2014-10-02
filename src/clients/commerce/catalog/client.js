@@ -1,7 +1,5 @@
-var sub = require('../../../utils/sub'),
-    makeClient = require('../../../utils/make-client'),
-    Client = require('../../../client');
+var Client = require('../../../client');
 
-module.exports = sub(Client, {
-  admin: makeClient('commerce/catalog/admin')
+module.exports = Client.sub({
+  admin: Client.from('commerce/catalog/admin')
 });

@@ -1,4 +1,6 @@
 var extend = require('node.extend'),
+    sub = require('./utils/sub'),
+    makeMethod = require('./utils/make-method'),
     makeClient = require('./utils/make-client'),
     constants = require('./constants'),
     findWhere = require('./utils/find-where'),
@@ -12,6 +14,14 @@ function Client(cfg) {
   extend(this, cfg);
   this.defaultRequestOptions = this.defaultRequestOptions || {};
 }
+
+extend(Client, {
+  method: makeMethod,
+  from: makeClient,
+  sub: function() {
+    return sub.apply(this, [Client].concat([].slice.call(arguments))); 
+  }
+});
 
 extend(Client.prototype, {
   commerce: makeClient('commerce'),

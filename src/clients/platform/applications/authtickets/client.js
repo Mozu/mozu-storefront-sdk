@@ -1,21 +1,18 @@
-var sub = require('../../../../utils/sub'),
-    makeMethod = require('../../../../utils/make-method'),
-    makeClient = require('../../../../utils/make-client'),
-    constants = require('../../../../constants'),
+var constants = require('../../../../constants'),
     Client = require('../../../../client');
 
-module.exports = sub(Client, {
-  authenticateApp: makeMethod({
+module.exports = Client.sub({
+  authenticateApp: Client.method({
     scope: constants.scopes.NONE,
     method: constants.verbs.POST,
     url: "{+homePod}api/platform/applications/authtickets/"
   }),
-  refreshAppAuthTicket: makeMethod({
+  refreshAppAuthTicket: Client.method({
     scope: constants.scopes.NONE,
     method: constants.verbs.PUT,
     url: "{+homePod}api/platform/applications/authtickets/refresh-ticket"
   }),
-  deleteAppAuthTicket: makeMethod({
+  deleteAppAuthTicket: Client.method({
     scope: constants.scopes.NONE,
     method: constants.verbs.DELETE,
     url: "{+homePod}api/platform/applications/authtickets/{refreshToken}"

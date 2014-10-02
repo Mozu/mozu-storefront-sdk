@@ -1,71 +1,68 @@
-var sub = require('../../../../utils/sub'),
-    makeMethod = require('../../../../utils/make-method'),
-    makeClient = require('../../../../utils/make-client'),
-    constants = require('../../../../constants'),
+var constants = require('../../../../constants'),
     Client = require('../../../../client');
 
-module.exports = sub(Client, {
-  getAllApplications: makeMethod({
+module.exports = Client.sub({
+  getAllApplications: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.GET,
     url: "{+homePod}api/platform/developer/applications/{?_*}"
   }),
-  getApplication: makeMethod({
+  getApplication: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.GET,
     url: "{+homePod}api/platform/developer/applications/{applicationId}"
   }),
-  getApplicationVersion: makeMethod({
+  getApplicationVersion: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.GET,
     url: "{+homePod}api/platform/developer/applications/applicationVersions/{applicationVersionId}"
   }),
-  getPackages: makeMethod({
+  getPackages: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.GET,
     url: "{+homePod}api/platform/developer/applications/applicationVersions/{applicationVersionId}/packages"
   }),
-  getPackage: makeMethod({
+  getPackage: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.GET,
     url: "{+homePod}api/platform/developer/applications/applicationVersions/{applicationVersionId}/packages/{packageId}"
   }),
-  getPackageItemsMetadata: makeMethod({
+  getPackageItemsMetadata: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.GET,
     url: "{+homePod}api/platform/developer/applications/applicationVersions/{applicationVersionId}/packages/{packageId}/files"
   }),
-  getPackageItemMetadata: makeMethod({
+  getPackageItemMetadata: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.GET,
     url: "{+homePod}api/platform/developer/applications/applicationVersions/{applicationVersionId}/packages/{packageId}/files/?itemPath={itempath}"
   }),
-  getPackageFilesZip: makeMethod({
+  getPackageFilesZip: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.GET,
     url: "{+homePod}api/platform/developer/applications/applicationVersions/{applicationVersionId}/packages/{packageId}/zip"
   }),
-  addPackage: makeMethod({
+  addPackage: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.POST,
     url: "{+homePod}api/platform/developer/applications/applicationVersions/{applicationVersionId}/packages"
   }),
-  changePackageFileNameOrPath: makeMethod({
+  changePackageFileNameOrPath: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.POST,
     url: "{+homePod}api/platform/developer/applications/applicationVersions/{applicationVersionId}/packages/{packageId}/files/change-name-or-path"
   }),
-  addPackageFile: makeMethod({
+  addPackageFile: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.POST,
     url: "{+homePod}api/platform/developer/applications/applicationVersions/{applicationVersionId}/packages/{packageId}/files?filePath={filepath}"
   }),
-  updatePackageFile: makeMethod({
+  updatePackageFile: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.PUT,
     url: "{+homePod}api/platform/developer/applications/applicationVersions/{applicationVersionId}/packages/{packageId}/files?filePath={filepath}"
   }),
-  deletePackageFile: makeMethod({
+  deletePackageFile: Client.method({
     scope: constants.scopes.DEVELOPER,
     method: constants.verbs.DELETE,
     url: "{+homePod}api/platform/developer/applications/applicationVersions/{applicationVersionId}/packages/{packageId}/files?filePath={filepath}"

@@ -1,12 +1,9 @@
-var sub = require('../../../../utils/sub'),
-    makeMethod = require('../../../../utils/make-method'),
-    makeClient = require('../../../../utils/make-client'),
-    constants = require('../../../../constants'),
+var constants = require('../../../../constants'),
     AuthProvider = require('../../../../auth-provider'),
     Client = require('../../../../client');
 
-module.exports = sub(Client, {
-  getUser: makeMethod({
+module.exports = Client.sub({
+  getUser: Client.method({
     scope: constants.scopes.ADMINUSER,
     method: constants.verbs.GET,
     url: "{+homePod}api/platform/adminuser/accounts/{userId}"
@@ -19,7 +16,7 @@ module.exports = sub(Client, {
           return getTenantScopes.call(this, { userId: this.context.user.userId });
         }.bind(this));
       }
-    })(makeMethod({
+    })(Client.method({
       scope: constants.scopes.ADMINUSER,
       method: constants.verbs.GET,
       url: "{+homePod}api/platform/adminuser/accounts/{userId}/tenants" 

@@ -1,57 +1,54 @@
-var sub = require('../../../../../utils/sub'),
-    makeClient = require('../../../../../utils/make-client'),
-    makeMethod = require('../../../../../utils/make-method'),
-    constants = require('../../../../../constants'),
+var constants = require('../../../../../constants'),
     Client = require('../../../../../client');
 
-module.exports = sub(Client, {
-  getProducts: makeMethod({
+module.exports = Client.sub({
+  getProducts: Client.method({
     scope: constants.scopes.MASTERCATALOG,
     url: "{+tenantPod}api/commerce/catalog/admin/products/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&q={q}&qLimit={qLimit}&noCount={noCount}"
   }),
-  getProduct: makeMethod({
+  getProduct: Client.method({
     scope: constants.scopes.MASTERCATALOG,
     url: "{+tenantPod}api/commerce/catalog/admin/products/{productCode}"
   }),
-  getProductInCatalogs: makeMethod({
+  getProductInCatalogs: Client.method({
     scope: constants.scopes.MASTERCATALOG,
     url: "{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs"
   }),
-  getProductInCatalog: makeMethod({
+  getProductInCatalog: Client.method({
     scope: constants.scopes.MASTERCATALOG,
     url: "{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs/{catalogId}"
   }),
-  addProduct: makeMethod({
+  addProduct: Client.method({
     scope: constants.scopes.MASTERCATALOG,
     method: constants.verbs.POST,
     url: "{+tenantPod}api/commerce/catalog/admin/products/"
   }),
-  addProductInCatalog: makeMethod({
+  addProductInCatalog: Client.method({
     scope: constants.scopes.MASTERCATALOG,
     method: constants.verbs.POST,
     url: "{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs"
   }),
-  updateProduct: makeMethod({
+  updateProduct: Client.method({
     scope: constants.scopes.MASTERCATALOG,
     method: constants.verbs.PUT,
     url: "{+tenantPod}api/commerce/catalog/admin/products/{productCode}"
   }),
-  updateProductInCatalogs: makeMethod({
+  updateProductInCatalogs: Client.method({
     scope: constants.scopes.MASTERCATALOG,
     method: constants.verbs.PUT,
     url: "{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs"
   }),
-  updateProductInCatalog: makeMethod({
+  updateProductInCatalog: Client.method({
     scope: constants.scopes.MASTERCATALOG,
     method: constants.verbs.PUT,
     url: "{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs/{catalogId}"
   }),
-  deleteProduct: makeMethod({
+  deleteProduct: Client.method({
     scope: constants.scopes.MASTERCATALOG,
     method: constants.verbs.DELETE,
     url: "{+tenantPod}api/commerce/catalog/admin/products/{productCode}"
   }),
-  deleteProductInCatalog: makeMethod({
+  deleteProductInCatalog: Client.method({
     scope: constants.scopes.MASTERCATALOG,
     method: constants.verbs.DELETE,
     url: "{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs/{catalogId}"

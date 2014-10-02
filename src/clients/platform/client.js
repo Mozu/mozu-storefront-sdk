@@ -1,10 +1,8 @@
-var sub = require('../../utils/sub'),
-    makeClient = require('../../utils/make-client'),
-    Client = require('../../client');
+var Client = require('../../client');
 
-module.exports = sub(Client, {
-  adminuser: makeClient('platform/adminuser'),
-  applications: makeClient('platform/applications'),
-  developer: makeClient('platform/developer'),
-  tenants: makeClient('platform/developer')
+module.exports = Client.sub({
+  adminuser: Client.from('platform/adminuser'),
+  applications: Client.from('platform/applications'),
+  developer: Client.from('platform/developer'),
+  tenants: Client.from('platform/developer')
 });

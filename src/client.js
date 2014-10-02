@@ -17,21 +17,14 @@ function Client(cfg) {
 
 extend(Client, {
   method: makeMethod,
-  from: makeClient,
   sub: function() {
-    return sub.apply(this, [Client].concat([].slice.call(arguments))); 
+    return makeClient(sub.apply(this, [Client].concat([].slice.call(arguments)))); 
   }
 });
 
-extend(Client.prototype, {
-  commerce: makeClient('commerce'),
-  // content: makeClient('./content/client'),
-  // event: makeClient('./event/client'),
-  platform: makeClient('platform'),
-  root: function() {
-    return new Client(this);
-  },
-});
+Client.prototype.root = function() {
+  return new Client(this);
+};
 
 function camelCase (str) {
   return (str.charAt(0).toUpperCase() + str.substring(1)).replace(rdashAlpha, cccb);
@@ -70,10 +63,14 @@ Client.prototype.setTenant = function(tenantId) {
 };
 
 
-var u = require('util');
 Client.prototype.setAvailableTenants = function(arr) {
   this.context.availableTenants = arr;
   setTenantPodFromId(this, this.getTenant());
 }
+
+extend(Client.prototype, {
+  commerce: require('./clients/commerce')(Client),
+  platform: require('./clients/platform')(Client)
+});
 
 module.exports = Client;

@@ -21,7 +21,6 @@
   },
   "main": "./src/init",
   "devDependencies": {
-    "blanket": "^1.1.6",
     "mocha": "^1.21.4",
     "nock": "^0.48.0"
   },

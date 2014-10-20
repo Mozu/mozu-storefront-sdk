@@ -47,6 +47,8 @@ module.exports = function(options) {
   if (conf.body && typeof conf.body === "object") {
     conf.json = conf.body;
     delete conf.body;
+  } else {
+    conf.json = true;
   }
   conf.headers = makeContext(conf);
   request(conf, function(error, message, response) {

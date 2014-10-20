@@ -2,6 +2,8 @@
 -------------------------------------------------------------------------------------
 
 *   **Changed** Everything. Ground-up rewrite to resemble the other SDKs more. 
+*   **Changed** Client methods changed to return flat JSON instead of rich objects.
+*   **Added** Authentication management.
 *   **Added** Code generation with CodeZu.
 *   **Added** Testing with Mocha and Nock.
 

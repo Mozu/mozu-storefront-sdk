@@ -19,10 +19,16 @@ module.exports = function getAuthTasks(client, scope) {
       return AuthProvider.addAdminUserClaims(client);
     })
   }
+  if (!scope && AuthProvider.addMostRecentUserClaims) {
+    tasks.push(function() {
+      return AuthProvider.addMostRecentUserClaims(client);
+    });
+  }
   if (!(scope & scopes.NONE)) {
     tasks.push(function() {
       return AuthProvider.addPlatformAppClaims(client);
     });
   }
+
   return tasks;
 };

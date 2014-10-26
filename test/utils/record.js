@@ -17,7 +17,7 @@ module.exports = function (name, options) {
     // starts recording, or ensure the fixtures exist
     before: function () {
       if (!has_fixtures) try {
-        require('../../' + fp);
+        require(path.resolve(fp));
         has_fixtures = true;
       } catch (e) {
         nock.recorder.rec({

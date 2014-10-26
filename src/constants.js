@@ -9,6 +9,9 @@ var DEVELOPER = 1,
     all,
     hOP = Object.prototype.hasOwnProperty;
 
+// scopes are not yet in use, but when the services can reflect
+// their required scope, here will be all the bitmask constants
+
 // some contexts are always additive
 
 TENANT |= ADMINUSER;

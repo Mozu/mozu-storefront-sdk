@@ -2,6 +2,7 @@ var extend = require('node.extend'),
     request = require('./request'),
     makeUrl = require('./make-url'),
     pipeline = require('when/pipeline'),
+    scopes = require('../constants').scopes,
     getAuthTasks = require('./get-auth-tasks');
 
 /**
@@ -12,7 +13,7 @@ var extend = require('node.extend'),
 module.exports = function(config) {
   return function(body, options) {
     var self = this,
-        tasks = getAuthTasks(this, config.scope);
+        tasks = getAuthTasks(this, resolveScope(options, config));
     
     tasks.push(function() {
       return request(extend({}, config, self.defaultRequestOptions, {
@@ -23,4 +24,9 @@ module.exports = function(config) {
     });
     return pipeline(tasks);
   }
+}
+
+function resolveScope(options, config) {
+  if (options && options.scope && scopes[options.scope]) return scopes[options.scope];
+  return config.scope;
 }

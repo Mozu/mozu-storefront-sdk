@@ -14,25 +14,35 @@ var request = require('request'),
 function makeContext(conf) {
   var headers = {},
   context = conf.context;
-  if (context[APPCLAIMS]) headers[APPCLAIMS] = context[APPCLAIMS];
-  if (context[DATAVIEWMODE]) {
-    headers[DATAVIEWMODE] = context[DATAVIEWMODE];
-  } 
-  if (conf.scope & (scopes.DEVELOPER | scopes.ADMINUSER | scopes.SHOPPER)) {
-    headers[USERCLAIMS] = context[USERCLAIMS];
+
+  for (var h in constants.headers) {
+    if (constants.headers.hasOwnProperty(h) && context[constants.headers[h]]) {
+      headers[constants.headers[h]] = context[constants.headers[h]];
+    }
   }
-  if (((conf.scope & scopes.TENANT) == scopes.TENANT) && context[TENANT]) {
-    headers[TENANT] = context[TENANT];
-  }
-  if (((conf.scope & scopes.SITE) == scopes.SITE) && context[SITE]) {
-    headers[SITE] = context[SITE];
-  }
-  if (((conf.scope & scopes.MASTERCATALOG) == scopes.MASTERCATALOG) && context[MASTERCATALOG]) {
-    headers[MASTERCATALOG] = context[MASTERCATALOG];
-  }
-  if (((conf.scope & scopes.CATALOG) == scopes.CATALOG) && context[CATALOG]) {
-    headers[CATALOG] = context[CATALOG];
-  }
+
+  // 
+  // until scopes can reflect accurately out of the service classes, we'll just push all the context we have
+  // 
+  // if (context[APPCLAIMS]) headers[APPCLAIMS] = context[APPCLAIMS];
+  // if (context[DATAVIEWMODE]) {
+  //   headers[DATAVIEWMODE] = context[DATAVIEWMODE];
+  // } 
+  // if (conf.scope & (scopes.DEVELOPER | scopes.ADMINUSER | scopes.SHOPPER)) {
+  //   headers[USERCLAIMS] = context[USERCLAIMS];
+  // }
+  // if (((conf.scope & scopes.TENANT) == scopes.TENANT) && context[TENANT]) {
+  //   headers[TENANT] = context[TENANT];
+  // }
+  // if (((conf.scope & scopes.SITE) == scopes.SITE) && context[SITE]) {
+  //   headers[SITE] = context[SITE];
+  // }
+  // if (((conf.scope & scopes.MASTERCATALOG) == scopes.MASTERCATALOG) && context[MASTERCATALOG]) {
+  //   headers[MASTERCATALOG] = context[MASTERCATALOG];
+  // }
+  // if (((conf.scope & scopes.CATALOG) == scopes.CATALOG) && context[CATALOG]) {
+  //   headers[CATALOG] = context[CATALOG];
+  // }
   return headers;
 }
 

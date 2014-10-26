@@ -62,10 +62,11 @@ function refreshAdminUserAuthTicket(client, ticket) {
   return client.root().platform().adminuser().authtickets().refreshAuthTicket(ticket).then(AuthTicket.create);
 }
 
-function makeClaimMemoizer(requester, refresher, claimHeader) {
+function makeClaimMemoizer(calleeName, requester, refresher, claimHeader) {
   var claimCache = {};
   return function(client) {
-    var now = new Date(),
+    var claimsOp,
+        now = new Date(),
         cached = claimCache[client.context.appId],
         cacheAndUpdateClient = function(ticket) {
           claimCache[client.context.appId] = ticket;
@@ -75,21 +76,24 @@ function makeClaimMemoizer(requester, refresher, claimHeader) {
     if (!cached || (cached.refreshTokenExpiration < now && cached.accessTokenExpiration < now)) {
       return requester(client).then(cacheAndUpdateClient);
     } else if (cached.accessTokenExpiration < now && cached.refreshTokenExpiration > now) {
-      return refresher(client, cached).then(cacheAndUpdateClient);
+      claimsOp = refresher(client, cached).then(cacheAndUpdateClient);
     } else {
       client.context[claimHeader] = cached.accessToken;
-      return when(client);
+      claimsOp = when(client);
     }
+    claimsOp.ensure(function() {
+      allClaimMethods.addMostRecentUserClaims = allClaimMethods[calleeName];
+    });
+    return claimsOp;
   };
 }
 
-var addPlatformAppClaims = makeClaimMemoizer(getPlatformAuthTicket, refreshPlatformAuthTicket, constants.headers.APPCLAIMS),
-    addDeveloperUserClaims = makeClaimMemoizer(getDeveloperAuthTicket, refreshDeveloperAuthTicket, constants.headers.USERCLAIMS),
-    addAdminUserClaims = makeClaimMemoizer(getAdminUserAuthTicket, refreshAdminUserAuthTicket, constants.headers.USERCLAIMS);
 
-
-module.exports = {
-  addPlatformAppClaims: addPlatformAppClaims,
-  addDeveloperUserClaims: addDeveloperUserClaims,
-  addAdminUserClaims: addAdminUserClaims
+var allClaimMethods = {
+  addPlatformAppClaims: makeClaimMemoizer('addPlatformAppClaims', getPlatformAuthTicket, refreshPlatformAuthTicket, constants.headers.APPCLAIMS),
+  addDeveloperUserClaims: makeClaimMemoizer('addDeveloperUserClaims', getDeveloperAuthTicket, refreshDeveloperAuthTicket, constants.headers.USERCLAIMS),
+  addAdminUserClaims: makeClaimMemoizer('addAdminUserClaims', getAdminUserAuthTicket, refreshAdminUserAuthTicket, constants.headers.USERCLAIMS),
+  addMostRecentUserClaims: false
 };
+
+module.exports = allClaimMethods;

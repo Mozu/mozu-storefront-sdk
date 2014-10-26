@@ -25,7 +25,7 @@ describe('the Mozu JavaScript SDK', function() {
 
   describe('Catalog section', function() {
     it('returns Products from ProductAdmin.GetProducts()', function() {
-      return client.commerce().catalog().admin().products().getProducts().should.eventually.be.ok;
+      return client.commerce().catalog().admin().products().getProducts(null, { scope: 'ADMINUSER' }).should.eventually.be.ok;
       // nock will implicitly throw if there are any problems with authentication
     });
   });

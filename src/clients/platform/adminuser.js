@@ -1,8 +1,8 @@
 
 module.exports = function(Client){
 	return Client.sub({
-		adminuser: require('./platform/adminuser/adminUser')(Client),
-		adminuser: require('./platform/adminuser/tenantAdminUserAuthTicket')(Client)
+		"adminUser": require('./adminuser/adminUser')(Client),
+		"tenantAdminUserAuthTicket": require('./adminuser/tenantAdminUserAuthTicket')(Client)
 	});
 };
 

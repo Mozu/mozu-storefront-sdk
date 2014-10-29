@@ -1,9 +1,9 @@
 
 module.exports = function(Client){
 	return Client.sub({
-		carts: require('./commerce/carts/appliedDiscount')(Client),
-		carts: require('./commerce/carts/cartItem')(Client),
-		carts: require('./commerce/carts/changeMessage')(Client)
+		"appliedDiscount": require('./carts/appliedDiscount')(Client),
+		"cartItem": require('./carts/cartItem')(Client),
+		"changeMessage": require('./carts/changeMessage')(Client)
 	});
 };
 

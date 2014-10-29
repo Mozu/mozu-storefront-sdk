@@ -1,22 +1,22 @@
 
 module.exports = function(Client){
 	return Client.sub({
-		commerce: require('./commerce/commerce/admin')(Client),
-		commerce: require('./commerce/commerce/cart')(Client),
-		commerce: require('./commerce/commerce/carts')(Client),
-		commerce: require('./commerce/commerce/catalog')(Client),
-		commerce: require('./commerce/commerce/channel')(Client),
-		commerce: require('./commerce/commerce/channelGroup')(Client),
-		commerce: require('./commerce/commerce/customer')(Client),
-		commerce: require('./commerce/commerce/inStockNotificationSubscription')(Client),
-		commerce: require('./commerce/commerce/location')(Client),
-		commerce: require('./commerce/commerce/order')(Client),
-		commerce: require('./commerce/commerce/orders')(Client),
-		commerce: require('./commerce/commerce/return')(Client),
-		commerce: require('./commerce/commerce/returns')(Client),
-		commerce: require('./commerce/commerce/settings')(Client),
-		commerce: require('./commerce/commerce/wishlist')(Client),
-		commerce: require('./commerce/commerce/wishlists')(Client)
+		"admin": require('./commerce/admin')(Client),
+		"cart": require('./commerce/cart')(Client),
+		"carts": require('./commerce/carts')(Client),
+		"catalog": require('./commerce/catalog')(Client),
+		"channel": require('./commerce/channel')(Client),
+		"channelGroup": require('./commerce/channelGroup')(Client),
+		"customer": require('./commerce/customer')(Client),
+		"inStockNotificationSubscription": require('./commerce/inStockNotificationSubscription')(Client),
+		"location": require('./commerce/location')(Client),
+		"order": require('./commerce/order')(Client),
+		"orders": require('./commerce/orders')(Client),
+		"return": require('./commerce/return')(Client),
+		"returns": require('./commerce/returns')(Client),
+		"settings": require('./commerce/settings')(Client),
+		"wishlist": require('./commerce/wishlist')(Client),
+		"wishlists": require('./commerce/wishlists')(Client)
 	});
 };
 

@@ -1,10 +1,10 @@
 
 module.exports = function(Client){
 	return Client.sub({
-		documentlists: require('./content/documentlists/document')(Client),
-		documentlists: require('./content/documentlists/documentTree')(Client),
-		documentlists: require('./content/documentlists/facet')(Client),
-		documentlists: require('./content/documentlists/view')(Client)
+		"document": require('./documentlists/document')(Client),
+		"documentTree": require('./documentlists/documentTree')(Client),
+		"facet": require('./documentlists/facet')(Client),
+		"view": require('./documentlists/view')(Client)
 	});
 };
 

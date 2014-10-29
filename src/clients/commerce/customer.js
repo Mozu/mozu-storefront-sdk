@@ -1,15 +1,15 @@
 
 module.exports = function(Client){
 	return Client.sub({
-		customer: require('./commerce/customer/accounts')(Client),
-		customer: require('./commerce/customer/addressValidationRequest')(Client),
-		customer: require('./commerce/customer/attributedefinition')(Client),
-		customer: require('./commerce/customer/credit')(Client),
-		customer: require('./commerce/customer/credits')(Client),
-		customer: require('./commerce/customer/customerAccount')(Client),
-		customer: require('./commerce/customer/customerAuthTicket')(Client),
-		customer: require('./commerce/customer/customerSegment')(Client),
-		customer: require('./commerce/customer/visit')(Client)
+		"accounts": require('./customer/accounts')(Client),
+		"addressValidationRequest": require('./customer/addressValidationRequest')(Client),
+		"attributedefinition": require('./customer/attributedefinition')(Client),
+		"credit": require('./customer/credit')(Client),
+		"credits": require('./customer/credits')(Client),
+		"customerAccount": require('./customer/customerAccount')(Client),
+		"customerAuthTicket": require('./customer/customerAuthTicket')(Client),
+		"customerSegment": require('./customer/customerSegment')(Client),
+		"visit": require('./customer/visit')(Client)
 	});
 };
 

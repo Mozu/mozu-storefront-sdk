@@ -1,8 +1,9 @@
-var constants = require('../../constants');
 
-module.exports = function(Client) {
-  return Client.sub({
-    accounts: require('./adminuser/accounts')(Client),
-    authtickets: require('./adminuser/authtickets')(Client)
-  });
+module.exports = function(Client){
+	return Client.sub({
+		adminuser: require('./platform/adminuser/adminUser')(Client),
+		adminuser: require('./platform/adminuser/tenantAdminUserAuthTicket')(Client)
+	});
 };
+
+

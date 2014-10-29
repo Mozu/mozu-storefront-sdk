@@ -1,7 +1,8 @@
-var constants = require('../../constants');
 
-module.exports = function(Client) {
-  return Client.sub({
-    authtickets: require('./applications/authtickets')(Client)
-  });
+module.exports = function(Client){
+	return Client.sub({
+		applications: require('./platform/applications/authTicket')(Client)
+	});
 };
+
+

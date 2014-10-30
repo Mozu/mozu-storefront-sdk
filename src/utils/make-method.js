@@ -27,6 +27,9 @@ module.exports = function(config) {
 }
 
 function resolveScope(options, config) {
-  if (options && options.scope && scopes[options.scope]) return scopes[options.scope];
+  if (options && options.scope) {
+    if (scopes[options.scope]) return scopes[options.scope];
+    return options.scope;
+  }
   return config.scope;
 }

@@ -14,12 +14,13 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getFulfillmentInfo :Client.makeMethod({
+		getFulfillmentInfo :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/fulfillmentinfo?draft={draft}&responseFields={responseFields}'
-		})				setFulFillmentInfo :Client.makeMethod({
+		}),
+		setFulFillmentInfo :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/fulfillmentinfo?updatemode={updateMode}&version={version}&responseFields={responseFields}'
-		})		
+		})	
 	});
 };

@@ -14,17 +14,17 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getCategories :Client.makeMethod({
+		getCategories :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/storefront/categories/?filter={filter}&startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&responseFields={responseFields}'
 		}),
-		getCategory :Client.makeMethod({
+		getCategory :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/storefront/categories/{categoryId}?allowInactive={allowInactive}&responseFields={responseFields}'
 		}),
-		getCategoryTree :Client.makeMethod({
+		getCategoryTree :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/storefront/categories/tree?responseFields={responseFields}'
-		})				
+		})	
 	});
 };

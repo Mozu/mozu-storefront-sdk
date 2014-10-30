@@ -14,27 +14,27 @@ var constants = require('../../../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getAttributeLocalizedContents :Client.makeMethod({
+		getAttributeLocalizedContents :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/{attributeFQN}/LocalizedContent'
 		}),
-		getAttributeLocalizedContent :Client.makeMethod({
+		getAttributeLocalizedContent :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/{attributeFQN}/LocalizedContent/{localeCode}?responseFields={responseFields}'
-		})		,
-			addLocalizedContent :Client.makeMethod({
+		}),
+		addLocalizedContent :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/{attributeFQN}/LocalizedContent?responseFields={responseFields}'
-		})		,
-			updateLocalizedContents :Client.makeMethod({
+		}),
+		updateLocalizedContents :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/{attributeFQN}/LocalizedContent'
 		}),
-		updateLocalizedContent :Client.makeMethod({
+		updateLocalizedContent :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/{attributeFQN}/LocalizedContent/{localeCode}?responseFields={responseFields}'
-		})		,
-			deleteLocalizedContent :Client.makeMethod({
+		}),
+		deleteLocalizedContent :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/{attributeFQN}/LocalizedContent/{localeCode}'
 		})	

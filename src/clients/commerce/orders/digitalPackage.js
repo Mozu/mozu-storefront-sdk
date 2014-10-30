@@ -14,23 +14,23 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getAvailableDigitalPackageFulfillmentActions :Client.makeMethod({
+		getAvailableDigitalPackageFulfillmentActions :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/digitalpackages/{digitalPackageId}/actions'
 		}),
-		getDigitalPackage :Client.makeMethod({
+		getDigitalPackage :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/digitalpackages/{digitalPackageId}?responseFields={responseFields}'
-		})		,
-			createDigitalPackage :Client.makeMethod({
+		}),
+		createDigitalPackage :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/digitalpackages?responseFields={responseFields}'
-		})		,
-			updateDigitalPackage :Client.makeMethod({
+		}),
+		updateDigitalPackage :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/digitalpackages/{digitalPackageId}?responseFields={responseFields}'
-		})		,
-			deleteDigitalPackage :Client.makeMethod({
+		}),
+		deleteDigitalPackage :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/digitalpackages/{digitalPackageId}'
 		})	

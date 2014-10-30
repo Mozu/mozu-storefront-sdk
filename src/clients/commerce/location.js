@@ -14,29 +14,29 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getLocation :Client.makeMethod({
+		getLocation :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/storefront/locations/{code}?responseFields={responseFields}'
 		}),
-		getLocationInUsageType :Client.makeMethod({
+		getLocationInUsageType :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/storefront/locationUsageTypes/{locationUsageType}/locations/{code}?responseFields={responseFields}'
 		}),
-		getLocationsInUsageType :Client.makeMethod({
+		getLocationsInUsageType :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/storefront/locationUsageTypes/{locationUsageType}/locations?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getDirectShipLocation :Client.makeMethod({
+		getDirectShipLocation :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/storefront/locationUsageTypes/DS/location?responseFields={responseFields}'
 		}),
-		getInStorePickupLocation :Client.makeMethod({
+		getInStorePickupLocation :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/storefront/locationUsageTypes/SP/locations/{code}?responseFields={responseFields}'
 		}),
-		getInStorePickupLocations :Client.makeMethod({
+		getInStorePickupLocations :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/storefront/locationUsageTypes/SP/locations?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
-		})				
+		})	
 	});
 };

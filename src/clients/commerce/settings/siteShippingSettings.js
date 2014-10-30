@@ -14,9 +14,9 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getSiteShippingSettings :Client.makeMethod({
+		getSiteShippingSettings :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/settings/shipping/?responseFields={responseFields}'
-		})				
+		})	
 	});
 };

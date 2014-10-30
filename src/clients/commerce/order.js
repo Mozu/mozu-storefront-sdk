@@ -14,49 +14,49 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getOrders :Client.makeMethod({
+		getOrders :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&q={q}&qLimit={qLimit}&responseFields={responseFields}'
 		}),
-		getAvailableActions :Client.makeMethod({
+		getAvailableActions :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/actions'
 		}),
-		getTaxableOrders :Client.makeMethod({
+		getTaxableOrders :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/taxableorders'
 		}),
-		getOrder :Client.makeMethod({
+		getOrder :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/{orderId}?draft={draft}&responseFields={responseFields}'
-		})		,
-			createOrderFromCart :Client.makeMethod({
+		}),
+		createOrderFromCart :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/orders/?cartId={cartId}&responseFields={responseFields}'
 		}),
-		createOrder :Client.makeMethod({
+		createOrder :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/orders/?responseFields={responseFields}'
 		}),
-		performOrderAction :Client.makeMethod({
+		performOrderAction :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/actions?responseFields={responseFields}'
-		})		,
-			updateOrderDiscount :Client.makeMethod({
+		}),
+		updateOrderDiscount :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/discounts/{discountId}?updatemode={updateMode}&version={version}&responseFields={responseFields}'
 		}),
-		deleteOrderDraft :Client.makeMethod({
+		deleteOrderDraft :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/draft?version={version}'
 		}),
-		changeOrderUserId :Client.makeMethod({
+		changeOrderUserId :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/users?responseFields={responseFields}'
 		}),
-		updateOrder :Client.makeMethod({
+		updateOrder :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/orders/{orderId}?updatemode={updateMode}&version={version}&responseFields={responseFields}'
-		})		
+		})	
 	});
 };

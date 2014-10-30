@@ -14,23 +14,23 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getAccountAttribute :Client.makeMethod({
+		getAccountAttribute :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/attributes/{attributeFQN}?responseFields={responseFields}'
 		}),
-		getAccountAttributes :Client.makeMethod({
+		getAccountAttributes :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/attributes?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
-		})		,
-			addAccountAttribute :Client.makeMethod({
+		}),
+		addAccountAttribute :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/attributes?responseFields={responseFields}'
-		})		,
-			updateAccountAttribute :Client.makeMethod({
+		}),
+		updateAccountAttribute :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/attributes/{attributeFQN}?responseFields={responseFields}'
-		})		,
-			deleteAccountAttribute :Client.makeMethod({
+		}),
+		deleteAccountAttribute :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/attributes/{attributeFQN}'
 		})	

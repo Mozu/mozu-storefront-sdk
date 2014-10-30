@@ -14,31 +14,31 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getCartItem :Client.makeMethod({
+		getCartItem :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/carts/current/items/{cartItemId}?responseFields={responseFields}'
 		}),
-		getCartItems :Client.makeMethod({
+		getCartItems :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/carts/current/items?responseFields={responseFields}'
-		})		,
-			addItemToCart :Client.makeMethod({
+		}),
+		addItemToCart :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/carts/current/items?responseFields={responseFields}'
-		})		,
-			updateCartItemQuantity :Client.makeMethod({
+		}),
+		updateCartItemQuantity :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/carts/current/items/{cartItemId}/{quantity}?responseFields={responseFields}'
 		}),
-		updateCartItem :Client.makeMethod({
+		updateCartItem :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/carts/current/items/{cartItemId}?responseFields={responseFields}'
-		})		,
-			removeAllCartItems :Client.makeMethod({
+		}),
+		removeAllCartItems :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/carts/current/items'
 		}),
-		deleteCartItem :Client.makeMethod({
+		deleteCartItem :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/carts/current/items/{cartItemId}'
 		})	

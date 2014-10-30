@@ -14,9 +14,9 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getSubscriptions :Client.makeMethod({
+		getSubscriptions :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/event/push/subscriptions/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
-		})				
+		})	
 	});
 };

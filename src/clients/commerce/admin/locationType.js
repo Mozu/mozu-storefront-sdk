@@ -14,23 +14,23 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getLocationTypes :Client.makeMethod({
+		getLocationTypes :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/admin/locationtypes/'
 		}),
-		getLocationType :Client.makeMethod({
+		getLocationType :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/admin/locationtypes/{locationTypeCode}?responseFields={responseFields}'
-		})		,
-			addLocationType :Client.makeMethod({
+		}),
+		addLocationType :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/admin/locationtypes/?responseFields={responseFields}'
-		})		,
-			updateLocationType :Client.makeMethod({
+		}),
+		updateLocationType :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/admin/locationtypes/{locationTypeCode}?responseFields={responseFields}'
-		})		,
-			deleteLocationType :Client.makeMethod({
+		}),
+		deleteLocationType :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/admin/locationtypes/{locationTypeCode}'
 		})	

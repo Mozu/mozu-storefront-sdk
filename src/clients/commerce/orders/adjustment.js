@@ -14,19 +14,19 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-				applyShippingAdjustment :Client.makeMethod({
+		applyShippingAdjustment :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/adjustment/shipping?updatemode={updateMode}&version={version}&responseFields={responseFields}'
 		}),
-		applyAdjustment :Client.makeMethod({
+		applyAdjustment :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/adjustment?updatemode={updateMode}&version={version}&responseFields={responseFields}'
-		})		,
-			removeShippingAdjustment :Client.makeMethod({
+		}),
+		removeShippingAdjustment :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/adjustment/shipping?updatemode={updateMode}&version={version}'
 		}),
-		removeAdjustment :Client.makeMethod({
+		removeAdjustment :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/adjustment?updatemode={updateMode}&version={version}'
 		})	

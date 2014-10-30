@@ -14,23 +14,23 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getFacet :Client.makeMethod({
+		getFacet :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/facets/{facetId}?validate={validate}&responseFields={responseFields}'
 		}),
-		getFacetCategoryList :Client.makeMethod({
+		getFacetCategoryList :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/facets/category/{categoryId}?includeAvailable={includeAvailable}&validate={validate}&responseFields={responseFields}'
-		})		,
-			addFacet :Client.makeMethod({
+		}),
+		addFacet :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/facets/?responseFields={responseFields}'
-		})		,
-			updateFacet :Client.makeMethod({
+		}),
+		updateFacet :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/facets/{facetId}?responseFields={responseFields}'
-		})		,
-			deleteFacetById :Client.makeMethod({
+		}),
+		deleteFacetById :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/facets/{facetId}'
 		})	

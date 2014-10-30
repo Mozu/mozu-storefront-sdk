@@ -14,17 +14,17 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getOrderAttributes :Client.makeMethod({
+		getOrderAttributes :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/attributes'
-		})		,
-			createOrderAttributes :Client.makeMethod({
+		}),
+		createOrderAttributes :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/attributes'
-		})		,
-			updateOrderAttributes :Client.makeMethod({
+		}),
+		updateOrderAttributes :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/attributes?removeMissing={removeMissing}'
-		})		
+		})	
 	});
 };

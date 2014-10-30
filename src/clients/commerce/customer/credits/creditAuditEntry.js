@@ -14,9 +14,9 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getAuditEntries :Client.makeMethod({
+		getAuditEntries :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/credits/{code}/auditentries?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
-		})				
+		})	
 	});
 };

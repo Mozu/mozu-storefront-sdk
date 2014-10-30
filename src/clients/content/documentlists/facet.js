@@ -14,9 +14,9 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getFacets :Client.makeMethod({
+		getFacets :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/facets/{propertyName}'
-		})				
+		})	
 	});
 };

@@ -14,18 +14,19 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getTreeDocumentContent :Client.makeMethod({
+		getTreeDocumentContent :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documentTree/{documentName}/content'
 		}),
-		getTreeDocument :Client.makeMethod({
+		getTreeDocument :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documentTree/{documentName}?responseFields={responseFields}'
-		})				updateTreeDocumentContent :Client.makeMethod({
+		}),
+		updateTreeDocumentContent :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documentTree/{documentName}/content?folderPath={folderPath}&folderId={folderId}'
-		})		,
-			deleteTreeDocumentContent :Client.makeMethod({
+		}),
+		deleteTreeDocumentContent :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documentTree/{documentName}/content?folderPath={folderPath}&folderId={folderId}'
 		})	

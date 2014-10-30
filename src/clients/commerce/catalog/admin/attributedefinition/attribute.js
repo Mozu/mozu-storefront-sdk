@@ -14,23 +14,23 @@ var constants = require('../../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getAttributes :Client.makeMethod({
+		getAttributes :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getAttribute :Client.makeMethod({
+		getAttribute :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/{attributeFQN}?responseFields={responseFields}'
-		})		,
-			addAttribute :Client.makeMethod({
+		}),
+		addAttribute :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/?responseFields={responseFields}'
-		})		,
-			updateAttribute :Client.makeMethod({
+		}),
+		updateAttribute :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/{attributeFQN}?responseFields={responseFields}'
-		})		,
-			deleteAttribute :Client.makeMethod({
+		}),
+		deleteAttribute :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/{attributeFQN}'
 		})	

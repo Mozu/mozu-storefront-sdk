@@ -14,21 +14,21 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getVisits :Client.makeMethod({
+		getVisits :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/visits/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getVisit :Client.makeMethod({
+		getVisit :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/visits/{visitId}?responseFields={responseFields}'
-		})		,
-			addVisit :Client.makeMethod({
+		}),
+		addVisit :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/visits/?responseFields={responseFields}'
-		})		,
-			updateVisit :Client.makeMethod({
+		}),
+		updateVisit :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/customer/visits/{visitId}?responseFields={responseFields}'
-		})		
+		})	
 	});
 };

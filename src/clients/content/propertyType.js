@@ -14,23 +14,23 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getPropertyTypes :Client.makeMethod({
+		getPropertyTypes :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/propertytypes/?pageSize={pageSize}&startIndex={startIndex}&responseFields={responseFields}'
 		}),
-		getPropertyType :Client.makeMethod({
+		getPropertyType :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/propertytypes/{propertyTypeName}?responseFields={responseFields}'
-		})		,
-			createPropertyType :Client.makeMethod({
+		}),
+		createPropertyType :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/content/propertytypes/?responseFields={responseFields}'
-		})		,
-			updatePropertyType :Client.makeMethod({
+		}),
+		updatePropertyType :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/content/propertytypes/{propertyTypeName}?responseFields={responseFields}'
-		})		,
-			deletePropertyType :Client.makeMethod({
+		}),
+		deletePropertyType :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/content/propertytypes/{propertyTypeName}'
 		})	

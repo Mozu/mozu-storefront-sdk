@@ -14,9 +14,9 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-			getRates :Client.makeMethod({
+		getRates :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/storefront/shipping/request-rates?responseFields={responseFields}'
-		})			
+		})	
 	});
 };

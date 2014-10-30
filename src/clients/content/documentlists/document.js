@@ -14,35 +14,35 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getDocumentContent :Client.makeMethod({
+		getDocumentContent :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documents/{documentId}/content'
 		}),
-		getDocument :Client.makeMethod({
+		getDocument :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documents/{documentId}?responseFields={responseFields}'
 		}),
-		getDocuments :Client.makeMethod({
+		getDocuments :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documents?filter={filter}&sortBy={sortBy}&pageSize={pageSize}&startIndex={startIndex}&responseFields={responseFields}'
-		})		,
-			createDocument :Client.makeMethod({
+		}),
+		createDocument :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documents?responseFields={responseFields}'
-		})		,
-			updateDocumentContent :Client.makeMethod({
+		}),
+		updateDocumentContent :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documents/{documentId}/content'
 		}),
-		updateDocument :Client.makeMethod({
+		updateDocument :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documents/{documentId}?responseFields={responseFields}'
-		})		,
-			deleteDocument :Client.makeMethod({
+		}),
+		deleteDocument :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documents/{documentId}'
 		}),
-		deleteDocumentContent :Client.makeMethod({
+		deleteDocumentContent :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/documents/{documentId}/content'
 		})	

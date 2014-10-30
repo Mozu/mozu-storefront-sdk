@@ -14,27 +14,27 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getCredits :Client.makeMethod({
+		getCredits :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/credits/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getCredit :Client.makeMethod({
+		getCredit :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/credits/{code}?responseFields={responseFields}'
-		})		,
-			addCredit :Client.makeMethod({
+		}),
+		addCredit :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/credits/?responseFields={responseFields}'
-		})		,
-			associateCreditToShopper :Client.makeMethod({
+		}),
+		associateCreditToShopper :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/customer/credits/{code}/associate-to-shopper?responseFields={responseFields}'
 		}),
-		updateCredit :Client.makeMethod({
+		updateCredit :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/customer/credits/{code}?responseFields={responseFields}'
-		})		,
-			deleteCredit :Client.makeMethod({
+		}),
+		deleteCredit :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/customer/credits/{code}'
 		})	

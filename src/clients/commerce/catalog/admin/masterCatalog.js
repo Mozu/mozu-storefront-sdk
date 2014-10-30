@@ -14,16 +14,17 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getMasterCatalogs :Client.makeMethod({
+		getMasterCatalogs :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/mastercatalogs/?responseFields={responseFields}'
 		}),
-		getMasterCatalog :Client.makeMethod({
+		getMasterCatalog :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/mastercatalogs/{masterCatalogId}?responseFields={responseFields}'
-		})				updateMasterCatalog :Client.makeMethod({
+		}),
+		updateMasterCatalog :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/mastercatalogs/{masterCatalogId}?responseFields={responseFields}'
-		})		
+		})	
 	});
 };

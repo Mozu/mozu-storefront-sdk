@@ -14,23 +14,23 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getDocumentLists :Client.makeMethod({
+		getDocumentLists :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documentlists/?pageSize={pageSize}&startIndex={startIndex}&responseFields={responseFields}'
 		}),
-		getDocumentList :Client.makeMethod({
+		getDocumentList :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}?responseFields={responseFields}'
-		})		,
-			createDocumentList :Client.makeMethod({
+		}),
+		createDocumentList :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/content/documentlists/?responseFields={responseFields}'
-		})		,
-			updateDocumentList :Client.makeMethod({
+		}),
+		updateDocumentList :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}?responseFields={responseFields}'
-		})		,
-			deleteDocumentList :Client.makeMethod({
+		}),
+		deleteDocumentList :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}'
 		})	

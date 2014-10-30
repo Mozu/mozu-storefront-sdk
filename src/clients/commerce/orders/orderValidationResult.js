@@ -14,12 +14,13 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getValidationResults :Client.makeMethod({
+		getValidationResults :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/validationresults'
-		})				addValidationResult :Client.makeMethod({
+		}),
+		addValidationResult :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/validationresults?responseFields={responseFields}'
-		})		
+		})	
 	});
 };

@@ -14,17 +14,17 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		listDocumentDraftSummaries :Client.makeMethod({
+		listDocumentDraftSummaries :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documentpublishing/draft?pageSize={pageSize}&startIndex={startIndex}&documentLists={documentLists}&responseFields={responseFields}'
-		})		,
-			deleteDocumentDrafts :Client.makeMethod({
+		}),
+		deleteDocumentDrafts :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/content/documentpublishing/draft?documentLists={documentLists}'
-		})		,
-			publishDocuments :Client.makeMethod({
+		}),
+		publishDocuments :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/content/documentpublishing/active?documentLists={documentLists}'
-		})		
+		})	
 	});
 };

@@ -14,12 +14,13 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getCustomerCheckoutSettings :Client.makeMethod({
+		getCustomerCheckoutSettings :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/settings/checkout/customercheckoutsettings?responseFields={responseFields}'
-		})				updateCustomerCheckoutSettings :Client.makeMethod({
+		}),
+		updateCustomerCheckoutSettings :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/settings/checkout/customercheckoutsettings?responseFields={responseFields}'
-		})		
+		})	
 	});
 };

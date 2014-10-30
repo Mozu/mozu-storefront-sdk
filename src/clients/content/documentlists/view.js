@@ -14,9 +14,9 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getViewDocuments :Client.makeMethod({
+		getViewDocuments :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documentlists/{documentListName}/views/{viewName}/documents?filter={filter}&sortBy={sortBy}&pageSize={pageSize}&startIndex={startIndex}&responseFields={responseFields}'
-		})				
+		})	
 	});
 };

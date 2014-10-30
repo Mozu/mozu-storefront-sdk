@@ -14,9 +14,9 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getThirdPartyPaymentWorkflows :Client.makeMethod({
+		getThirdPartyPaymentWorkflows :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/settings/checkout/paymentsettings/thirdpartyworkflows'
-		})				
+		})	
 	});
 };

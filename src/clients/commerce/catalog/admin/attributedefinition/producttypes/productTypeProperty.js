@@ -14,23 +14,23 @@ var constants = require('../../../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getProperties :Client.makeMethod({
+		getProperties :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/producttypes/{productTypeId}/Properties'
 		}),
-		getProperty :Client.makeMethod({
+		getProperty :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/producttypes/{productTypeId}/Properties/{attributeFQN}?responseFields={responseFields}'
-		})		,
-			addProperty :Client.makeMethod({
+		}),
+		addProperty :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/producttypes/{productTypeId}/Properties?responseFields={responseFields}'
-		})		,
-			updateProperty :Client.makeMethod({
+		}),
+		updateProperty :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/producttypes/{productTypeId}/Properties/{attributeFQN}?responseFields={responseFields}'
-		})		,
-			deleteProperty :Client.makeMethod({
+		}),
+		deleteProperty :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/producttypes/{productTypeId}/Properties/{attributeFQN}'
 		})	

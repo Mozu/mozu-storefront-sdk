@@ -14,23 +14,23 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getEntity :Client.makeMethod({
+		getEntity :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/entities/{id}?responseFields={responseFields}'
 		}),
-		getEntities :Client.makeMethod({
+		getEntities :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/entities?pageSize={pageSize}&startIndex={startIndex}&filter={filter}&sortBy={sortBy}&responseFields={responseFields}'
-		})		,
-			insertEntity :Client.makeMethod({
+		}),
+		insertEntity :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/entities/?responseFields={responseFields}'
-		})		,
-			updateEntity :Client.makeMethod({
+		}),
+		updateEntity :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/entities/{id}?responseFields={responseFields}'
-		})		,
-			deleteEntity :Client.makeMethod({
+		}),
+		deleteEntity :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/entities/{id}'
 		})	

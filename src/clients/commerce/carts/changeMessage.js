@@ -14,14 +14,15 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getMessages :Client.makeMethod({
+		getMessages :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/carts/current/messages?responseFields={responseFields}'
-		})					removeAllMessages :Client.makeMethod({
+		}),
+		removeAllMessages :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/carts/current/messages'
 		}),
-		removeMessage :Client.makeMethod({
+		removeMessage :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/carts/current/messages/{messageId}'
 		})	

@@ -14,23 +14,23 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getChannels :Client.makeMethod({
+		getChannels :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/channels/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getChannel :Client.makeMethod({
+		getChannel :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/channels/{code}?responseFields={responseFields}'
-		})		,
-			createChannel :Client.makeMethod({
+		}),
+		createChannel :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/channels/?responseFields={responseFields}'
-		})		,
-			updateChannel :Client.makeMethod({
+		}),
+		updateChannel :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/channels/{code}?responseFields={responseFields}'
-		})		,
-			deleteChannel :Client.makeMethod({
+		}),
+		deleteChannel :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/channels/{code}'
 		})	

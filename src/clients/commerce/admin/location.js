@@ -14,23 +14,23 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getLocations :Client.makeMethod({
+		getLocations :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/admin/locations/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getLocation :Client.makeMethod({
+		getLocation :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/admin/locations/{locationCode}?responseFields={responseFields}'
-		})		,
-			addLocation :Client.makeMethod({
+		}),
+		addLocation :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/admin/locations/?responseFields={responseFields}'
-		})		,
-			updateLocation :Client.makeMethod({
+		}),
+		updateLocation :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/admin/locations/{locationCode}?responseFields={responseFields}'
-		})		,
-			deleteLocation :Client.makeMethod({
+		}),
+		deleteLocation :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/admin/locations/{locationCode}'
 		})	

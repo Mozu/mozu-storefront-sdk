@@ -14,67 +14,67 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getReturns :Client.makeMethod({
+		getReturns :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/returns/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getAvailableReturnActions :Client.makeMethod({
+		getAvailableReturnActions :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/returns/{returnId}/actions'
 		}),
-		getReturnItem :Client.makeMethod({
+		getReturnItem :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/returns/{returnId}/items/{returnItemId}?responseFields={responseFields}'
 		}),
-		getReturnItems :Client.makeMethod({
+		getReturnItems :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/returns/{returnId}/items?responseFields={responseFields}'
 		}),
-		getAvailablePaymentActionsForReturn :Client.makeMethod({
+		getAvailablePaymentActionsForReturn :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/returns/{returnId}/payments/{paymentId}/actions'
 		}),
-		getPayment :Client.makeMethod({
+		getPayment :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/returns/{returnId}/payments/{paymentId}?responseFields={responseFields}'
 		}),
-		getPayments :Client.makeMethod({
+		getPayments :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/returns/{returnId}/payments?responseFields={responseFields}'
 		}),
-		getReturn :Client.makeMethod({
+		getReturn :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/returns/{returnId}?responseFields={responseFields}'
-		})		,
-			createReturn :Client.makeMethod({
+		}),
+		createReturn :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/returns/?responseFields={responseFields}'
 		}),
-		createReturnItem :Client.makeMethod({
+		createReturnItem :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/returns/{returnId}/items?responseFields={responseFields}'
 		}),
-		performPaymentActionForReturn :Client.makeMethod({
+		performPaymentActionForReturn :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/returns/{returnId}/payments/{paymentId}/actions?responseFields={responseFields}'
 		}),
-		createPaymentActionForReturn :Client.makeMethod({
+		createPaymentActionForReturn :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/returns/{returnId}/payments/actions?responseFields={responseFields}'
 		}),
-		performReturnActions :Client.makeMethod({
+		performReturnActions :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/returns/actions?responseFields={responseFields}'
-		})		,
-			updateReturn :Client.makeMethod({
+		}),
+		updateReturn :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/returns/{returnId}?responseFields={responseFields}'
-		})		,
-			deleteOrderItem :Client.makeMethod({
+		}),
+		deleteOrderItem :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/returns/{orderId}/items/{orderItemId}?updatemode={updateMode}&version={version}'
 		}),
-		deleteReturn :Client.makeMethod({
+		deleteReturn :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/returns/{returnId}'
 		})	

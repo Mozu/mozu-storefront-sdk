@@ -14,47 +14,47 @@ var constants = require('../../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getProperties :Client.makeMethod({
+		getProperties :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/Properties'
 		}),
-		getPropertyValueLocalizedContents :Client.makeMethod({
+		getPropertyValueLocalizedContents :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/Properties/{attributeFQN}/values/{value}/LocalizedContent'
 		}),
-		getPropertyValueLocalizedContent :Client.makeMethod({
+		getPropertyValueLocalizedContent :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/Properties/{attributeFQN}/values/{value}/LocalizedContent/{localeCode}?responseFields={responseFields}'
 		}),
-		getProperty :Client.makeMethod({
+		getProperty :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/Properties/{attributeFQN}?responseFields={responseFields}'
-		})		,
-			addPropertyValueLocalizedContent :Client.makeMethod({
+		}),
+		addPropertyValueLocalizedContent :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/Properties/{attributeFQN}/values/{value}/LocalizedContent?responseFields={responseFields}'
 		}),
-		addProperty :Client.makeMethod({
+		addProperty :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/Properties?responseFields={responseFields}'
-		})		,
-			updatePropertyValueLocalizedContents :Client.makeMethod({
+		}),
+		updatePropertyValueLocalizedContents :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/Properties/{attributeFQN}/values/{value}/LocalizedContent'
 		}),
-		updatePropertyValueLocalizedContent :Client.makeMethod({
+		updatePropertyValueLocalizedContent :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/Properties/{attributeFQN}/values/{value}/LocalizedContent/{localeCode}?responseFields={responseFields}'
 		}),
-		updateProperty :Client.makeMethod({
+		updateProperty :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/Properties/{attributeFQN}?responseFields={responseFields}'
-		})		,
-			deleteProperty :Client.makeMethod({
+		}),
+		deleteProperty :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/Properties/{attributeFQN}'
 		}),
-		deletePropertyValueLocalizedContent :Client.makeMethod({
+		deletePropertyValueLocalizedContent :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/Properties/{attributeFQN}/values/{value}/LocalizedContent/{localeCode}'
 		})	

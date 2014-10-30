@@ -14,27 +14,27 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getProductReservations :Client.makeMethod({
+		getProductReservations :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/productreservations/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getProductReservation :Client.makeMethod({
+		getProductReservation :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/productreservations/{productReservationId}?responseFields={responseFields}'
-		})		,
-			addProductReservations :Client.makeMethod({
+		}),
+		addProductReservations :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/productreservations/?skipInventoryCheck={skipInventoryCheck}'
 		}),
-		commitReservations :Client.makeMethod({
+		commitReservations :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/productreservations/commit'
-		})		,
-			updateProductReservations :Client.makeMethod({
+		}),
+		updateProductReservations :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/productreservations/?skipInventoryCheck={skipInventoryCheck}'
-		})		,
-			deleteProductReservation :Client.makeMethod({
+		}),
+		deleteProductReservation :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/productreservations/{productReservationId}'
 		})	

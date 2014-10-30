@@ -14,12 +14,13 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getGeneralSettings :Client.makeMethod({
+		getGeneralSettings :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/settings/general/?responseFields={responseFields}'
-		})				updateGeneralSettings :Client.makeMethod({
+		}),
+		updateGeneralSettings :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/settings/general/?responseFields={responseFields}'
-		})		
+		})	
 	});
 };

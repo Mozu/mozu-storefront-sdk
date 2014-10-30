@@ -29,9 +29,9 @@ module.exports = function(Client){
 				method: constants.verbs.GET,
 				turl: '{+homePod}api/platform/adminuser/accounts/{userId}/tenants?responseFields={responseFields}'
 			})),
-		getUser :Client.makeMethod({
+		getUser :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/adminuser/accounts/{userId}?responseFields={responseFields}'
-		})				
+		})	
 	});
 };

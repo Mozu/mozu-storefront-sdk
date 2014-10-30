@@ -14,23 +14,23 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getAccountContact :Client.makeMethod({
+		getAccountContact :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/contacts/{contactId}?responseFields={responseFields}'
 		}),
-		getAccountContacts :Client.makeMethod({
+		getAccountContacts :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/contacts?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
-		})		,
-			addAccountContact :Client.makeMethod({
+		}),
+		addAccountContact :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/contacts?responseFields={responseFields}'
-		})		,
-			updateAccountContact :Client.makeMethod({
+		}),
+		updateAccountContact :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/contacts/{contactId}?responseFields={responseFields}'
-		})		,
-			deleteAccountContact :Client.makeMethod({
+		}),
+		deleteAccountContact :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/contacts/{contactId}'
 		})	

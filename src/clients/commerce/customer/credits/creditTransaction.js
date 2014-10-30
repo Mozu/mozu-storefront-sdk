@@ -14,13 +14,13 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getTransactions :Client.makeMethod({
+		getTransactions :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/credits/{code}/transactions?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
-		})		,
-			addTransaction :Client.makeMethod({
+		}),
+		addTransaction :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/credits/{code}/transactions?responseFields={responseFields}'
-		})			
+		})	
 	});
 };

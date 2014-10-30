@@ -14,25 +14,25 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getPayments :Client.makeMethod({
+		getPayments :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/payments/?responseFields={responseFields}'
 		}),
-		getAvailablePaymentActions :Client.makeMethod({
+		getAvailablePaymentActions :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/payments/{paymentId}/actions'
 		}),
-		getPayment :Client.makeMethod({
+		getPayment :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/payments/{paymentId}?responseFields={responseFields}'
-		})		,
-			performPaymentAction :Client.makeMethod({
+		}),
+		performPaymentAction :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/payments/{paymentId}/actions?responseFields={responseFields}'
 		}),
-		createPaymentAction :Client.makeMethod({
+		createPaymentAction :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/payments/actions?responseFields={responseFields}'
-		})			
+		})	
 	});
 };

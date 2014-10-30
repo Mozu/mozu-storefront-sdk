@@ -14,9 +14,9 @@ var constants = require('../../../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-			generateProductVariations :Client.makeMethod({
+		generateProductVariations :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/producttypes/{productTypeId}/variations?productCode={productCode}&startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
-		})			
+		})	
 	});
 };

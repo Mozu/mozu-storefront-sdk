@@ -14,15 +14,15 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-				applyCoupon :Client.makeMethod({
+		applyCoupon :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/carts/{cartId}/coupons/{couponCode}?responseFields={responseFields}'
-		})		,
-			removeCoupons :Client.makeMethod({
+		}),
+		removeCoupons :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/carts/{cartId}/coupons'
 		}),
-		removeCoupon :Client.makeMethod({
+		removeCoupon :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/carts/{cartId}/coupons/{couponcode}'
 		})	

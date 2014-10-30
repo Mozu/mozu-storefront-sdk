@@ -14,13 +14,13 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-			discardDrafts :Client.makeMethod({
+		discardDrafts :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/publishing/discarddrafts'
 		}),
-		publishDrafts :Client.makeMethod({
+		publishDrafts :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/publishing/publishdrafts'
-		})			
+		})	
 	});
 };

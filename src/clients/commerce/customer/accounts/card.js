@@ -14,23 +14,23 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getAccountCard :Client.makeMethod({
+		getAccountCard :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/cards/{cardId}?responseFields={responseFields}'
 		}),
-		getAccountCards :Client.makeMethod({
+		getAccountCards :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/cards?responseFields={responseFields}'
-		})		,
-			addAccountCard :Client.makeMethod({
+		}),
+		addAccountCard :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/cards?responseFields={responseFields}'
-		})		,
-			updateAccountCard :Client.makeMethod({
+		}),
+		updateAccountCard :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/cards/{cardId}?responseFields={responseFields}'
-		})		,
-			deleteAccountCard :Client.makeMethod({
+		}),
+		deleteAccountCard :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/cards/{cardId}'
 		})	

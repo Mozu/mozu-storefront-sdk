@@ -14,9 +14,9 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-			performFulfillmentAction :Client.makeMethod({
+		performFulfillmentAction :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/orders/{orderId}/fulfillment/actions/?responseFields={responseFields}'
-		})			
+		})	
 	});
 };

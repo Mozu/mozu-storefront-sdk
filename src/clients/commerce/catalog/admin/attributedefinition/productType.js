@@ -14,23 +14,23 @@ var constants = require('../../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getProductTypes :Client.makeMethod({
+		getProductTypes :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/producttypes/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getProductType :Client.makeMethod({
+		getProductType :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/producttypes/{productTypeId}?responseFields={responseFields}'
-		})		,
-			addProductType :Client.makeMethod({
+		}),
+		addProductType :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/producttypes/?responseFields={responseFields}'
-		})		,
-			updateProductType :Client.makeMethod({
+		}),
+		updateProductType :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/producttypes/{productTypeId}?responseFields={responseFields}'
-		})		,
-			deleteProductType :Client.makeMethod({
+		}),
+		deleteProductType :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/producttypes/{productTypeId}'
 		})	

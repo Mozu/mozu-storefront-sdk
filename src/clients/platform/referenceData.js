@@ -14,53 +14,53 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getAddressSchema :Client.makeMethod({
+		getAddressSchema :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/addressschema/{countryCode}?responseFields={responseFields}'
 		}),
-		getAddressSchemas :Client.makeMethod({
+		getAddressSchemas :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/addressschemas?responseFields={responseFields}'
 		}),
-		getBehavior :Client.makeMethod({
+		getBehavior :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/behaviors/{behaviorId}?responseFields={responseFields}'
 		}),
-		getBehaviorCategory :Client.makeMethod({
+		getBehaviorCategory :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/behaviors/categories/{categoryId}?responseFields={responseFields}'
 		}),
-		getBehaviorCategories :Client.makeMethod({
+		getBehaviorCategories :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/behaviors/categories?responseFields={responseFields}'
 		}),
-		getBehaviors :Client.makeMethod({
+		getBehaviors :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/behaviors?userType={userType}&responseFields={responseFields}'
 		}),
-		getContentLocales :Client.makeMethod({
+		getContentLocales :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/contentLocales?responseFields={responseFields}'
 		}),
-		getCountries :Client.makeMethod({
+		getCountries :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/countries?responseFields={responseFields}'
 		}),
-		getCurrencies :Client.makeMethod({
+		getCurrencies :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/currencies?responseFields={responseFields}'
 		}),
-		getTimeZones :Client.makeMethod({
+		getTimeZones :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/timezones?responseFields={responseFields}'
 		}),
-		getTopLevelDomains :Client.makeMethod({
+		getTopLevelDomains :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/topleveldomains?responseFields={responseFields}'
 		}),
-		getUnitsOfMeasure :Client.makeMethod({
+		getUnitsOfMeasure :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/platform/reference/unitsofmeasure?filter={filter}&responseFields={responseFields}'
-		})				
+		})	
 	});
 };

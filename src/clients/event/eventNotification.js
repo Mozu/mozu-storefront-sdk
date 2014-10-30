@@ -14,13 +14,13 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getEvents :Client.makeMethod({
+		getEvents :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/event/pull/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getEvent :Client.makeMethod({
+		getEvent :Client.method({
 			method: constants.verbs.GET,
 			url: '{+homePod}api/event/pull/{eventId}?responseFields={responseFields}'
-		})				
+		})	
 	});
 };

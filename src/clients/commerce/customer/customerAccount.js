@@ -14,67 +14,67 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getAccounts :Client.makeMethod({
+		getAccounts :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/accounts/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&fields={fields}&q={q}&qLimit={qLimit}&isAnonymous={isAnonymous}&responseFields={responseFields}'
 		}),
-		getLoginState :Client.makeMethod({
+		getLoginState :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/loginstate?responseFields={responseFields}'
 		}),
-		getAccount :Client.makeMethod({
+		getAccount :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}?responseFields={responseFields}'
-		})		,
-			addAccount :Client.makeMethod({
+		}),
+		addAccount :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/?responseFields={responseFields}'
 		}),
-		changePassword :Client.makeMethod({
+		changePassword :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/Change-Password'
 		}),
-		addLoginToExistingCustomer :Client.makeMethod({
+		addLoginToExistingCustomer :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/Create-Login?responseFields={responseFields}'
 		}),
-		recomputeCustomerLifetimeValue :Client.makeMethod({
+		recomputeCustomerLifetimeValue :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/recomputelifetimevalue'
 		}),
-		setLoginLocked :Client.makeMethod({
+		setLoginLocked :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/Set-Login-Locked'
 		}),
-		setPasswordChangeRequired :Client.makeMethod({
+		setPasswordChangeRequired :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}/Set-Password-Change-Required'
 		}),
-		addAccountAndLogin :Client.makeMethod({
+		addAccountAndLogin :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/Add-Account-And-Login?responseFields={responseFields}'
 		}),
-		addAccounts :Client.makeMethod({
+		addAccounts :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/Bulk?responseFields={responseFields}'
 		}),
-		getLoginStateByEmailAddress :Client.makeMethod({
+		getLoginStateByEmailAddress :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/loginstatebyemailaddress?emailAddress={emailAddress}&responseFields={responseFields}'
 		}),
-		getLoginStateByUserName :Client.makeMethod({
+		getLoginStateByUserName :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/loginstatebyusername?userName={userName}&responseFields={responseFields}'
 		}),
-		resetPassword :Client.makeMethod({
+		resetPassword :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/accounts/Reset-Password'
-		})		,
-			updateAccount :Client.makeMethod({
+		}),
+		updateAccount :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}?responseFields={responseFields}'
-		})		,
-			deleteAccount :Client.makeMethod({
+		}),
+		deleteAccount :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/customer/accounts/{accountId}'
 		})	

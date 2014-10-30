@@ -14,17 +14,17 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getAttributes :Client.makeMethod({
+		getAttributes :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/attributedefinition/attributes/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getAttributeVocabularyValues :Client.makeMethod({
+		getAttributeVocabularyValues :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/attributedefinition/attributes/{attributeFQN}/VocabularyValues'
 		}),
-		getAttribute :Client.makeMethod({
+		getAttribute :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/customer/attributedefinition/attributes/{attributeFQN}?responseFields={responseFields}'
-		})				
+		})	
 	});
 };

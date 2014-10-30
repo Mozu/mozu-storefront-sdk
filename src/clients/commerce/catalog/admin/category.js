@@ -14,27 +14,27 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getCategories :Client.makeMethod({
+		getCategories :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/categories/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getChildCategories :Client.makeMethod({
+		getChildCategories :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/categories/{categoryId}/children?responseFields={responseFields}'
 		}),
-		getCategory :Client.makeMethod({
+		getCategory :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/categories/{categoryId}?responseFields={responseFields}'
-		})		,
-			addCategory :Client.makeMethod({
+		}),
+		addCategory :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/categories/?incrementSequence={incrementSequence}&responseFields={responseFields}'
-		})		,
-			updateCategory :Client.makeMethod({
+		}),
+		updateCategory :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/categories/{categoryId}?cascadeVisibility={cascadeVisibility}&responseFields={responseFields}'
-		})		,
-			deleteCategoryById :Client.makeMethod({
+		}),
+		deleteCategoryById :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/categories/{categoryId}/?cascadeDelete={cascadeDelete}'
 		})	

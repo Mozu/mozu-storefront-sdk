@@ -14,16 +14,17 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getLocationUsages :Client.makeMethod({
+		getLocationUsages :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/settings/locationUsages/?responseFields={responseFields}'
 		}),
-		getLocationUsage :Client.makeMethod({
+		getLocationUsage :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/settings/locationUsages/{code}?responseFields={responseFields}'
-		})				updateLocationUsage :Client.makeMethod({
+		}),
+		updateLocationUsage :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/settings/locationUsages/{code}?responseFields={responseFields}'
-		})		
+		})	
 	});
 };

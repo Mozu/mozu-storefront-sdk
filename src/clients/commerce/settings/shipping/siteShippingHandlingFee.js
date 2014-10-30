@@ -14,17 +14,17 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getOrderHandlingFee :Client.makeMethod({
+		getOrderHandlingFee :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/settings/shipping/orderhandlingfee?responseFields={responseFields}'
-		})		,
-			createOrderHandlingFee :Client.makeMethod({
+		}),
+		createOrderHandlingFee :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/settings/shipping/orderhandlingfee?responseFields={responseFields}'
-		})		,
-			updateOrderHandlingFee :Client.makeMethod({
+		}),
+		updateOrderHandlingFee :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/settings/shipping/orderhandlingfee?responseFields={responseFields}'
-		})		
+		})	
 	});
 };

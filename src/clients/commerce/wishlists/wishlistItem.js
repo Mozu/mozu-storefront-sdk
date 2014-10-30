@@ -14,35 +14,35 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getWishlistItem :Client.makeMethod({
+		getWishlistItem :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/wishlists/{wishlistId}/items/{wishlistItemId}?responseFields={responseFields}'
 		}),
-		getWishlistItems :Client.makeMethod({
+		getWishlistItems :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/wishlists/{wishlistId}/items?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getWishlistItemsByWishlistName :Client.makeMethod({
+		getWishlistItemsByWishlistName :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/wishlists/customers/{customerAccountId}/{wishlistName}/items?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
-		})		,
-			addItemToWishlist :Client.makeMethod({
+		}),
+		addItemToWishlist :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/wishlists/{wishlistId}/items?responseFields={responseFields}'
-		})		,
-			updateWishlistItemQuantity :Client.makeMethod({
+		}),
+		updateWishlistItemQuantity :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/wishlists/{wishlistId}/items/{wishlistItemId}/{quantity}?responseFields={responseFields}'
 		}),
-		updateWishlistItem :Client.makeMethod({
+		updateWishlistItem :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/wishlists/{wishlistId}/items/{wishlistItemId}?responseFields={responseFields}'
-		})		,
-			removeAllWishlistItems :Client.makeMethod({
+		}),
+		removeAllWishlistItems :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/wishlists/{wishlistId}/items'
 		}),
-		deleteWishlistItem :Client.makeMethod({
+		deleteWishlistItem :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/wishlists/{wishlistId}/items/{wishlistItemId}'
 		})	

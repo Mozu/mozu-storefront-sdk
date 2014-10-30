@@ -14,35 +14,35 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getDiscounts :Client.makeMethod({
+		getDiscounts :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/discounts/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getDiscountContent :Client.makeMethod({
+		getDiscountContent :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/discounts/{discountId}/content?responseFields={responseFields}'
 		}),
-		getDiscount :Client.makeMethod({
+		getDiscount :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/discounts/{discountId}?responseFields={responseFields}'
 		}),
-		generateRandomCoupon :Client.makeMethod({
+		generateRandomCoupon :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/discounts/generate-random-coupon?responseFields={responseFields}'
-		})		,
-			createDiscount :Client.makeMethod({
+		}),
+		createDiscount :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/discounts/?responseFields={responseFields}'
-		})		,
-			updateDiscountContent :Client.makeMethod({
+		}),
+		updateDiscountContent :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/discounts/{discountId}/content?responseFields={responseFields}'
 		}),
-		updateDiscount :Client.makeMethod({
+		updateDiscount :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/discounts/{discountId}?responseFields={responseFields}'
-		})		,
-			deleteDiscount :Client.makeMethod({
+		}),
+		deleteDiscount :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/discounts/{discountId}'
 		})	

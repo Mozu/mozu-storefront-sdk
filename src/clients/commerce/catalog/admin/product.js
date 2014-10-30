@@ -14,51 +14,51 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getProducts :Client.makeMethod({
+		getProducts :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&q={q}&qLimit={qLimit}&noCount={noCount}&responseFields={responseFields}'
 		}),
-		getProductInCatalogs :Client.makeMethod({
+		getProductInCatalogs :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs'
 		}),
-		getProductInCatalog :Client.makeMethod({
+		getProductInCatalog :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs/{catalogId}?responseFields={responseFields}'
 		}),
-		getProduct :Client.makeMethod({
+		getProduct :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}?responseFields={responseFields}'
-		})		,
-			addProduct :Client.makeMethod({
+		}),
+		addProduct :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/?responseFields={responseFields}'
 		}),
-		addProductInCatalog :Client.makeMethod({
+		addProductInCatalog :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs?responseFields={responseFields}'
 		}),
-		renameProductCodes :Client.makeMethod({
+		renameProductCodes :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/Actions/RenameProductCodes'
-		})		,
-			updateProductInCatalogs :Client.makeMethod({
+		}),
+		updateProductInCatalogs :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs'
 		}),
-		updateProductInCatalog :Client.makeMethod({
+		updateProductInCatalog :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs/{catalogId}?responseFields={responseFields}'
 		}),
-		updateProduct :Client.makeMethod({
+		updateProduct :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}?responseFields={responseFields}'
-		})		,
-			deleteProduct :Client.makeMethod({
+		}),
+		deleteProduct :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}'
 		}),
-		deleteProductInCatalog :Client.makeMethod({
+		deleteProductInCatalog :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/catalog/admin/products/{productCode}/ProductInCatalogs/{catalogId}'
 		})	

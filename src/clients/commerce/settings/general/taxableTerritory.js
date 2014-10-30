@@ -14,17 +14,17 @@ var constants = require('../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getTaxableTerritories :Client.makeMethod({
+		getTaxableTerritories :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/settings/general/taxableterritories'
-		})		,
-			addTaxableTerritory :Client.makeMethod({
+		}),
+		addTaxableTerritory :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/settings/general/taxableterritories?responseFields={responseFields}'
-		})		,
-			updateTaxableTerritories :Client.makeMethod({
+		}),
+		updateTaxableTerritories :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/settings/general/taxableterritories'
-		})		
+		})	
 	});
 };

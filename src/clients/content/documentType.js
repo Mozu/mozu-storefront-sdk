@@ -14,21 +14,21 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getDocumentTypes :Client.makeMethod({
+		getDocumentTypes :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documenttypes/?pageSize={pageSize}&startIndex={startIndex}&responseFields={responseFields}'
 		}),
-		getDocumentType :Client.makeMethod({
+		getDocumentType :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/content/documenttypes/{documentTypeName}?responseFields={responseFields}'
-		})		,
-			createDocumentType :Client.makeMethod({
+		}),
+		createDocumentType :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/content/documenttypes/?responseFields={responseFields}'
-		})		,
-			updateDocumentType :Client.makeMethod({
+		}),
+		updateDocumentType :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/content/documenttypes/{documentTypeName}?responseFields={responseFields}'
-		})		
+		})	
 	});
 };

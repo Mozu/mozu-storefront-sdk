@@ -14,9 +14,9 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getCheckoutSettings :Client.makeMethod({
+		getCheckoutSettings :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/settings/checkout/?responseFields={responseFields}'
-		})				
+		})	
 	});
 };

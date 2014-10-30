@@ -14,9 +14,9 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-			validateAddress :Client.makeMethod({
+		validateAddress :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/customer/addressvalidation/?responseFields={responseFields}'
-		})			
+		})	
 	});
 };

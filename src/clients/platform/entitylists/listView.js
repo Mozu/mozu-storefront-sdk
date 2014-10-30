@@ -14,39 +14,39 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getViewEntity :Client.makeMethod({
+		getViewEntity :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/views/{viewName}/entities/{entityId}?responseFields={responseFields}'
 		}),
-		getViewEntities :Client.makeMethod({
+		getViewEntities :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/views/{viewName}/entities?pageSize={pageSize}&startIndex={startIndex}&filter={filter}&responseFields={responseFields}'
 		}),
-		getViewEntityContainer :Client.makeMethod({
+		getViewEntityContainer :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/views/{viewName}/entityContainers/{entityId}?responseFields={responseFields}'
 		}),
-		getViewEntityContainers :Client.makeMethod({
+		getViewEntityContainers :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/views/{viewName}/entityContainers?pageSize={pageSize}&startIndex={startIndex}&filter={filter}&responseFields={responseFields}'
 		}),
-		getEntityListView :Client.makeMethod({
+		getEntityListView :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/views/{viewName}?responseFields={responseFields}'
 		}),
-		getEntityListViews :Client.makeMethod({
+		getEntityListViews :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/views?responseFields={responseFields}'
-		})		,
-			createEntityListView :Client.makeMethod({
+		}),
+		createEntityListView :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/views/?responseFields={responseFields}'
-		})		,
-			updateEntityListView :Client.makeMethod({
+		}),
+		updateEntityListView :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/views/{viewName}?responseFields={responseFields}'
-		})		,
-			deleteEntityListView :Client.makeMethod({
+		}),
+		deleteEntityListView :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/views/{viewName}'
 		})	

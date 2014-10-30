@@ -14,9 +14,9 @@ var constants = require('../../../../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getAttributeTypeRules :Client.makeMethod({
+		getAttributeTypeRules :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/catalog/admin/attributedefinition/attributes/typerules/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
-		})				
+		})	
 	});
 };

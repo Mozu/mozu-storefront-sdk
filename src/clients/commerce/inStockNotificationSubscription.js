@@ -14,18 +14,19 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getInStockNotificationSubscriptions :Client.makeMethod({
+		getInStockNotificationSubscriptions :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/instocknotifications/?startIndex={startIndex}&pageSize={pageSize}&sortBy={sortBy}&filter={filter}&responseFields={responseFields}'
 		}),
-		getInStockNotificationSubscription :Client.makeMethod({
+		getInStockNotificationSubscription :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/instocknotifications/{id}?responseFields={responseFields}'
-		})		,
-			addInStockNotificationSubscription :Client.makeMethod({
+		}),
+		addInStockNotificationSubscription :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/commerce/instocknotifications/?responseFields={responseFields}'
-		})				deleteInStockNotificationSubscription :Client.makeMethod({
+		}),
+		deleteInStockNotificationSubscription :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/commerce/instocknotifications/{id}'
 		})	

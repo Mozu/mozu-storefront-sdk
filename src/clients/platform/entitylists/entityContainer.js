@@ -14,13 +14,13 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getEntityContainer :Client.makeMethod({
+		getEntityContainer :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/entityContainers/{id}?responseFields={responseFields}'
 		}),
-		getEntityContainers :Client.makeMethod({
+		getEntityContainers :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/platform/entitylists/{entityListFullName}/entityContainers?pageSize={pageSize}&startIndex={startIndex}&filter={filter}&sortBy={sortBy}&responseFields={responseFields}'
-		})				
+		})	
 	});
 };

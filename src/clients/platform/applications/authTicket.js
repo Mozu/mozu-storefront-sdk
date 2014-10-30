@@ -14,15 +14,15 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-			authenticateApp :Client.makeMethod({
+		authenticateApp :Client.method({
 			method: constants.verbs.POST,
 			url: '{+homePod}api/platform/applications/authtickets/?responseFields={responseFields}'
-		})		,
-			refreshAppAuthTicket :Client.makeMethod({
+		}),
+		refreshAppAuthTicket :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+homePod}api/platform/applications/authtickets/refresh-ticket?responseFields={responseFields}'
-		})		,
-			deleteAppAuthTicket :Client.makeMethod({
+		}),
+		deleteAppAuthTicket :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+homePod}api/platform/applications/authtickets/{refreshToken}'
 		})	

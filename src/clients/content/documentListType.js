@@ -14,13 +14,13 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-			createDocumentListType :Client.makeMethod({
+		createDocumentListType :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/content/documentlistTypes/?responseFields={responseFields}'
-		})		,
-			updateDocumentListType :Client.makeMethod({
+		}),
+		updateDocumentListType :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/content/documentlistTypes/{documentListTypeName}?responseFields={responseFields}'
-		})		
+		})	
 	});
 };

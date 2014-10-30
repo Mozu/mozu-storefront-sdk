@@ -14,12 +14,13 @@ var constants = require('../../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		thirdPartyGetApplication :Client.makeMethod({
+		thirdPartyGetApplication :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/commerce/settings/applications/?responseFields={responseFields}'
-		})				thirdPartyUpdateApplication :Client.makeMethod({
+		}),
+		thirdPartyUpdateApplication :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/commerce/settings/applications/?responseFields={responseFields}'
-		})		
+		})	
 	});
 };

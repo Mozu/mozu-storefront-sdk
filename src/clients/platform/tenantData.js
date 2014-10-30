@@ -14,19 +14,19 @@ var constants = require('../../constants');
 
 module.exports = function(Client){
 	return Client.sub({
-		getDBValue :Client.makeMethod({
+		getDBValue :Client.method({
 			method: constants.verbs.GET,
 			url: '{+tenantPod}api/platform/tenantdata/{*dbEntryQuery}?responseFields={responseFields}'
-		})		,
-			createDBValue :Client.makeMethod({
+		}),
+		createDBValue :Client.method({
 			method: constants.verbs.POST,
 			url: '{+tenantPod}api/platform/tenantdata/{*dbEntryQuery}'
-		})		,
-			updateDBValue :Client.makeMethod({
+		}),
+		updateDBValue :Client.method({
 			method: constants.verbs.PUT,
 			url: '{+tenantPod}api/platform/tenantdata/{*dbEntryQuery}'
-		})		,
-			deleteDBValue :Client.makeMethod({
+		}),
+		deleteDBValue :Client.method({
 			method: constants.verbs.DELETE,
 			url: '{+tenantPod}api/platform/tenantdata/{*dbEntryQuery}'
 		})	

@@ -70,6 +70,8 @@ Client.prototype.setAvailableTenants = function(arr) {
 
 extend(Client.prototype, {
   commerce: require('./clients/commerce')(Client),
+  content: require('./clients/content')(Client),
+  event: require('./clients/event')(Client),
   platform: require('./clients/platform')(Client)
 });
 

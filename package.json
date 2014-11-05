@@ -22,7 +22,8 @@
   "main": "./src/init",
   "devDependencies": {
     "mocha": "^1.21.4",
-    "nock": "^0.48.0"
+    "nock": "^0.48.0",
+    "rimraf": "^2.2.8"
   },
   "scripts": {
     "test": "node maketest.js"

@@ -42,14 +42,14 @@ function refreshPlatformAuthTicket(client, ticket) {
 }
 
 function getDeveloperAuthTicket(client) {
-  return client.root().platform().developer().authtickets().createDeveloperUserAuthTicket(client.context.developerAccount).then(function(json) {
+  return client.root().platform().developer().developerAdminUserAuthTicket().createDeveloperUserAuthTicket(client.context.developerAccount).then(function(json) {
     if (json.availableTenants && json.availableTenants.length > 0) client.setAvailableTenants(json.availableTenants);
     return AuthTicket.create(json);
   });
 }
 
 function refreshDeveloperAuthTicket(client, ticket) {
-  return client.root().platform().developer().authtickets().refreshDeveloperAuthTicket(ticket).then(AuthTicket.create);
+  return client.root().platform().developer().developerAdminUserAuthTicket().refreshDeveloperUserAuthTicket(ticket).then(AuthTicket.create);
 }
 
 function getAdminUserAuthTicket(client) {

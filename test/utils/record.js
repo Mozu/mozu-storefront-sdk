@@ -18,6 +18,7 @@ module.exports = function (name, options) {
     before: function () {
       if (!has_fixtures) try {
         require(path.resolve(fp));
+        console.log('using recorded fixtures ' + fp);
         has_fixtures = true;
       } catch (e) {
         nock.recorder.rec({

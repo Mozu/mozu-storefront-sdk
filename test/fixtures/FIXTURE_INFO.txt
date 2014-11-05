@@ -1,0 +1,1 @@
+This directory will be filled with fixtures recorded with Nock. Periodically it should be cleaned; export the environment variable "NOCK_RECORD=true" and the directory will be cleaned out and refilled. If it is not automatically cleaned, a new fixture file will be generated every day the tests are run.

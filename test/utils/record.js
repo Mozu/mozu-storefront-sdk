@@ -26,6 +26,11 @@ module.exports = function (name, options) {
         });
       } else {
         has_fixtures = false;
+        fs.readdirSync(path.join(test_folder, fixtures_folder)).filter(function(filename) {
+          return filename.indexOf('fixtures-') === 0 && path.extname(filename) === ".js";
+        }).map(function(filename) {
+          return path.resolve(test_folder, fixtures_folder, filename);
+        }).forEach(fs.unlinkSync);
         nock.recorder.rec({
           dont_print: true
         });

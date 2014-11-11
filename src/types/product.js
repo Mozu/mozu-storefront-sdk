@@ -1,7 +1,24 @@
-﻿var errors = require('../errors');
+var errors = require('../errors');
 var utils = require('../utils');
 var CONSTANTS = require('../constants/default');
 module.exports = {
+    addToCart: function(payload) {
+        // expect payload to have only "options" and "quantity"
+        if (!payload) {
+            payload = {};
+        }
+        
+        return this.api.action(this, 'addToCart', {
+            product: {
+                productCode: this.data.productCode,
+                variationProductCode: this.data.variationProductCode,
+                options: payload.options
+            },
+            quantity: payload.quantity || 1,
+            fulfillmentLocationCode: payload.fulfillmentLocationCode,
+            fulfillmentMethod: payload.fulfillmentMethod || "Ship"
+        });
+    },
     addToWishlist: function (payload) {
         var self = this;
         var list = this.api.createSync('wishlist', { customerAccountId: payload.customerAccountId });

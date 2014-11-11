@@ -1,4 +1,4 @@
-﻿
+
 # Mozu JavaScript SDK
 
 The Mozu JavaScript SDK is a JavaScript tool for using the Mozu APIs. It turns the simple JSON responses of the APIs into rich JavaScript objects that stay synchronized with your Mozu store, taking care of all of the AJAX, events, and callback management along the way. You can use the SDK to create innovative Mozu-powered interfaces, to integrate ecommerce features into another site, or just to make a clean Mozu theme, where all you have to worry about is the spit and polish. The SDK takes code that used to look like this:

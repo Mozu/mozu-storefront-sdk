@@ -1,4 +1,4 @@
-﻿var utils = require('../utils');
+var utils = require('../utils');
 var errors = require('../errors');
 module.exports = (function() {
 
@@ -68,7 +68,7 @@ module.exports = (function() {
         var data = obj.data, maskCharacter = obj.maskCharacter, maskedData;
         if (!data.paymentOrCardType) errors.throwOnObject(obj, 'CARD_TYPE_MISSING');
         if (!data.cardNumberPartOrMask) errors.throwOnObject(obj, 'CARD_NUMBER_MISSING');
-        if (!data.cvv) errors.throwOnObject(obj, 'CVV_MISSING');
+        if (!data.cvv && !data.isCvvOptional) errors.throwOnObject(obj, 'CVV_MISSING');
         maskedData = transform.toCardData(data)
         var cardNumber = maskedData.cardNumber.replace(charsInCardNumberRE, '');
         if (!validateCardNumber(obj, cardNumber)) errors.throwOnObject(obj, 'CARD_NUMBER_UNRECOGNIZED');
@@ -116,7 +116,7 @@ module.exports = (function() {
             return this.api.action(this, (isUpdate ? 'update' : 'save'), makePayload(this)).then(function (res) {
                 self.prop(transform.toStorefrontData({
                     cardNumber: self.maskedCardNumber,
-                    cvv: self.prop('cvv').replace(/\d/g, self.maskCharacter),
+                    cvv: !!(self.prop('cvv'))? self.prop('cvv').replace(/\d/g, self.maskCharacter) : '',
                     cardId: isUpdate || res
                 }));
                 self.fire('sync', utils.clone(self.data), self.data);
@@ -134,7 +134,7 @@ module.exports = (function() {
         },
         getOrderData: function () {
             return {
-                cardNumberPartOrMask: this.maskedCardNumber,
+                cardNumberPartOrMask: this.maskedCardNumber || this.data.cardNumberPartOrMask || this.data.cardNumberPart || this.data.cardNumber,
                 cvv: this.data.cvv,
                 nameOnCard: this.data.nameOnCard,
                 paymentOrCardType: this.data.paymentOrCardType || this.data.cardType,

@@ -1,4 +1,4 @@
-﻿// BEGIN UTILS
+// BEGIN UTILS
 // Many of these poached from lodash
 
     var maxFlattenDepth = 20;
@@ -45,6 +45,12 @@
         clone: function(obj) {
             return JSON.parse(JSON.stringify(obj)); // cheap copy :)
         },
+        compose: function(first, second) {
+            return function() {
+                first.call(this, arguments);
+                second.call(this, arguments);
+            }
+        },
         flatten: function (obj, into, prefix, separator, depth) {
             if (depth === 0) throw "Cannot flatten circular object.";
             if (!depth) depth = maxFlattenDepth;
@@ -70,15 +76,22 @@
 
             return into;
         },
-        inherit: function (parent, more) {
-            var ApiInheritedObject = function () {
-                if (this.construct) this.construct.apply(this, arguments);
-                parent.apply(this, arguments);
-                if (this.postconstruct) this.postconstruct.apply(this, arguments);
+        inherit: (function(composedMethods) {
+            return function (parent, more) {
+                var ApiInheritedObject = function() {
+                    if (this.construct) this.construct.apply(this, arguments);
+                    parent.apply(this, arguments);
+                    if (this.postconstruct) this.postconstruct.apply(this, arguments);
+                },
+                parentObject = new parent();
+                for (var i = 0; i < composedMethods.length; i++) {
+                    if (parentObject[composedMethods[i]] && more[composedMethods[i]])
+                        more[composedMethods[i]] = utils.compose(parentObject[composedMethods[i]], more[composedMethods[i]]);
+                }
+                ApiInheritedObject.prototype = utils.extend(parentObject, more);
+                return ApiInheritedObject;
             };
-            ApiInheritedObject.prototype = utils.extend(new parent(), more);
-            return ApiInheritedObject;
-        },
+        })(['construct','postconstruct']),
         map: function (arr, fn, scope) {
             var newArr = [], len = arr.length;
             scope = scope || window;
@@ -199,15 +212,28 @@
                     }
                 }
             };
-            xhr.open(method || 'GET', url);
+
+            var tunnelMethod = (method === "DELETE");
+
+            xhr.open(tunnelMethod ? "POST" : (method || 'GET'), url);
             if (headers) {
                 for (var h in headers) {
                     if (headers[h]) xhr.setRequestHeader(h, headers[h]);
                 }
             }
+
+            if (tunnelMethod) {
+                xhr.setRequestHeader('X-HTTP-Method-Override', method);
+            }
+
+
             xhr.setRequestHeader('Content-type', 'application/json');
             xhr.setRequestHeader('Accept', 'application/json');
-            xhr.send(method !== 'GET' && data);
+            if (data && method !== 'GET') {
+                xhr.send(data);
+            } else {
+                xhr.send();
+            }
             return xhr;
         },
 

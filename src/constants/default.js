@@ -1,4 +1,4 @@
-﻿module.exports = {
+module.exports = {
     DEFAULT_WISHLIST_NAME: 'my_wishlist',
     PAYMENT_STATUSES: {
         NEW: "New"
@@ -29,6 +29,7 @@
     },
     FULFILLMENT_METHODS: {
         SHIP: "Ship",
-        PICKUP: "Pickup"
+        PICKUP: "Pickup",
+        DIGITAL: "Digital"
     }
 };

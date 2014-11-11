@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @external Promise
  * @see {@link https://github.com/cujojs/when/blob/master/docs/api.md#promise WhenJS/Promise}
  */
@@ -18,9 +18,16 @@ var utils = require('./utils');
 var ApiReference = require('./reference');
 var ApiObject = require('./object');
 
-var errorMessage = "No {0} was specified. Run Mozu.Tenant(tenantId).MasterCatalog(masterCatalogId).Site(siteId).",
-    requiredContextValues = ['Tenant', 'MasterCatalog', 'Site'];
+var errorMessage = "No {0} was specified. Run Mozu.Tenant(tenantId).MasterCatalog(masterCatalogId).Catalog(catalogId).Site(siteId).",
+    requiredContextValues = ['Tenant', 'MasterCatalog', 'Site', 'Catalog'];
 var ApiInterfaceConstructor = function(context) {
+    // for now, cheat and try to grab context from the known preload if it's not being supplied correctly
+    var headerPreload = document.getElementById('data-mz-preload-apicontext'),
+        headerPreloadText = headerPreload && (headerPreload.textContent || headerPreload.innerText || headerPreload.text || headerPreload.innerHTML),
+        headerJSON = headerPreloadText && JSON.parse(headerPreloadText);
+
+    if (headerJSON && headerJSON.headers) context = context.Store(headerJSON.headers);
+
     for (var i = 0, len = requiredContextValues.length; i < len; i++) {
         if (context[requiredContextValues[i]]() === undefined) throw new ReferenceError(errorMessage.split('{0}').join(requiredContextValues[i]));
     }
@@ -49,15 +56,28 @@ ApiInterfaceConstructor.prototype = {
             data = conf.data || conf;
         }
 
-        var contextHeaders = this.context.asObject("x-vol-");
-
-        var xhr = utils.request(method, url, contextHeaders, data, function(rawJSON) {
+        var xhr;
+        var triedRefresh = false;
+        var makeRequest = function () {
+            var contextHeaders = me.getRequestHeaders();
+            xhr = utils.request(method, url, contextHeaders, data, function (rawJSON) {
             // update context with response headers
             me.fire('success', rawJSON, xhr, requestConf);
             deferred.resolve(rawJSON, xhr);
-        }, function(error) {
+            }, function (error) {
+
+                var failRequest = function () {
             deferred.reject(error, xhr, url);
+                }
+
+                if (error && error.errorCode === "INVALID_ACCESS_TOKEN" && !triedRefresh) {
+                    me.refresh().then(makeRequest, failRequest);
+                    triedRefresh = true;
+                } else {
+                    failRequest();
+                }
         }, requestConf.iframeTransportUrl);
+        };
 
         var cancelled = false,
             canceller = function() {
@@ -66,6 +86,7 @@ ApiInterfaceConstructor.prototype = {
                 deferred.reject("Request cancelled.")
             };
 
+        makeRequest();
         this.fire('request', xhr, canceller, deferred.promise, requestConf, conf);
 
         deferred.promise.otherwise(function(error) {
@@ -78,6 +99,20 @@ ApiInterfaceConstructor.prototype = {
 
 
         return deferred.promise;
+    },
+    refresh: function() {
+        var me = this,
+            updateClaimsHeaders = function(json, xhr, conf) {
+                if (conf === '/token/refresh') {
+                    me.context.AppClaims(xhr.getResponseHeader(ApiReference.headerPrefix + 'app-claims'));
+                    me.context.UserClaims(xhr.getResponseHeader(ApiReference.headerPrefix + 'user-claims'));
+                }
+            };
+        me.on('success', updateClaimsHeaders);
+        return me.request('POST', '/token/refresh').ensure(function () {
+            me.off('success', updateClaimsHeaders);
+            return null;
+        });
     },
     /**
      * @public
@@ -112,10 +147,21 @@ ApiInterfaceConstructor.prototype = {
                 return obj;
             }
         }, function(errorJSON) {
+            if (!requestConf.suppressErrors) {
             obj.fire('error', errorJSON);
             me.fire('error', errorJSON, obj);
+            }
             throw errorJSON;
         });
+    },
+    getActionConfig: function(instanceOrType, actionName, data) {
+        var me = this,
+            obj = instanceOrType instanceof ApiObject ? instanceOrType : me.createSync(instanceOrType),
+            type = obj.type;
+        return ApiReference.getRequestConfig(actionName, type, data || obj.data, me.context, obj);
+    },
+    getRequestHeaders: function() {
+        return this.context.asHeaders();
     },
     all: function() {
         return utils.when.join.apply(utils.when, arguments);

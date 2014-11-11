@@ -1,4 +1,4 @@
-﻿// BEGIN OBJECT
+// BEGIN OBJECT
 
 var utils = require('./utils');
 var ApiReference;
@@ -36,6 +36,7 @@ ApiObjectConstructor.prototype = {
 utils.addEvents(ApiObjectConstructor);
 
 ApiObjectConstructor.types = {
+    //address: require('./types/address'),
     cart: require('./types/cart'),
     cartsummary: require('./types/cartsummary'),
     creditcard: require('./types/creditcard'),

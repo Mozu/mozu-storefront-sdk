@@ -1,4 +1,4 @@
-﻿// BEGIN IFRAMEXHR
+// BEGIN IFRAMEXHR
 var utils = require('./utils');
 module.exports = (function (window, document, undefined) {
 
@@ -25,9 +25,10 @@ module.exports = (function (window, document, undefined) {
                 this.messageListener = function (e) {
                     if (!e) e = window.event;
                     if (e && e.data === "process-tick") return; // browserify clogs up this channel
+                    if (e.data.indexOf(self.uid) !== 0) return;
                     if (!validateOrigin(self, e.origin)) throw new Error("Origin " + e.origin + " does not match required origin " + self.frameOrigin);
-                    if (e.data === "ready") return self.postMessage();
-                    self.update(e.data);
+                    if (e.data === self.uid + " ready") return self.postMessage();
+                    self.update(e.data.substring(self.uid.length));
                 };
                 window.addEventListener('message', this.messageListener, false);
             },
@@ -45,11 +46,11 @@ module.exports = (function (window, document, undefined) {
                     self.hash = document.location.hash;
                     data = self.hash.replace(hashRE, '');
                     if (self.hash !== self.lastHash) {
-                        if (data === "ready") return self.postMessage();
+                        if (data === self.uid + "ready") return self.postMessage();
 
                         if (hashRE.test(self.hash)) {
                             self.lastHash = self.hash;
-                            self.update(data);
+                            self.update(data.substring(self.uid.length));
                         }
                     }
                 }, 100);
@@ -63,13 +64,18 @@ module.exports = (function (window, document, undefined) {
             }
         };
 
+
+    var uids = 0;
     var IframeXMLHttpRequest = function (frameUrl) {
         var frameMatch = frameUrl.match(originRE);
         if (!frameMatch || !frameMatch[0]) throw new Error(frameUrl + " does not seem to have a valid origin.");
         this.frameOrigin = frameMatch[0].toLowerCase();
-        this.frameUrl = frameUrl + "?&parenturl=" + encodeURIComponent(location.href) + "&parentdomain=" + encodeURIComponent(location.protocol + '//' + location.host) + "&messagedelimiter=" + encodeURIComponent(messageDelimiter);
+        this.uid = "xhr_" + (++uids);
+        this.frameUrl = frameUrl + (frameUrl.indexOf('?') === -1 ? '?' : '&') + "parenturl=" + encodeURIComponent(location.href) + "&parentdomain=" + encodeURIComponent(location.protocol + '//' + location.host) + "&messagedelimiter=" + encodeURIComponent(messageDelimiter) + "&uid=" + this.uid;
         this.headers = {};
     };
+
+    IframeXMLHttpRequest.version = 2;
 
     utils.extend(IframeXMLHttpRequest.prototype, messageMethods, {
         readyState: 0,

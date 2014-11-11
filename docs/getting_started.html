@@ -1,0 +1,293 @@
+<h1>Mozu JavaScript SDK</h1>
+
+<p>The Mozu JavaScript SDK is a JavaScript tool for using the Mozu APIs. It turns the simple JSON responses of the APIs into rich JavaScript objects that stay synchronized with your Mozu store, taking care of all of the AJAX, events, and callback management along the way. You can use the SDK to create innovative Mozu-powered interfaces, to integrate ecommerce features into another site, or just to make a clean Mozu theme, where all you have to worry about is the spit and polish. The SDK takes code that used to look like this:</p>
+
+<p><code>js<br />
+$.ajax({<br />
+    url: 'http://mozu/mozu.ProductRuntime.WebApi/products/' + productid,<br />
+    headers: {<br />
+        'x-vol-tenant': 30001,<br />
+        'x-vol-site': 2,<br />
+        'x-vol-sitegroup': 1<br />
+    },<br />
+    success: function(product) {<br />
+        $.ajax({<br />
+            url: 'http://mozu/mozu.CommerceRuntime.WebApi/carts/current',<br />
+            type: 'POST',<br />
+            data: {},<br />
+            success: function() {<br />
+                $.ajax({<br />
+                    // and so forth<br />
+                })<br />
+            }<br />
+        })<br />
+    }<br />
+})<br />
+</code></p>
+
+<p>And turns it into this:</p>
+
+<p><code>js<br />
+Mozu.Tenant(30001)<br />
+    .MasterCatalog(1)<br />
+    .Site(2)<br />
+    .api()<br />
+    .get('product',productid)<br />
+    .then(function(product){ <br />
+        return product.action('addToCart'); <br />
+    }).then(function(){<br />
+        // there, isn't that nice?<br />
+    })<br />
+</code></p>
+
+<p>It is a small (9.2Kb minified and gzipped), cross-browser, platform-independent library, that depends on no other libraries, but works well with all of the ones we know about. It supports multiple tenants and stores at once. It uses an emerging standard for asynchronous tasks called <a href="http://wiki.commonjs.org/wiki/Promises/A">Promises</a>, used also in jQuery's <a href="http://api.jquery.com/category/deferred-object/">Deferred Objects</a>. Any SDK method or function that requires an AJAX call returns a Promise object with a <code>.then</code> method for attaching callbacks to the eventual result of that AJAX call. Lastly, it looks and feels great; common ecommerce tasks can be written in an expressive, concise way, easy to follow for later maintainers of your code. <strong>It's the bee's knees on the cat's pajamas</strong>, is what we're trying to get across here. Don't talk to the Mozu APIs without it.</p>
+
+<h2>Getting Started</h2>
+
+<h3>Loading the SDK</h3>
+
+<p>The SDK is available at a special URL at your store's domain: <code>yourstoredomain.com/sdk/default.js</code>. Two other flavors are available: a minified version at <code>yourstoredomain.com/sdk/min.js</code>, and a debug version that exposes some inner workings at <code>yourstoredomain.com/sdk/debug.js</code>. <strong>We recommend using the minified version.</strong> The simplest way to include the SDK is with a good old-fashioned <code>script</code> tag:</p>
+
+<p>```html</p>
+
+<script src="/sdk/min.js"></script>
+
+<p><code>``<br />
+You will then be able to make new API contexts using the</code>Mozu` global variable.</p>
+
+<p>Of course, <strong>our favorite way to load the SDK is with <em>require.js</em>.</strong> The Core Theme uses RequireJS modules for all its JavaScript, and our template language provides convenience methods to make RequireJS modules easy and seamless to use; our SDK is compatible with RequireJS as well!</p>
+
+<p><code>js<br />
+require(['sdk'], function(Mozu) {<br />
+   var api = Mozu.Store('...').api();<br />
+   // In the presence of a global, AMD-compatible define() function, <br />
+   // the SDK will define() itself instead of assigning itself to the Mozu global. <br />
+});<br />
+</code></p>
+
+<h3>Obtaining an API Interface</h3>
+
+<p><em><strong>Note:</strong> The Core Theme includes a module, <code>modules/api</code>, that completes this step for you. It initializes an API interface and returns it to you prepared to create API objects. Use this part of the guide for initializing the SDK outside your Core theme or its descendents.</em></p>
+
+<p>The SDK tries to be as simple as possible, but since Mozu is a multi-tenant system at its core, you have to provide your tenant, sitegroup, and site IDs before you get an API interface. The combination of variables that determine your store and authentication level is called a <strong>context</strong>. The first thing to do is obtain one.</p>
+
+<p>You can create a context by chaining individual functions:</p>
+
+<p><code>js<br />
+var context = Mozu.Tenant(30001).MasterCatalog(1).Site(2);<br />
+</code></p>
+
+<p>Or you can call the single <code>Store()</code> method with an object literal of these IDs:</p>
+
+<p><code>js<br />
+var context = Mozu.Store({<br />
+    'tenant': 30001,<br />
+    'site-group': 1,<br />
+    'site': 2   <br />
+});<br />
+</code></p>
+
+<p>These two script blocks are equivalent. They both produce the same context object.</p>
+
+<p>Contexts can be used to create new contexts:</p>
+
+<p><code>js<br />
+var context = Mozu.Tenant(30001).MasterCatalog(1).Site(2);<br />
+var site3Context = context.Site(3);<br />
+// the new site3Context is still in tenant 30001 and sitegroup 1<br />
+</code></p>
+
+<p>But the <em>big</em> deal about a context is that once it has a tenant, sitegroup, and site, it can produce an <strong>interface object</strong> through its <code>.api()</code> method.</p>
+
+<p><code>js<br />
+var myStoreApi = Mozu.Tenant(30001).MasterCatalog(1).Site(2).api();<br />
+</code></p>
+
+<p>This interface is what you'll use to work with API objects.</p>
+
+<h3>Getting Objects With Your Interface</h3>
+
+<h4>Using <code>.get()</code>, <code>.create()</code>, <code>.update()</code>, and <code>.del()</code></h4>
+
+<p>You might recognize that these methods correspond to the standard set of CRUD actions available on REST API resources! Or, if you're not a REST junkie, you might see them as likely things you'd want to do with API objects. These are the basic methods you'll use to get started. API objects have similar methods on themselves, so you should view these methods on the interface itself as being <em>starting points</em> for a chain of interactions. <strong>By far, the most common starting point is <code>.get()</code>, so that's what we'll cover here;</strong> the other methods take the same arguments.</p>
+
+<p>Let's assume we created an interface that we called <code>myStoreApi</code>, as above, and use it to get a product:</p>
+
+<p><code>js<br />
+var productPromise = myStoreApi.get('product',{<br />
+    ProductCode: 'OXFORDSHIRT1'<br />
+});<br />
+</code></p>
+
+<p>The first argument to <code>.get()</code> is the <strong>object type</strong> you want. This must be a string such as <code>"product"</code>, <code>"cart"</code>, or <code>"user"</code>. The complete list of supported product types is available in the full SDK documentation.</p>
+
+<p>The second argument to <code>.get()</code> is the <strong>request configuration</strong>. This is an object literal, specifying the part of the object that you already know about. In this case, we want to get a product when we know its code.<br />
+<strong>Note:</strong> For many objects, you'll find yourself searching on one parameter most commonly. Products, for example, you'll usually get using their unique product code. The SDK gives you some sugar here.</p>
+
+<p><code>js<br />
+// the below is equivalent to the above; the SDK knows that a string for a product request config means to use that string as ProductCode.<br />
+var productPromise = myStoreApi.get('product','OXFORDSHIRT1');<br />
+</code></p>
+
+<h4>Working with Promises</h4>
+
+<p>You might notice that we are storing the return value of <code>myStoreApi.get()</code> in a variable called <code>productPromise</code>. Why <code>productPromise</code> and not just <code>product</code>? Because when the method returns, the product isn't quite ready yet; the <code>.get()</code> method, like all asynchronous methods in the SDK, returns a <strong>Promise</strong>. The SDK needs to run an AJAX call to retrieve this product, so it returns an object that you can add callbacks to, via its <code>.then()</code> method.</p>
+
+<p><code>js<br />
+productPromise.then(function(product) {<br />
+    console.log(product.data.ProductName); // --&gt; 'Oxford Shirt'<br />
+})<br />
+</code></p>
+
+<p>You can usually chain the api request and the call to <code>.then()</code> for brevity and readability, and the promise itself never gets stored in a variable:</p>
+
+<p><code>js<br />
+myStoreApi.get('product','OXFORDSHIRT1').then(function(product){<br />
+    console.log(product.data.ProductName); // --&gt; 'Oxford Shirt'<br />
+});<br />
+</code></p>
+
+<p>The <code>.then()</code> method takes <em>two</em> arguments; the first is called if the promise <em>fulfilled</em>, and the second if the promise <em>rejected</em>. In SDK terms, this translates to whether your API call was successful or not. The second argument to <code>.then()</code> can be used for error handling:</p>
+
+<p><code>js<br />
+myStoreApi.get('product','OXFORDSHIRT1').then(function(product){<br />
+    return product.action('addToCart');<br />
+}, function(error) {<br />
+    console.error(error);<br />
+})<br />
+</code></p>
+
+<p>Remember that a Promise can take indefinite callbacks; you can call .then() on it as many times as you want and add success and/or failure handlers that receive its eventual result.</p>
+
+<h4>Chaining Promises</h4>
+
+<p>If you're wondering why Promises are any better than just having success and failure callbacks, then read this carefully, because this is the special sauce.</p>
+
+<p>The <code>.then()</code> method of a promise <strong>returns a new promise</strong>. The new promise fulfills or rejects with the <em>return value</em> of the handlers you added during that invocation of <code>.then()</code>.</p>
+
+<p><code>js<br />
+var newPromise = myStoreApi.get('product','OXFORDSHIRT1').then(function(product) {<br />
+    return product.data.Price.Price;<br />
+});<br />
+newPromise.then(function(value) {<br />
+    console.log(value); // --&gt; 35.00<br />
+})<br />
+</code></p>
+
+<p>And if you return a new promise inside your old promise's <code>.then()</code> handler, you get a promise that only fulfills when both the old and the new promise have fulfilled. This makes it easy to do sequential, asynchronous tasks without building an ugly, hard-to-trace callback pyramid!</p>
+
+<p><code>js<br />
+myStoreApi.get('product','OXFORDSHIRT1').then(function(product) {<br />
+    return product.action('addToCart');<br />
+}).then(function(cartItem) {<br />
+    return myStoreApi.get('cart')<br />
+}).then(function(cart) {<br />
+    return cart.action('checkout');<br />
+})<br />
+</code></p>
+
+<p>Isn't that nice? The interface has a few convenience methods to make multiple promises even easier to manage, available in the full SDK documentation.</p>
+
+<h4>The raw <code>request()</code> method</h4>
+
+<p>The API exposes a <code>request()</code> method that you can use to perform raw AJAX calls to URLs that you manually specify. Like all asynchronous methods, it returns a Promise with a <code>.then()</code> method, but the promise fulfills with a raw JSON object instead of a rich API object.</p>
+
+<p><code>js<br />
+api.request('GET','http://mozu/mozu.CommerceRuntime.WebApi/carts/current').then(function(cartData){<br />
+    // cartData is raw JSON here<br />
+})<br />
+</code></p>
+
+<p>You should never have to do this, since all the calls you'll want to make should be supported by the SDK's library of rich objects. If you find yourself doing this, either we've dropped the ball, or there might be a cleaner and more concise way to do what you're trying to do.</p>
+
+<h3>Using API Objects</h3>
+
+<p>Now that you're using the interface's <code>.get()</code> method (or <code>.create()</code> or <code>.update()</code> methods, you hotshot) to acquire API objects, you may have noticed some stuff about them:</p>
+
+<ul>
+<li>They have a <code>type</code> property, a string representing their type (e.g. <code>"product"</code> or <code>"user"</code>)</li>
+<li>They have a <code>data</code> property, an object containing the raw JSON representation of this API resource</li>
+<li>They have an <code>.action()</code> method</li>
+<li>They have a <code>.getAvailableActions()</code> method</li>
+<li>They have <code>.on()</code>, <code>.off()</code>, and <code>.fire()</code> methods</li>
+</ul>
+
+<p>The <code>.action()</code> method on API objects is where, not coincidentally, the action is. Every API object has a list of <strong>actions</strong> you can perform on it. Some actions transform the object, some use it to create a new object, some get related objects. You can see what your API object can do by running <code>.getAvailableActions()</code> on it, which will return an array of strings.</p>
+
+<p><code>js<br />
+api.get('product','OXFORDSHIRT1').then(function(product){<br />
+    console.log(product.getAvailableActions()); // --&gt; ["update", "create", "del", "get", "addToCart"]<br />
+})<br />
+</code></p>
+
+<p>You can carry out any of these actions on your product using the <code>.action()</code> method. All API objects have the four basic actions, which are usually the equivalent of using the API interface's method instead of the API object's method. Most API objects have more specialized actions, such as <code>addToCart</code>.</p>
+
+<p>Since the <code>.action</code> method always has to run an AJAX call, it returns a Promise. For many actions, the promise will fulfill with the same (updated) object; for others, the promise will fulfill with a new or different object. In the case of <code>addToCart</code>, the returned object is a CartItem.</p>
+
+<p><code>js<br />
+product.action('addToCart', 3).then(function(cartItem){<br />
+    return cartItem.action('updateQuantity', 2);<br />
+})<br />
+// the above adds 3 of a product to the cart, and then updates the quantity to 2, removing one. <br />
+// Goodness knows why, but it seemed instructive<br />
+</code></p>
+
+<p>Using Promises and Actions, you can build a very clear chain of events with the SDK:</p>
+
+<p><code>js<br />
+api.get('product','OXFORDSHIRT1').then(function(product){<br />
+    return product.action('addToCart',3);<br />
+}).then(function(){<br />
+    return api.get('cart');<br />
+}).then(function(cart){<br />
+    return cart.action('checkout');<br />
+}).then(function(order) {<br />
+    window.location = "/orders/" + order.data.Id;<br />
+});<br />
+</code></p>
+
+<h3>Using Events</h3>
+
+<p>Both the API interface and the API objects fire events. They have <code>.on()</code> and <code>.off()</code> methods that each take two arguments: an event name, and a function or function reference to use as a handler. There is also a <code>.fire()</code> event on both, to manually fire these events if necessary.</p>
+
+<h4>Events on the API Interface</h4>
+
+<p>The API interface throws three events: <code>request</code>, <code>success</code>, and <code>error</code>. The <code>request</code> event fires before every AJAX request the interface makes, including requests made by the interface's child objects. <em>(Under the hood, all API objects use their parent interface to issue their requests.)</em> The <code>success</code> event fires after an AJAX request has successfully completed, but before any promises are fulfilled. The <code>error</code> event fires after an AJAX request has failed, either from a failed HTTP request or from the API service responding with a detailed error. You can use the interface's events for e.g. a global error handler, instead of having to argue the same error handlers into every promise:</p>
+
+<p><code>js<br />
+api.on('error', function(error){<br />
+    var messages = error.Items.map(function(item) { return item.Message; }).join('\n');<br />
+    alert("Sorry, errors occurred in the Mozu API: \n" + messages);<br />
+})<br />
+</code></p>
+
+<h4>Events on the API Object</h4>
+
+<p>API objects throw four events: <code>action</code>, <code>sync</code>, <code>spawn</code>, and <code>error</code>. The <code>action</code> event fires before every action request is sent, and the <code>error</code> event fires if any of this object's requests fail, but instead of a <code>success</code> event, there are two different success cases:</p>
+
+<ul>
+<li><code>sync</code> fires if the action caused an update in <em>this object's</em> data, like a <code>get</code> or an <code>update</code> action</li>
+<li><p><code>spawn</code> fires if the action caused a new API object to be returned by the fulfilled promise, like <code>addToCart</code> returning a <code>"cartitem"</code> from a <code>"product"</code>, or <code>checkout</code> returning an <code>"order"</code> from a <code>"cart"</code>.</p>
+
+<p>Subscribe to the events in the same way as the interface. These events are useful when integrating the SDK objects into some client-side data-binding framework.</p></li>
+</ul>
+
+<p><code>js<br />
+product.on('action', function(){<br />
+    myProductView.addClass('loading');<br />
+})<br />
+product.on('sync', function(newData) {<br />
+    myProductView.removeClass('loading');<br />
+    myProductViewModel.update(newData);<br />
+})<br />
+</code></p>
+
+<h3>Get Going</h3>
+
+<p>This guide has outlined the most commonly used features of the SDK; it should be enough to get you started with your killer new Mozu app. If it's not, there is full SDK documentation after the beep!</p>
+
+<h2>Full SDK Reference</h2>
+
+<ul>
+<li><em>There is no full SDK documentation yet.</em></li>
+</ul>

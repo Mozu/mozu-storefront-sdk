@@ -1,4 +1,4 @@
-﻿// BEGIN OBJECT
+// BEGIN OBJECT
 
 var utils = require('./utils');
 var ApiObject = require('./object');
@@ -8,23 +8,25 @@ var ApiObject = require('./object');
     }
 
     var ApiCollectionConstructor = function (type, data, api, itemType) {
-        var self = this;
         ApiObject.apply(this, arguments);
         this.itemType = itemType;
-        if (!data) data = {};
-        if (!data.items) this.prop("items", data.items = []);
-        if (data.items.length > 0) this.add(data.items, true);
-        this.on('sync', function (raw) {
-            if (raw && raw.items) {
-                self.removeAll();
-                self.add(raw.items);
-            }
-        });
     };
 
     ApiCollectionConstructor.prototype = utils.extend(new ApiObject(), {
         isCollection: true,
         constructor: ApiCollectionConstructor,
+        postconstruct: function(type, data, api, itemType) {
+            var self = this;
+            if (!data) data = {};
+            if (!data.items) this.prop("items", data.items = []);
+            if (data.items.length > 0) this.add(data.items, true);
+            this.on('sync', function(raw) {
+                if (raw && raw.items) {
+                    self.removeAll();
+                    self.add(raw.items);
+                }
+            });
+        },
         add: function (newItems, /*private*/ noUpdate) {
             if (utils.getType(newItems) !== "Array") newItems = [newItems];
             Array.prototype.push.apply(this, utils.map(newItems, convertItem, this));

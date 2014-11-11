@@ -1,10 +1,26 @@
-﻿// SDK Gruntfile
+// SDK Gruntfile
 'use strict';
-
-var allScripts = ['lib/when/when.js', 'lib/uritemplate/bin/uritemplate.js', 'lib/microevent/microevent.js', 'src/constants/default.js', 'src/utils.js', 'src/errors.js', 'src/iframexhr.js', 'src/reference.js', 'src/object.js', 'src/collection.js', 'src/types/*.js', 'src/interface.js', 'src/context.js', 'src/init.js'];
 
 var port = 9001,
     testurl = "http://127.0.0.1:" + port + "/tests/SpecRunner.html";
+
+var through = require('through'),
+    path = require('path'),
+    crlfRE = /\r\n|\n|\r/g,
+    wd = process.cwd(),
+    normalizeTo = "\n";
+
+function bNormalizeLineEndingsTransform(file) {
+    var data = '';
+    return through(write, end);
+
+    function write(buf) { data += buf }
+    function end() {
+        var tag = "\n\n//# sourceUrl=" + path.relative(wd, file).replace(/\\/g,'/') + "\n\n";
+        this.queue(tag + data.replace(crlfRE, normalizeTo));
+        this.queue(null);
+    }
+};
 
 module.exports = function (grunt) {
 
@@ -36,10 +52,11 @@ module.exports = function (grunt) {
                     '<%= testPlatform %>': ['./src/init_debug.js']
                 },
                 options: {
-                    debug: true,
+                    //debug: true,
                     standalone: "<%= toExport %>",
                     bare: true,
-                    external: ["xmlhttprequest"]
+                    external: ["xmlhttprequest"],
+                    transform: [bNormalizeLineEndingsTransform]
                 }
             },
             dist: {
@@ -90,7 +107,7 @@ module.exports = function (grunt) {
         mocha: {
             test: {
                 options: {
-                    reporter: 'Dot',
+                    reporter: 'Nyan',
                     urls: [testurl],
                     run: true
                 }
@@ -111,7 +128,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-jsdoc');
     grunt.loadNpmTasks('grunt-browserify');
-
 
     grunt.registerTask('test', ['browserify:debug', 'connect:server', 'mocha']);
     grunt.registerTask('dist', ['clean:dist', 'browserify:dist', 'concat:debug', 'uglify', 'clean:tmp']);

@@ -1,16 +1,17 @@
-﻿var errors = require('../errors');
+var errors = require('../errors');
 var CONSTANTS = require('../constants/default');
 var utils = require('../utils');
-var ApiReference = require('../reference');
-module.exports = (function() {
+var ApiReference;
+module.exports = (function () {
 
     errors.register({
         'BILLING_INFO_MISSING': 'Billing info missing.',
         'PAYMENT_TYPE_MISSING_OR_UNRECOGNIZED': 'Payment type missing or unrecognized.',
-        'PAYMENT_MISSING': 'Expected a payment to exist on this order and one did not.',
-        'PAYPAL_TRANSACTION_ID_MISSING': 'Expected the active payment to include a paymentServiceTransactionId and it did not.',
-        'ORDER_CANNOT_SUBMIT': 'Order cannot be submitted. Is order complete?',
+        'PAYMENT_MISSING': 'Sorry, something went wrong: Expected a payment to exist on this order and one did not.',
+        'PAYPAL_TRANSACTION_ID_MISSING': 'Sorry, something went wrong: Expected the active payment to include a paymentServiceTransactionId and it did not.',
+        'ORDER_CANNOT_SUBMIT': 'Sorry, this order cannot be submitted. Please refresh the page and try again, or contact Support.',
         'ADD_COUPON_FAILED': 'Adding coupon failed for the following reason: {0}',
+        //'ADD_GIFT_CARD_FAILED': 'Adding gift card failed for the following reason: {0}',
         'ADD_CUSTOMER_FAILED': 'Adding customer failed for the following reason: {0}'
     });
 
@@ -18,6 +19,7 @@ module.exports = (function() {
     OrderStatus2IsComplete[CONSTANTS.ORDER_STATUSES.SUBMITTED] = true;
     OrderStatus2IsComplete[CONSTANTS.ORDER_STATUSES.ACCEPTED] = true;
     OrderStatus2IsComplete[CONSTANTS.ORDER_STATUSES.PENDING_REVIEW] = true;
+    OrderStatus2IsComplete[CONSTANTS.ORDER_STATUSES.COMPLETED] = true;
 
     var OrderStatus2IsReady = {};
     OrderStatus2IsReady[CONSTANTS.ORDER_ACTIONS.SUBMIT_ORDER] = true;
@@ -26,6 +28,7 @@ module.exports = (function() {
 
     var PaymentStrategies = {
         "PaypalExpress": function (order, billingInfo) {
+            if (!ApiReference) ApiReference = require('../reference');
             return order.createPayment({
                 returnUrl: billingInfo.paypalReturnUrl,
                 cancelUrl: billingInfo.paypalCancelUrl
@@ -51,6 +54,15 @@ module.exports = (function() {
     };
     
     return {
+        getShippingMethodsFromContact: function (contact) {
+            var self = this;
+            var fulfillmentContact = utils.clone(self.prop('fulfillmentInfo').fulfillmentContact);
+            // currently the service can't handle not having a state
+            if (fulfillmentContact.address && !fulfillmentContact.address.stateOrProvince) fulfillmentContact.address.stateOrProvince = "n/a";
+            return self.update({ fulfillmentInfo: { fulfillmentContact: fulfillmentContact } }).then(function () {
+                return self.getShippingMethods();
+            });
+        },
         addCoupon: function(couponCode) {
             var self = this;
             return this.applyCoupon(couponCode).then(function () {
@@ -103,14 +115,14 @@ module.exports = (function() {
         getCurrentPayment: function() {
             var activePayments = this.getActivePayments();
             for (var i = activePayments.length - 1; i >= 0; i--) {
-                if (activePayments[i].paymentType !== "StoreCredit") return activePayments[i];
+                if (activePayments[i].paymentType !== "StoreCredit" && activePayments[i].paymentType !== 'GiftCard') return activePayments[i];
             }
         },
         getActiveStoreCredits: function() {
             var activePayments = this.getActivePayments(),
                 credits = [];
             for (var i = activePayments.length - 1; i >= 0; i--) {
-                if (activePayments[i].paymentType === "StoreCredit") credits.unshift(activePayments[i]);
+                if (activePayments[i].paymentType === "StoreCredit" || activePayments[i].paymentType === "GiftCard") credits.unshift(activePayments[i]);
             }
             return credits;
         },
@@ -131,10 +143,15 @@ module.exports = (function() {
             });
         },
         checkout: function() {
-            var availableActions = this.prop('availableActions');
+            var self = this,
+                availableActions = this.prop('availableActions');
             if (!this.isComplete()) {
                 for (var i = availableActions.length - 1; i >= 0; i--) {
-                    if (availableActions[i] in OrderStatus2IsReady) return this.performOrderAction(availableActions[i]);
+                    if (availableActions[i] in OrderStatus2IsReady) return this.performOrderAction(availableActions[i]).otherwise(function(e) {
+                        return self.get().ensure(function() {
+                            throw e;
+                        })
+                    });
                 }
             }
             errors.throwOnObject(this, 'ORDER_CANNOT_SUBMIT');

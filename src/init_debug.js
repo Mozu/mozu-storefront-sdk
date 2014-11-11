@@ -1,4 +1,4 @@
-﻿// EXPOSE DEBUGGING STUFF
+// EXPOSE DEBUGGING STUFF
 var _init = require('./init');
 
 _init.Utils = require('./utils');

@@ -1,4 +1,4 @@
-﻿// BEGIN CONTEXT
+// BEGIN CONTEXT
 /**
  * @class
  * @classdesc The context object helps you configure the SDK to connect to a particular Mozu site. Supply it with tenant, site, mastercatalog, currency code, locale code, app claims, and user claims, and  it will produce for you an ApiInterface object.
@@ -17,8 +17,8 @@ var ApiContextConstructor = function(conf) {
         ApiContextConstructor.__debug__ = require('when/monitor/console');
     }
 },
-    mutableAccessors = ['app-claims', 'user-claims', 'callchain', 'currency', 'locale'], //, 'bypass-cache'],
-    immutableAccessors = ['tenant', 'site', 'master-catalog'],
+    mutableAccessors = ['app-claims', 'user-claims', 'callchain', 'currency', 'locale','dataview-mode'], //, 'bypass-cache'],
+    immutableAccessors = ['tenant', 'site', 'master-catalog', 'catalog'],
     immutableAccessorLength = immutableAccessors.length,
     allAccessors = mutableAccessors.concat(immutableAccessors),
     allAccessorsLength = allAccessors.length,
@@ -59,7 +59,17 @@ ApiContextConstructor.prototype = {
         return this._apiInstance || (this._apiInstance = new ApiInterface(this));
     },
     Store: function(conf) {
-        return new ApiContextConstructor(conf);
+        var xform = {}, l = ApiReference.headerPrefix.length;
+        for (var k in conf) {
+            if (conf.hasOwnProperty(k)) {
+                if (k.indexOf(ApiReference.headerPrefix) === 0) {
+                    xform[k.substring(l)] = conf[k];
+                } else {
+                    xform[k] = conf[k];
+                }
+            }
+        }
+        return new ApiContextConstructor(xform);
     },
     asObject: function(prefix) {
         var obj = {};
@@ -68,6 +78,9 @@ ApiContextConstructor.prototype = {
             obj[prefix + allAccessors[i]] = this[allAccessors[i]];
         }
         return obj;
+    },
+    asHeaders: function() {
+        return this.asObject(ApiReference.headerPrefix);
     },
     setServiceUrls: function(urls) {
         ApiReference.urls = urls;

@@ -1,4 +1,4 @@
-﻿var utils = require('../utils');
+var utils = require('../utils');
 var errors = require('../errors');
 module.exports = (function () {
     return {
@@ -35,6 +35,11 @@ module.exports = (function () {
             var credits = this.api.createSync('storecredits');
             errors.passFrom(credits, this);
             return credits.get();
+        },
+        getDigitalCredit: function (id) {
+            var credit = this.api.createSync('storecredit', { code: id });
+            errors.passFrom(credit, this);
+            return credit.getCredit();
         },
         addStoreCredit: function (id) {
             var credit = this.api.createSync('storecredit', { code: id });

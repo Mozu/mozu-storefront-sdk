@@ -1,4 +1,4 @@
-﻿// BEGIN ERRORS
+// BEGIN ERRORS
 var utils = require('./utils');
 
 function errorToString() {

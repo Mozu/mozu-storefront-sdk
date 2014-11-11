@@ -1,4 +1,4 @@
-﻿module.exports = {
+module.exports = {
     postconstruct: function () {
         var self = this;
         this.on('sync', function (json) {

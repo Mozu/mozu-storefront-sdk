@@ -1,9 +1,10 @@
-﻿// BEGIN REFERENCE
+// BEGIN REFERENCE
 var utils = require('./utils');
 var errors = require('./errors');
 var ApiCollection;
 var ApiObject = require('./object');
 var objectTypes = require('./methods.json');
+var IframeXHR;
 
 errors.register({
     'NO_REQUEST_CONFIG_FOUND': 'No request configuration was found for {0}.{1}',
@@ -16,7 +17,7 @@ var basicOps = {
     create: 'POST',
     del: 'DELETE'
 };
-var copyToConf = ['verb', 'returnType', 'noBody'],
+var copyToConf = ['verb', 'returnType', 'noBody', 'suppressErrors'],
     copyToConfLength = copyToConf.length;
 var reservedWords = {
     template: true,
@@ -37,6 +38,8 @@ var ApiReference = {
 
     basicOps: basicOps,
     urls: {},
+
+    headerPrefix: 'x-vol-',
 
     getActionsFor: function(typeName) {
         ApiCollection = ApiCollection || require('./collection');
@@ -89,7 +92,11 @@ var ApiReference = {
         if (!oType.template) errors.throwOnObject(obj, 'NO_REQUEST_CONFIG_FOUND', typeName, operation);
 
         returnObj = {};
-        tptData = {};
+
+        IframeXHR = IframeXHR || require('./iframexhr');
+        tptData = {
+            receiverVersion: IframeXHR.version
+        };
 
         // cache templates lazily
         if (typeof oType.template === "string") oType.template = utils.uritemplate.parse(oType.template);

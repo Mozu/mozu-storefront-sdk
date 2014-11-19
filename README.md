@@ -116,4 +116,4 @@ define(['mozu-javascript-sdk/dist/mozu-javascript-sdk.min'], function(Mozu) {
 
 ## Reference documentation
 
-A full method reference is available at [docs/reference.md](docs/reference.md).
+A full method reference is available at [docs/sdk_reference.md](docs/sdk_reference.md).

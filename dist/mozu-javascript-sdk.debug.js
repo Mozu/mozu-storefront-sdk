@@ -1,5 +1,5 @@
 /*! 
- * Mozu JavaScript SDK - v0.3.0 - 2014-10-24
+ * Mozu JavaScript SDK - v0.3.0 - 2014-11-19
  *
  * Copyright (c) 2014 Volusion, Inc.
  *
@@ -61,10 +61,6 @@ process.chdir = function (dir) {
 };
 
 },{}],2:[function(require,module,exports){
-
-
-//# sourceUrl=node_modules/microevent/microevent.js
-
 /**
  * MicroEvent - to make any js object an event emitter (server or browser)
  * 
@@ -117,11 +113,7 @@ if( typeof module !== "undefined" && ('exports' in module)){
 }
 
 },{}],3:[function(require,module,exports){
-var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};
-
-//# sourceUrl=node_modules/uritemplate/bin/uritemplate.js
-
-/*global unescape, module, define, window, global*/
+var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};/*global unescape, module, define, window, global*/
 
 /*
  UriTemplate Copyright (c) 2012-2013 Franz Antesberger. All Rights Reserved.
@@ -1008,10 +1000,6 @@ var UriTemplate = (function () {
 ));
 
 },{}],4:[function(require,module,exports){
-
-
-//# sourceUrl=node_modules/when/monitor/aggregator.js
-
 /** @license MIT License (c) copyright 2010-2013 original author or authors */
 
 /**
@@ -1107,10 +1095,6 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 },{}],5:[function(require,module,exports){
-
-
-//# sourceUrl=node_modules/when/monitor/array.js
-
 /** @license MIT License (c) copyright 2010-2013 original author or authors */
 
 /**
@@ -1169,10 +1153,6 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 },{}],6:[function(require,module,exports){
-
-
-//# sourceUrl=node_modules/when/monitor/console.js
-
 /** @license MIT License (c) copyright 2010-2013 original author or authors */
 
 /**
@@ -1226,10 +1206,6 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
 },{"./aggregator":4,"./logger/consoleGroup":7,"./simpleFormatter":8,"./simpleReporter":9,"./stackFilter":10,"./throttledReporter":11}],7:[function(require,module,exports){
-
-
-//# sourceUrl=node_modules/when/monitor/logger/consoleGroup.js
-
 /** @license MIT License (c) copyright 2010-2013 original author or authors */
 
 /**
@@ -1308,10 +1284,6 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
 },{"../array":5}],8:[function(require,module,exports){
-
-
-//# sourceUrl=node_modules/when/monitor/simpleFormatter.js
-
 /** @license MIT License (c) copyright 2010-2013 original author or authors */
 
 /**
@@ -1387,10 +1359,6 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 },{}],9:[function(require,module,exports){
-
-
-//# sourceUrl=node_modules/when/monitor/simpleReporter.js
-
 /** @license MIT License (c) copyright 2010-2013 original author or authors */
 
 /**
@@ -1451,10 +1419,6 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 },{}],10:[function(require,module,exports){
-
-
-//# sourceUrl=node_modules/when/monitor/stackFilter.js
-
 /** @license MIT License (c) copyright 2010-2013 original author or authors */
 
 /**
@@ -1507,10 +1471,6 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
 },{"./array":5}],11:[function(require,module,exports){
-
-
-//# sourceUrl=node_modules/when/monitor/throttledReporter.js
-
 /** @license MIT License (c) copyright 2010-2013 original author or authors */
 
 /**
@@ -1549,11 +1509,7 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 },{}],12:[function(require,module,exports){
-var process=require("__browserify_process");
-
-//# sourceUrl=node_modules/when/when.js
-
-/** @license MIT License (c) copyright 2011-2013 original author or authors */
+var process=require("__browserify_process");/** @license MIT License (c) copyright 2011-2013 original author or authors */
 
 /**
  * A lightweight CommonJS Promises/A and when() implementation
@@ -2996,7 +2952,7 @@ module.exports = _init;
 
 //# sourceUrl=src/interface.js
 
-﻿/**
+/**
  * @external Promise
  * @see {@link https://github.com/cujojs/when/blob/master/docs/api.md#promise WhenJS/Promise}
  */
@@ -3528,7 +3484,7 @@ module.exports=
             "template": "{+creditService}/{id}",
             "includeSelf": true,
             "returnType": "storecredit"
-        },
+        }
     },
     "storecredit": {
         "associate-to-shopper": {

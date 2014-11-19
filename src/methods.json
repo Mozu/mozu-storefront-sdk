@@ -322,7 +322,7 @@
             "template": "{+creditService}/{id}",
             "includeSelf": true,
             "returnType": "storecredit"
-        },
+        }
     },
     "storecredit": {
         "associate-to-shopper": {

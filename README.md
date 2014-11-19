@@ -1,28 +1,19 @@
-# Mozu JavaScript SDK
+# Mozu Storefront SDK
 
-The Mozu JavaScript SDK provides a JavaScript API for connecting to Mozu web services. Originally designed to manage API requests for the storefront Core theme, the JS SDK is a multipurpose tool for performing common shopper-level actions.
+The Mozu Storefront SDK provides a JavaScript API for connecting to Mozu web services. Originally designed to manage API requests for the storefront Core theme, the JS SDK is a multipurpose tool for performing common shopper-level actions.
 
 ## Development requirements
 
 *   NodeJS >= 0.8
-*   GruntJS > 0.4
-*   `grunt-cli` installed globally
+*   `grunt-cli` package installed globally
 
 ## Browser requirements
 
-*   Native JSON or json2.js. In the Core theme this library is provided by the Mozu-Require module loader.
-
-## NodeJS requirements
-
-*   NodeJS >= 0.10
-*   [microevent](https://npmjs.org/package/microevent)
-*   [uritemplate](https://npmjs.org/package/uritemplate)
-*   [when](https://npmjs.org/package/when)
-*   [xmlhttprequest](https://npmjs.org/package/xmlhttprequest)
+*   Native JSON or json2.js. In the Core theme the json2.js polyfill is provided by the Mozu-Require module loader.
 
 ## Build
 
-Uses NPM for packaging and testing.
+Uses npm for packaging and testing.
 
     $ npm install -g grunt-cli
     $ npm install
@@ -40,9 +31,41 @@ This should work on all platforms.
 
 ## Usage
 
-In the presence of an AMD module loader like RequireJS or a CommonJS module loader like Node, the SDK will declare itself as a module. If neither are present, the SDK will declare a global Mozu variable that is an empty, configurable `ApiContext`. The first step is to configure the context and use it to generate an `ApiInterface`.
+The SDK is registered with the Mozu-Require library built into the storefront and used by the Mozu Core Theme. You can access the SDK directly as the module `'sdk'`, though you usually don't want to.
 
-Full usage details are available in the Getting Started guide in the `/docs` folder. Here's how to quickly generate an interface for a given store:
+```js
+require(['sdk'], function(Mozu) {
+    // the original blank APIContext is now the Mozu object, you'll need to hydrate it with store data
+})
+```
+
+Since the initial SDK object, an APIContext, is useless without store information, the Core Theme has a simple JavaScript module that creates an API context and returns an API interface for you, available at `'modules/api'`.
+
+```js
+require(['modules/api'], function(api) {
+    // the api object is already prepared with your store's information and the logged-in user's permissions
+
+    // get the current customer!
+    api.get('customer', require.mozuData('user').accountId).then(function(customer) {
+        console.log(customer.prop('firstName')); // "James"
+    });
+
+    // search for products!
+    api.get('search', 'gold').then(function(products) {
+        console.log(products.prop('totalCount')); // 124 (products matching "gold")
+        console.log(products[0].prop('content').name); // "Gold Cuff Links"
+    });
+
+})
+```
+
+Use the `'modules/api'` module everywhere. In the Mozu Core Theme, there is almost no reason to directly access the original SDK object.
+
+## Uncommon Usages
+
+While the Storefront SDK is designed to be used in a Mozu storefront with the Mozu Core Theme, it's possible to use the SDK separately.
+
+In the presence of an AMD module loader like RequireJS or a CommonJS web module loader like wreq, the SDK will declare itself as a module. If neither are present, the SDK will declare a global `Mozu` variable that is an empty, configurable `ApiContext`. The first step is to configure the context and use it to generate an `ApiInterface`.
 
 ```js
 define(['mozu-javascript-sdk/dist/mozu-javascript-sdk.min'], function(Mozu) {
@@ -91,8 +114,8 @@ define(['mozu-javascript-sdk/dist/mozu-javascript-sdk.min'], function(Mozu) {
 });
 ```
 
-## Planned
+## Reference documentation
 
-*   Real NodeJS testing (Nock)
-*   Support for Admin services
-*   Full method documentation
+Full usage details are available in the [Getting Started guide](docs/getting_started.md) in the `/docs` folder. 
+
+A full method reference is available at [docs/reference.md](docs/reference.md).

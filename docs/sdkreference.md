@@ -1,50 +1,42 @@
 # Contents
-- Core Objects
-  - [Context](#context)
-    - [.Store(contextConfig)](#contextstore)
-    - [.setServiceUrls(serviceUrls)](#contextsetserviceurls)
-    - [.api()](#contextapi)
-    - [.getServiceUrls()](#contextgetserviceurls)
-    - [.asObject(prefix)](#contextasobject)
-    - [.asHeaders()](#contextasheaders)
-  - [Interface](#interface)
-    - [.request(method, requestConfig, body)](#interfacerequest)
-    - [.action(instanceOrType, actionName, body)](#interfaceaction)
-    - [.get(type, params)](#interfaceget)
-    - [.create(type, body)](#interfacecreate)
-    - [.update(instanceOrType, body)](#interfaceupdate)
-    - [.del(instanceOrType, params)](#interfacedel)
-    - [.createSync(type, data)](#interfacecreatesync)
-    - [.getAvailableActionsFor(type)](#interfacegetavailableactionsfortype)
-    - [.on(eventName, handler)](#interfaceoneventnamehandler)
-    - [.off(eventName, handler)](#interfaceoffeventnamehandler)
-    - [.all(promises*)](#interfaceall)
-    - [.steps(promises*)](#interfacesteps)
-    - [.defer()](#interfacedefer)
-    - [.context](#interfacecontext)
-    - [Interface Events](#interfaceevents)
-  - [ApiObject](#apiobject)
-    - [.getAvailableActions()](#apiobjectgetavailableactions)
-    - [.prop(name, value)](#apiobjectprop)
-    - [.get(params)](#apiobjectget)
-    - [.create(data)](#apiobjectcreate)
-    - [.update(data)](#apiobjectupdate)
-    - [.del()](#apiobjectdel)
-    - [.on(eventName, handler)](#apiobjectoneventnamehandler)
-    - [.off(eventName, handler)](#apiobjectoffeventnamehandler)
-    - [.fire(eventName, [ args* ])](#apiobjectfireeventnameargs)
-    - [.data](#apiobjectdata)
-    - [.api](#apiobjectapi)
-    - [.type](#apiobjecttype)
-    - [ApiObject Events](#interfaceevents)
-  - [ApiCollection](#apicollection)
-    - [.add(newItems)](#collectionadd)
-    - [.remove(indexOrItem)](#collectionremove)
-    - [.replace(newItems)](#collectionreplace)
-    - [.removeAll()](#collectionremoveall)
-- [ApiObject Subtypes](#apiobjectsubtypes)
-- [Shortcut Parameters](#shortcutparameters)
-
+- [Context](#context)
+  - [.Store(contextValues)](#contextstorecontextvalues)
+  - [.setServiceUrls(serviceUrls)](#contextsetserviceurlsserviceurls)
+  - [.api()](#contextapi)
+  - [.getServiceUrls()](#contextgetserviceurls)
+  - [.asObject(prefix)](#contextasobjectprefix)
+  - [.asHeaders()](#contextasheaders)
+- [Interface](#interface)
+  - [.request(method, requestConfig, body)](#apirequestmethod-requestconfig-data)
+  - [.action(instanceOrType, actionName, body)](#apiactiontype-actionname-data)
+  - [.get(type, params)](#apigettype-data)
+  - [.create(type, body)](#apicreatetype-data)
+  - [.update(instanceOrType, body)](#apiupdateinstanceortype-data)
+  - [.del(instanceOrType, params)](#apideltype-data)
+  - [.createSync(type, data)](#apicreatesynctype-data)
+  - [.getAvailableActionsFor(type)](#apigetavailableactionsfortype)
+  - [.on(eventName, handler)](#apioneventname-handler)
+  - [.off(eventName, handler)](#apioffeventname-handler)
+  - [.all(promises*)](#apiallpromise1-promise2-)
+  - [.steps(promises*)](#apistepspromise1-promise2-)
+  - [.defer()](#apidefer)
+  - [.context](#apicontext)
+  - [Interface Events](#events)
+- [ApiObject](#apiobject)
+  - [.getAvailableActions()](#objgetavailableactions)
+  - [.prop(name, value)](#objpropname-value)
+  - [.on(eventName, handler)](#objon)
+  - [.off(eventName, handler)](#objoff)
+  - [.data](#objdata)
+  - [.api](#objapi)
+  - [.type](#objtype)
+  - [ApiObject Events](#events-1)
+- [ApiCollection](#apicollection)
+  - [.add(newItems)](#collectionaddnewitems)
+  - [.remove(indexOrItem)](#collectionremoveindexoritem)
+  - [.replace(newItems)](#collectionreplacenewitems)
+  - [.removeAll()](#collectionremoveall)
+- [ApiObject Subtypes](#apiobject-subtypes)
 
 # Context
 
@@ -248,7 +240,7 @@ cart.get();
 are all equivalent. The first runs the 'get' action on the 'cart' type by name, the second runs the `.get()` convenience method, and the third creates a blank `ApiObject` and then runs the corresponding instance method.
 
 - **Argument** *(string)* `type`
-  A string corresponding to a known `ApiObject` [type](#apiobjecttypes).
+  A string corresponding to a known `ApiObject` [type](#apiobject-types).
 
 - **Argument** *(string)* `actionName`
   A string corresponding to a valid action name for the given type. For most types, the standard CRUD actions are available. To find a list of available actions for a type, use the [`.getAvailableActionsFor(type)`](#interfacegetavailableactionsfortype) method.
@@ -329,7 +321,7 @@ customer.get(); // will populate itself
 ```
 
 - **Argument** *(string)* `type`
-  A valid [type](#apiobjecttypes) for an `ApiObject`.
+  A valid [type](#apiobject-types) for an `ApiObject`.
 
 - **Argument** *(object)* `data`
   Optionally, supply some data to preload into the object.
@@ -346,7 +338,7 @@ api.getAvailableActionsFor('product');
 ```
 
 - **Argument** *(string)* `type`
-  A valid [type](#apiobjecttypes) for an `ApiObject`.
+  A valid [type](#apiobject-types) for an `ApiObject`.
 
 - **Returns** *string[]*
 
@@ -498,7 +490,7 @@ Return a list of available actions for this type. Equivalent to calling `api.get
 
 ## obj.prop(name, [value])
 Get or set properties from the `.data` of this object. This is an alternative way to access object data if directly manipulating the `.data` collection is ever discouraged or deprecated.
-```
+```js
 // get the product code
 api.get('product', { productCode: 'EXAMPLE123' }).then(function(product) {
   console.log(product.prop('productCode')); // -> 'EXAMPLE123'
@@ -519,11 +511,20 @@ api.get('customer', { id: require.mozuData('user').accountId }).then(function(cu
 - **Argument** *(string|object|boolean|number|null|array)* `value`
   Value to set. If this is not present, `.prop()` returns the current value.
 
+## obj.on
+Subscribe to events on this object. Just like [api.on](#apioneventname-handler), but for this object alone.
+
+## obj.off
+Unsubscribe to events on this object. Just like [api.off](#apioffeventname-handler), but for this object alone.
+
+## obj.data
+Reference to the plain JSON object representing this ApiObject's data. This object is the server representation of the ApiObject and is sent and updated with server requests.
+
 ## obj.api
 Reference to the `Interface` instance that created this ApiObject.
 
 ## obj.type
-The [type](#objecttypes) of the ApiObject.
+The [type](#apiobject-types) of the ApiObject.
 
 Subclasses of APIObject have more instance methods, as described below. Most of them have at least the methods `.get`, `.create`, `.update`, and `.del`, just like the `Interface`.
 
@@ -900,7 +901,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### product.addToCart
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/product.js). 
 - **Returns** *product*
 
 
@@ -923,7 +924,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### product.addToWishlist
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/product.js). 
 - **Returns** *product*
 
 
@@ -934,7 +935,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### product.addToCartForPickup
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/product.js). 
 - **Returns** *product*
 
 
@@ -974,7 +975,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### locations.getByLatLong
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/locations.js). 
 - **Returns** *locations*
 
 
@@ -987,7 +988,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### locations.getForProduct
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/locations.js). 
 - **Returns** *locations*
 
 
@@ -1002,7 +1003,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### cartsummary.count
 
 ##### `{+cartService}summary` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/cartsummary.js). 
 - **Returns** *cartsummary*
 
 
@@ -1059,7 +1060,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### cart.count
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/cart.js). 
 - **Returns** *cart*
 
 
@@ -1156,7 +1157,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### customer.update
 
 ##### `{+customerService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/customer.js). 
 - **Returns** *customer*
 - **Shortcut Parameter** *id*
   You can use the shortcut `customer.update(foo)` instead of `customer.update({ id: foo })`. 
@@ -1324,7 +1325,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### customer.savePaymentCard
 
 ##### `{+customerService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/customer.js). 
 - **Returns** *customer*
 - **Shortcut Parameter** *id*
   You can use the shortcut `customer.savePaymentCard(foo)` instead of `customer.savePaymentCard({ id: foo })`. 
@@ -1336,7 +1337,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### customer.deletePaymentCard
 
 ##### `{+customerService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/customer.js). 
 - **Returns** *customer*
 - **Shortcut Parameter** *id*
   You can use the shortcut `customer.deletePaymentCard(foo)` instead of `customer.deletePaymentCard({ id: foo })`. 
@@ -1348,7 +1349,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### customer.getStoreCredits
 
 ##### `{+customerService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/customer.js). 
 - **Returns** *customer*
 - **Shortcut Parameter** *id*
   You can use the shortcut `customer.getStoreCredits(foo)` instead of `customer.getStoreCredits({ id: foo })`. 
@@ -1360,7 +1361,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### customer.getDigitalCredit
 
 ##### `{+customerService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/customer.js). 
 - **Returns** *customer*
 - **Shortcut Parameter** *id*
   You can use the shortcut `customer.getDigitalCredit(foo)` instead of `customer.getDigitalCredit({ id: foo })`. 
@@ -1372,7 +1373,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### customer.addStoreCredit
 
 ##### `{+customerService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/customer.js). 
 - **Returns** *customer*
 - **Shortcut Parameter** *id*
   You can use the shortcut `customer.addStoreCredit(foo)` instead of `customer.addStoreCredit({ id: foo })`. 
@@ -1384,7 +1385,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### customer.getMinimumPartial
 
 ##### `{+customerService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/customer.js). 
 - **Returns** *customer*
 - **Shortcut Parameter** *id*
   You can use the shortcut `customer.getMinimumPartial(foo)` instead of `customer.getMinimumPartial({ id: foo })`. 
@@ -1577,7 +1578,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.createPayment
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1669,7 +1670,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.getShippingMethodsFromContact
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1680,7 +1681,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.addCoupon
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1691,7 +1692,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.addNewCustomer
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1702,7 +1703,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.addStoreCredit
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1713,7 +1714,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.addPayment
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1724,7 +1725,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.getActivePayments
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1735,7 +1736,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.getCurrentPayment
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1746,7 +1747,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.getActiveStoreCredits
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1757,7 +1758,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.voidPayment
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1768,7 +1769,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.checkout
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1779,7 +1780,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### order.isComplete
 
 ##### `{+orderService}{id}` 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
 - **Returns** *order*
 
 
@@ -1854,7 +1855,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### shipment.getShippingMethodsFromContact
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/shipment.js). 
 - **Returns** *shipment*
 
 
@@ -1928,7 +1929,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### creditcard.save
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/creditcard.js). 
 - **Returns** *creditcard*
 
 
@@ -1984,7 +1985,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### creditcard.saveToCustomer
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/creditcard.js). 
 - **Returns** *creditcard*
 
 
@@ -1995,7 +1996,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### creditcard.getOrderData
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/creditcard.js). 
 - **Returns** *creditcard*
 
 
@@ -2058,7 +2059,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### wishlist.get
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/wishlist.js). 
 - **Returns** *wishlist*
 
 
@@ -2174,7 +2175,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### wishlist.getOrCreate
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/wishlist.js). 
 - **Returns** *wishlist*
 
 
@@ -2185,7 +2186,7 @@ This method uses the iframe transport by default in order to be used across orig
 #### wishlist.addItemToCartById
 
 
- This is a **method override** with special logic assigned to it. 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/wishlist.js). 
 - **Returns** *wishlist*
 
 

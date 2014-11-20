@@ -1,4 +1,5 @@
-# Contents
+# Mozu Storefront SDK Reference
+- [A word on usage](#a-word-on-usage)
 - [Context](#context)
   - [.Store(contextValues)](#contextstorecontextvalues)
   - [.setServiceUrls(serviceUrls)](#contextsetserviceurlsserviceurls)
@@ -38,9 +39,34 @@
   - [.removeAll()](#collectionremoveall)
 - [ApiObject Subtypes](#apiobject-subtypes)
 
+# A word on usage
+
+The chief use case for the Mozu Storefront SDK is in theme JavaScript based on the Mozu Core Theme. The Core Theme only rarely uses the Storefront SDK directly, so in normal theme development it will be rare to directly call the methods documented below.
+
+Instead, the Core Theme implements a set of model abstractions using [Backbone](http://backbonejs.org). The [Backbone.MozuModel](https://github.com/Mozu/core-theme/blob/master/scripts/modules/backbone-mozu-model.js) in the Core Theme is an extended Backbone.Model with several extra features, including integration with the Storefront SDK. Instead of directly creating [ApiObjects](#apiobject), themes should create Backbone.MozuModels and specify a `mozuType` string, which should be one of the [ApiObject Types](#apiobject-types), as part of their definition. Then, when the theme creates an instance of a Backbone.MozuModel, it will automatically create an ApiObject of the specified `mozuType`, and bind it tightly to the Backbone.MozuModel using `sync` events and proxy methods. All of the instance methods on the `ApiObject` will appear as special methods on the Backbone.MozuModel with the prefix "api". For instance, a Backbone.MozuModel bound to a [`cart`](#cart):
+
+```js
+var CartModel = Backbone.MozuModel.extend({
+  mozuType: 'cart'
+});
+
+var cart = new CartModel();
+```
+
+The resulting `cart` will have an `apiModel` property that is a reference to its bound [`cart` object](#cart), and will also expose its asynchronous, server-call methods under the "api" prefix:
+
+```js
+typeof cart.apiAddProduct; // -> "function"
+typeof cart.apiEmpty; // -> "function"
+typeof cart.apiCheckout; // -> "function"
+typeof cart.apiGet; // -> "function"
+```
+
+Familiarity with the Storefront SDK is very useful, since the Backbone.MozuModels do all of their server communication using it; still, it's important to note that in theme usage, we usually call it through Backbone.MozuModels rather than using it directly.
+
 # Context
 
-The Context object is the "starter" object exposed by the SDK. Configure the Context with tenant, catalog, site, and access token data. When a Context is fully configured, run its `.api()` method to return an [Interface](#Interface) to begin making API calls.
+The Context object is the "starter" object exposed by the SDK. Configure the Context with tenant, catalog, site, and access token data. When a Context is fully configured, run its `.api()` method to return an [Interface](#interface) to begin making API calls.
 
 ## context.Store(contextValues)
 
@@ -623,8 +649,8 @@ This method uses the iframe transport by default in order to be used across orig
   You can use the shortcut `documentList.get(foo)` instead of `documentList.get({ listName: foo })`. 
 
 - **Default Parameters**
-  - **startIndex**: 0
-  - **pageSize**: 15
+  - **startIndex**: `0`
+  - **pageSize**: `15`
    
 
 This method uses the iframe transport by default in order to be used across origins (such as secure and unsecure pages). 
@@ -640,9 +666,9 @@ This method uses the iframe transport by default in order to be used across orig
   You can use the shortcut `documentView.get(foo)` instead of `documentView.get({ listName: foo })`. 
 
 - **Default Parameters**
-  - **viewName**: default
-  - **startIndex**: 0
-  - **pageSize**: 15
+  - **viewName**: `default`
+  - **startIndex**: `0`
+  - **pageSize**: `15`
    
 
 This method uses the iframe transport by default in order to be used across origins (such as secure and unsecure pages). 
@@ -658,8 +684,8 @@ This method uses the iframe transport by default in order to be used across orig
   You can use the shortcut `entityList.get(foo)` instead of `entityList.get({ listName: foo })`. 
 
 - **Default Parameters**
-  - **startIndex**: 0
-  - **pageSize**: 15
+  - **startIndex**: `0`
+  - **pageSize**: `15`
    
 
 This method uses the iframe transport by default in order to be used across origins (such as secure and unsecure pages). 
@@ -675,9 +701,9 @@ This method uses the iframe transport by default in order to be used across orig
   You can use the shortcut `entityView.get(foo)` instead of `entityView.get({ listName: foo })`. 
 
 - **Default Parameters**
-  - **viewName**: default
-  - **startIndex**: 0
-  - **pageSize**: 15
+  - **viewName**: `default`
+  - **startIndex**: `0`
+  - **pageSize**: `15`
    
 
 This method uses the iframe transport by default in order to be used across origins (such as secure and unsecure pages). 
@@ -720,8 +746,8 @@ This method uses the iframe transport by default in order to be used across orig
   You can use the shortcut `entityContainerList.get(foo)` instead of `entityContainerList.get({ listName: foo })`. 
 
 - **Default Parameters**
-  - **startIndex**: 0
-  - **pageSize**: 15
+  - **startIndex**: `0`
+  - **pageSize**: `15`
    
 
 This method uses the iframe transport by default in order to be used across origins (such as secure and unsecure pages). 
@@ -737,9 +763,9 @@ This method uses the iframe transport by default in order to be used across orig
   You can use the shortcut `entityContainerView.get(foo)` instead of `entityContainerView.get({ listName: foo })`. 
 
 - **Default Parameters**
-  - **startIndex**: 0
-  - **viewName**: default
-  - **pageSize**: 15
+  - **startIndex**: `0`
+  - **viewName**: `default`
+  - **pageSize**: `15`
    
 
 This method uses the iframe transport by default in order to be used across origins (such as secure and unsecure pages). 
@@ -755,8 +781,8 @@ This method uses the iframe transport by default in order to be used across orig
   You can use the shortcut `products.get(foo)` instead of `products.get({ filter: foo })`. 
 
 - **Default Parameters**
-  - **startIndex**: 0
-  - **pageSize**: 15
+  - **startIndex**: `0`
+  - **pageSize**: `15`
    
 
 
@@ -772,8 +798,8 @@ This method uses the iframe transport by default in order to be used across orig
   You can use the shortcut `categories.get(foo)` instead of `categories.get({ filter: foo })`. 
 
 - **Default Parameters**
-  - **startIndex**: 0
-  - **pageSize**: 15
+  - **startIndex**: `0`
+  - **pageSize**: `15`
    
 
 
@@ -789,7 +815,7 @@ This method uses the iframe transport by default in order to be used across orig
   You can use the shortcut `category.get(foo)` instead of `category.get({ id: foo })`. 
 
 - **Default Parameters**
-  - **allowInactive**: false
+  - **allowInactive**: `false`
    
 
 
@@ -818,9 +844,9 @@ This method uses the iframe transport by default in order to be used across orig
   You can use the shortcut `search.get(foo)` instead of `search.get({ query: foo })`. 
 
 - **Default Parameters**
-  - **startIndex**: 0
-  - **query**: *:*
-  - **pageSize**: 15
+  - **startIndex**: `0`
+  - **query**: `*:*`
+  - **pageSize**: `15`
    
 
 
@@ -862,9 +888,9 @@ This method uses the iframe transport by default in order to be used across orig
 
 
 - **Default Parameters**
-  - **filter**: Status ne Created and Status ne Validated and Status ne Pending
-  - **startIndex**: 0
-  - **pageSize**: 5
+  - **filter**: `Status ne Created and Status ne Validated and Status ne Pending`
+  - **startIndex**: `0`
+  - **pageSize**: `5`
    
 
 
@@ -880,7 +906,7 @@ This method uses the iframe transport by default in order to be used across orig
   You can use the shortcut `product.get(foo)` instead of `product.get({ productCode: foo })`. 
 
 - **Default Parameters**
-  - **allowInactive**: false
+  - **allowInactive**: `false`
    
 
 
@@ -893,7 +919,7 @@ This method uses the iframe transport by default in order to be used across orig
 
 
 - **Default Parameters**
-  - **includeOptionDetails**: true
+  - **includeOptionDetails**: `true`
    
 
 
@@ -967,7 +993,7 @@ This method uses the iframe transport by default in order to be used across orig
 
 
 - **Default Parameters**
-  - **pageSize**: 15
+  - **pageSize**: `15`
    
 
 
@@ -980,7 +1006,7 @@ This method uses the iframe transport by default in order to be used across orig
 
 
 - **Default Parameters**
-  - **pageSize**: 15
+  - **pageSize**: `15`
    
 
 
@@ -993,7 +1019,7 @@ This method uses the iframe transport by default in order to be used across orig
 
 
 - **Default Parameters**
-  - **pageSize**: 15
+  - **pageSize**: `15`
    
 
 
@@ -1833,8 +1859,8 @@ This method uses the iframe transport by default in order to be used across orig
 
 
 - **Default Parameters**
-  - **startIndex**: 0
-  - **pageSize**: 5
+  - **startIndex**: `0`
+  - **pageSize**: `5`
    
 
 
@@ -2097,8 +2123,8 @@ This method uses the iframe transport by default in order to be used across orig
 
 
 - **Default Parameters**
-  - **name**: my_wishlist
-  - **typeTag**: default
+  - **name**: `my_wishlist`
+  - **typeTag**: `default`
    
 
 
@@ -2167,7 +2193,7 @@ This method uses the iframe transport by default in order to be used across orig
 
 
 - **Default Parameters**
-  - **sortBy**: UpdateDate asc
+  - **sortBy**: `UpdateDate asc`
    
 
 

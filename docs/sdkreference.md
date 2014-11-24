@@ -254,7 +254,7 @@ A legal HTTP verb, like `'GET'`, `'POST'`, `'PUT'`, or `'DELETE'`. There is hard
   The `.request()` method, like all AJAX-invoking methods of the SDK, returns a Promise. The Promises in the Storefront SDK are [when.js](https://github.com/cujojs/when/) promises. They satisfy the Promises/A+ specification and also include [extra convenience methods](https://github.com/cujojs/when/blob/master/docs/api.md#promise). Promises returned by `.request()` resolve with a raw parsed JSON object.
 
 ## api.action(type, actionName, data)
-Perform an action on a known type of API object. This method is the starting point to a lot of API actions. It returns a Promise for an API object, and at the same time, runs an "action" on that object. It can run the common CRUD actions `get`, `create`, `update`, and `del` on most objects, but known objects often also have special actions available, such as `addToCart` for `cart` or `resetPassword` for `password`. These actions correspond to method names on API objects. There are also convenience methods on the `Interface` itself for the common CRUD actions. Therefore:
+Perform an action on a known type of API object. This method is the starting point for most API calls; it is the underlying method called by all ApiObject instance methode. It returns a Promise for an API object, and at the same time, runs an "action" on that object. It can run the common CRUD actions `get`, `create`, `update`, and `del` on most objects, but known objects often also have special actions available, such as `addToCart` for `cart` or `resetPassword` for `customer`. These actions correspond to method names on API objects. There are also convenience methods on the `Interface` itself for the common CRUD actions. Therefore:
 ```js
 api.action('cart','get');
 
@@ -269,7 +269,7 @@ are all equivalent. The first runs the 'get' action on the 'cart' type by name, 
   A string corresponding to a known `ApiObject` [type](#apiobject-types).
 
 - **Argument** *(string)* `actionName`
-  A string corresponding to a valid action name for the given type. For most types, the standard CRUD actions are available. To find a list of available actions for a type, use the [`.getAvailableActionsFor(type)`](#interfacegetavailableactionsfortype) method.
+  A string corresponding to a valid action name for the given type. For most types, the standard CRUD actions are available. To find a list of available actions for a type, use the [`.getAvailableActionsFor(type)`](#apigetavailableactionsfortype) method.
 
 - **Argument** *(object)* `data`
   An object consisting of the data to send for the actual request, either as query parameters or as POST data, depending on the HTTP method used.

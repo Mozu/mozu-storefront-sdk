@@ -1,4 +1,5 @@
-var DEVELOPER = 1,
+var version = require('./version'),
+    DEVELOPER = 1,
     ADMINUSER = 2,
     SHOPPER = 4,
     TENANT = 8,
@@ -52,7 +53,7 @@ all = {
     LIVE: 'Live',
     PENDING: 'Pending'
   },
-  version: "1.13.14325.0"
+  version: version.current
 };
 
 for (var h in all.headers) {

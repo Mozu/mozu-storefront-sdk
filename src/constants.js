@@ -45,12 +45,14 @@ all = {
     SITE: 'site',
     MASTERCATALOG: 'master-catalog',
     CATALOG: 'catalog',
-    DATAVIEWMODE: 'dataview-mode'
+    DATAVIEWMODE: 'dataview-mode',
+    VERSION: 'version'
   },
   dataViewModes: {
     LIVE: 'Live',
     PENDING: 'Pending'
-  }
+  },
+  version: "1.13.14325.0"
 };
 
 for (var h in all.headers) {

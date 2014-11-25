@@ -28,7 +28,6 @@ function getConfig() {
 
 module.exports = {
   client: function(cfg) {
-    var localConf;
     cfg = cfg || {};
     if (!cfg || !cfg.appId || !cfg.sharedSecret  || !cfg.baseUrl) {
       cfg = extend(getConfig(), cfg);

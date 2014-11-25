@@ -10,10 +10,12 @@ chai.use(require('chai-as-promised'));
 client.setTenant(testConfig.tenant);
 client.setMasterCatalog(testConfig.masterCatalog);
 
-// client.defaultRequestOptions = {
-//   proxy: "http://127.0.0.1:8888",
-//   strictSSL: false
-// };
+if (process.env.USE_FIDDLER) {
+  client.defaultRequestOptions = {
+    proxy: "http://127.0.0.1:8888",
+    strictSSL: false
+  };
+}
 
 describe('the Mozu JavaScript SDK', function() {
   

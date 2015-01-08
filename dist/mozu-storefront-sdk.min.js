@@ -1,7 +1,7 @@
 /*! 
- * Mozu JavaScript SDK - v0.3.0 - 2014-11-20
+ * Mozu Storefront SDK - v0.4.0 - 2015-01-08
  *
- * Copyright (c) 2014 Volusion, Inc.
+ * Copyright (c) 2015 Volusion, Inc.
  *
  */
 

@@ -1,3 +1,10 @@
+[0.4.0](https://github.com/Mozu/mozu-javascript-sdk/releases/tag/v0.4.0) / 2015-01-08
+-------------------------------------------------------------------------------------
+
+*   **Changed** Changed the name to Mozu Storefront SDK to accurately reflect usage
+
+
+
 [0.3.0](https://github.com/Mozu/mozu-javascript-sdk/releases/tag/v0.3.0) / 2014-01-20
 -------------------------------------------------------------------------------------
 

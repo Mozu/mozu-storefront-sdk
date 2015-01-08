@@ -1,10 +1,10 @@
 # Mozu Storefront SDK
 
-The Mozu Storefront SDK provides a JavaScript API for connecting to Mozu web services. Originally designed to manage API requests for the storefront Core theme, the JS SDK is a multipurpose tool for performing common shopper-level actions.
+The Mozu Storefront SDK provides a JavaScript API for connecting to Mozu web services. Originally designed to manage API requests for the storefront Core theme, the Storefront SDK is a multipurpose tool for performing common shopper-level actions.
 
 ## Development requirements
 
-*   NodeJS >= 0.8
+*   NodeJS >= 0.10
 *   `grunt-cli` package installed globally
 
 ## Browser requirements

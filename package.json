@@ -1,6 +1,6 @@
 {
-  "name": "mozu-javascript-sdk",
-  "title": "Mozu JavaScript SDK",
+  "name": "mozu-storefront-sdk",
+  "title": "Mozu Storefront SDK",
   "author": "Volusion, Inc.",
   "contributors": [
     {
@@ -8,14 +8,14 @@
       "email": "james_zetlen@volusion.com"
     }
   ],
-  "version": "0.3.0",
+  "version": "0.4.0",
   "scripts": {
     "make": "grunt",
     "test": "grunt test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Mozu/mozu-javascript-sdk.git"
+    "url": "https://github.com/Mozu/mozu-storefront-sdk.git"
   },
   "dependencies": {
     "microevent": "~1",
@@ -41,5 +41,5 @@
     "swig": "git://github.com/zetlen/swig",
     "through": "~2.3.4"
   },
-  "main": "./dist/mozu-javascript-sdk.min"
+  "main": "./dist/mozu-storefront-sdk.min"
 }

@@ -215,7 +215,7 @@ api.get('product','EXAMPLE-001').then(function(product) {   // ...
 Place a raw API request. This is the underlying method that all higher-level API calls use. It should be rare to call it directly.
 
 ```js
-api.request('POST', 'api/service/collection/', {
+api.request('POST', '/api/service/collection/', {
   some: 'new',
   payload: 'data'
 }).then(function(responseObject) {
@@ -229,7 +229,7 @@ A legal HTTP verb, like `'GET'`, `'POST'`, `'PUT'`, or `'DELETE'`. There is hard
   *Note: Due to several bugs and incompatibilities in popular software, the Storefront SDK tunnels the `DELETE` method through a `POST` with an `X-HTTP-Method-Override: DELETE` header.*
 
 - **Argument** *(object)* `requestConfig`
-  A [Request Config](#requestconfig) object, specifying the request URL, alternate transports, or behavior configuration for this API call. The simplest possible Request Config is a string representing the URL. The above example uses this style, which is equivalent to `api.request('POST', { url: 'api/service/collection/' } [...]`. Most Request Configs are simple object literals. The `.request()` method understands the following Request Config options:
+  A [Request Config](#requestconfig) object, specifying the request URL, alternate transports, or behavior configuration for this API call. The simplest possible Request Config is a string representing the URL. The above example uses this style, which is equivalent to `api.request('POST', { url: '/api/service/collection/' } [...]`. Most Request Configs are simple object literals. The `.request()` method understands the following Request Config options:
 
   *  `url` *(string)* The URL for the request.
 

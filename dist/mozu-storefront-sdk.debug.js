@@ -1,5 +1,5 @@
 /*! 
- * Mozu Storefront SDK - v0.4.0 - 2015-01-08
+ * Mozu Storefront SDK - v0.4.0 - 2015-02-20
  *
  * Copyright (c) 2015 Volusion, Inc.
  *
@@ -2584,6 +2584,7 @@ module.exports = {
         CREATED: "Created",
         PENDING_REVIEW: "PendingReview",
         PROCESSING: "Processing",
+        ERRORED: "Errored",
         SUBMITTED: "Submitted",
         VALIDATED: "Validated"
     },
@@ -2597,10 +2598,19 @@ module.exports = {
         CANCEL_ORDER: "CancelOrder",
         REOPEN_ORDER: "ReopenOrder"
     },
-    FULFILLMENT_METHODS: {
+    COMMERCE_FULFILLMENT_METHODS: {
         SHIP: "Ship",
         PICKUP: "Pickup",
         DIGITAL: "Digital"
+    },
+    CATALOG_FULFILLMENT_TYPES: {
+        SHIP: "DirectShip",
+        PICKUP: "InStorePickup",
+        DIGITAL: "Digital"
+    },
+    GOODS_TYPES: {
+        PHYSICAL: 'Physical',
+        DIGITAL: 'Digital'
     }
 };
 
@@ -2770,7 +2780,18 @@ module.exports = errors;
 
 // BEGIN IFRAMEXHR
 var utils = require('./utils');
-module.exports = (function (window, document, undefined) {
+module.exports = (function(window, document, undefined) {
+
+    var on = window.addEventListener ? function(obj, ev, handler) {
+        return obj.addEventListener(ev, handler, false);
+    } : function(obj, ev, handler) {
+        return obj.attachEvent("on" + ev, handler);
+    },
+    off = window.removeEventListener ? function(obj, ev, handler) {
+        return obj.removeEventListener(ev, handler, false);
+    } : function(obj, ev, handler) {
+        return obj.detachEvent("on" + ev, handler);
+    };
 
     var hasPostMessage = window.postMessage && navigator.userAgent.indexOf("Opera") === -1,
         firefoxVersion = (function () {
@@ -2800,13 +2821,13 @@ module.exports = (function (window, document, undefined) {
                     if (e.data === self.uid + " ready") return self.postMessage();
                     self.update(e.data.substring(self.uid.length));
                 };
-                window.addEventListener('message', this.messageListener, false);
+                on(window, 'message', this.messageListener);
             },
             postMessage: function () {
                 return this.getFrameWindow().postMessage(this.getMessage(), this.frameOrigin);
             },
             detachListeners: function () {
-                window.removeEventListener('message', this.messageListener, false);
+                off(window, 'message', this.messageListener);
             }
         } : {
             listen: function () {
@@ -2952,7 +2973,7 @@ module.exports = _init;
 
 //# sourceUrl=src/interface.js
 
-/**
+﻿/**
  * @external Promise
  * @see {@link https://github.com/cujojs/when/blob/master/docs/api.md#promise WhenJS/Promise}
  */
@@ -3286,7 +3307,7 @@ module.exports=
     "orders": {
         "template": "{+orderService}{?_*}",
         "defaultParams": {
-            "filter": "Status ne Created and Status ne Validated and Status ne Pending",
+            "filter": "Status ne Created and Status ne Validated and Status ne Pending and Status ne Abandoned",
             "startIndex": 0,
             "pageSize": 5
         },
@@ -3373,6 +3394,27 @@ module.exports=
             "noBody": true
         }
     },
+    "attributedefinition": {
+        "template": "{+customerAttributeDefService}{attributeFQN}",
+        "shortcutParam": "attributeFQN",
+        "defaults": {
+            "useIframeTransport": "{+storefrontUserService}../../receiver{?receiverVersion}"
+        }
+    },
+    "customerattribute": {
+        "template": "{+customerService}{accountId}/attributes/{attributeFQN}",
+        "defaults": {
+            "useIframeTransport": "{+storefrontUserService}../../receiver{?receiverVersion}"
+        }
+    },
+    "customerattributes": {
+        "collectionOf": "customerattribute",
+        "template": "{+customerService}{accountId}/attributes/{?_*}",
+        "defaultParams": {
+            "startIndex": 0,
+            "pageSize": 5
+        }
+    },
     "customer": {
         "template": "{+customerService}{id}",
         "defaults": { 
@@ -3419,6 +3461,43 @@ module.exports=
             "verb": "POST",
             "template": "{+customerService}{id}/change-password",
             "includeSelf": true
+        },
+        "get-attributes": {
+            "template": "{+customerService}{customer.id}/attributes/{?startIndex,pageSize,sortBy,filter}",
+            "defaultParams": {
+                "startIndex": 0,
+                "pageSize": 5
+            },
+            "includeSelf": {
+                "asProperty": "customer"
+            },
+            "returnType": "customerattributes"
+        },
+        "get-attribute": {
+            "template": "{+customerService}{customer.id}/attributes/{attributeFQN}",
+            "includeSelf": {
+                "asProperty": "customer"
+            },
+            "shortcutParam": "attributeFQN",
+            "returnType": "customerattribute"
+        },
+        "update-attribute": {
+            "verb": "PUT",
+            "template": "{+customerService}{customer.id}/attributes/{attributeFQN}",
+            "includeSelf": {
+                "asProperty": "customer"
+            },
+            "shortcutParam": "attributeFQN",
+            "returnType": "customerattribute"
+        },
+        "get-attribute-definition": {
+            "template": "{+customerAttributeDefService}{attributeFQN}",
+            "shortcutParam": "attributeFQN",
+            "returnType": "attributedefinition"
+        },
+        "get-attribute-definitions": {
+            "template": "{+customerAttributeDefService}",
+            "returnType": "customerattribute"
         },
         "get-orders": {
             "template": "{+orderService}?filter=OrderNumber ne null",
@@ -3535,7 +3614,7 @@ module.exports=
     "order": {
         "template": "{+orderService}{id}",
         "includeSelf": true,
-        "create": {
+        "create-from-cart": {
             "template": "{+orderService}{?cartId*}",
             "shortcutParam": "cartId",
             "noBody": true
@@ -4215,8 +4294,10 @@ module.exports = (function () {
         },
         deletePaymentCard: function (id) {
             var self = this;
-            return this.deleteCard(id).then(function () {
-                return self.api.del('creditcard', id);
+            return this.deleteCard(id).then(function() {
+                // TODO: until paymentservice enables a DELETE tunnelling handler
+                // we'll just leave these cards orphaned
+                //return self.api.del('creditcard', id);
             });
         },
         getStoreCredits: function() {
@@ -4400,6 +4481,8 @@ module.exports = (function () {
     OrderStatus2IsComplete[CONSTANTS.ORDER_STATUSES.SUBMITTED] = true;
     OrderStatus2IsComplete[CONSTANTS.ORDER_STATUSES.ACCEPTED] = true;
     OrderStatus2IsComplete[CONSTANTS.ORDER_STATUSES.PENDING_REVIEW] = true;
+    OrderStatus2IsComplete[CONSTANTS.ORDER_STATUSES.PROCESSING] = true;
+    OrderStatus2IsComplete[CONSTANTS.ORDER_STATUSES.ERRORED] = true;
     OrderStatus2IsComplete[CONSTANTS.ORDER_STATUSES.COMPLETED] = true;
 
     var OrderStatus2IsReady = {};
@@ -4550,6 +4633,14 @@ module.exports = (function () {
 var errors = require('../errors');
 var utils = require('../utils');
 var CONSTANTS = require('../constants/default');
+
+var catalogToCommerceFulfillmentTypeConstants = {};
+for (var k in CONSTANTS.COMMERCE_FULFILLMENT_METHODS) {
+    if (CONSTANTS.COMMERCE_FULFILLMENT_METHODS.hasOwnProperty(k)) {
+        catalogToCommerceFulfillmentTypeConstants[CONSTANTS.CATALOG_FULFILLMENT_TYPES[k]] = CONSTANTS.COMMERCE_FULFILLMENT_METHODS[k];
+    }
+}
+
 module.exports = {
     addToCart: function(payload) {
         // expect payload to have only "options" and "quantity"
@@ -4561,11 +4652,11 @@ module.exports = {
             product: {
                 productCode: this.data.productCode,
                 variationProductCode: this.data.variationProductCode,
-                options: payload.options
+                options: payload.options || this.data.options
             },
             quantity: payload.quantity || 1,
             fulfillmentLocationCode: payload.fulfillmentLocationCode,
-            fulfillmentMethod: payload.fulfillmentMethod || "Ship"
+            fulfillmentMethod: payload.fulfillmentMethod || (this.data.fulfillmentTypesSupported && catalogToCommerceFulfillmentTypeConstants[this.data.fulfillmentTypesSupported[0]]) || (this.data.goodsType === CONSTANTS.GOODS_TYPES.PHYSICAL ? CONSTANTS.COMMERCE_FULFILLMENT_METHODS.SHIP : CONSTANTS.COMMERCE_FULFILLMENT_METHODS.DIGITAL)
         });
     },
     addToWishlist: function (payload) {
@@ -4583,7 +4674,7 @@ module.exports = {
     },
     addToCartForPickup: function (opts) {
         return this.addToCart(utils.extend({}, this.data, {
-            fulfillmentMethod: CONSTANTS.FULFILLMENT_METHODS.PICKUP
+            fulfillmentMethod: CONSTANTS.COMMERCE_FULFILLMENT_METHODS.PICKUP
         }, opts));
     }
 };
@@ -4907,7 +4998,7 @@ var process=require("__browserify_process");
                             }, xhr, e);
                         }
                     }
-                    if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+                    if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 || xhr.status === 1223) { // IE8 reports 204 as 1223
                         success(json, xhr);
                     } else {
                         failure(json || {

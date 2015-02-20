@@ -124,7 +124,7 @@
     "orders": {
         "template": "{+orderService}{?_*}",
         "defaultParams": {
-            "filter": "Status ne Created and Status ne Validated and Status ne Pending",
+            "filter": "Status ne Created and Status ne Validated and Status ne Pending and Status ne Abandoned",
             "startIndex": 0,
             "pageSize": 5
         },
@@ -211,6 +211,27 @@
             "noBody": true
         }
     },
+    "attributedefinition": {
+        "template": "{+customerAttributeDefService}{attributeFQN}",
+        "shortcutParam": "attributeFQN",
+        "defaults": {
+            "useIframeTransport": "{+storefrontUserService}../../receiver{?receiverVersion}"
+        }
+    },
+    "customerattribute": {
+        "template": "{+customerService}{accountId}/attributes/{attributeFQN}",
+        "defaults": {
+            "useIframeTransport": "{+storefrontUserService}../../receiver{?receiverVersion}"
+        }
+    },
+    "customerattributes": {
+        "collectionOf": "customerattribute",
+        "template": "{+customerService}{accountId}/attributes/{?_*}",
+        "defaultParams": {
+            "startIndex": 0,
+            "pageSize": 5
+        }
+    },
     "customer": {
         "template": "{+customerService}{id}",
         "defaults": { 
@@ -257,6 +278,43 @@
             "verb": "POST",
             "template": "{+customerService}{id}/change-password",
             "includeSelf": true
+        },
+        "get-attributes": {
+            "template": "{+customerService}{customer.id}/attributes/{?startIndex,pageSize,sortBy,filter}",
+            "defaultParams": {
+                "startIndex": 0,
+                "pageSize": 5
+            },
+            "includeSelf": {
+                "asProperty": "customer"
+            },
+            "returnType": "customerattributes"
+        },
+        "get-attribute": {
+            "template": "{+customerService}{customer.id}/attributes/{attributeFQN}",
+            "includeSelf": {
+                "asProperty": "customer"
+            },
+            "shortcutParam": "attributeFQN",
+            "returnType": "customerattribute"
+        },
+        "update-attribute": {
+            "verb": "PUT",
+            "template": "{+customerService}{customer.id}/attributes/{attributeFQN}",
+            "includeSelf": {
+                "asProperty": "customer"
+            },
+            "shortcutParam": "attributeFQN",
+            "returnType": "customerattribute"
+        },
+        "get-attribute-definition": {
+            "template": "{+customerAttributeDefService}{attributeFQN}",
+            "shortcutParam": "attributeFQN",
+            "returnType": "attributedefinition"
+        },
+        "get-attribute-definitions": {
+            "template": "{+customerAttributeDefService}",
+            "returnType": "customerattribute"
         },
         "get-orders": {
             "template": "{+orderService}?filter=OrderNumber ne null",
@@ -373,7 +431,7 @@
     "order": {
         "template": "{+orderService}{id}",
         "includeSelf": true,
-        "create": {
+        "create-from-cart": {
             "template": "{+orderService}{?cartId*}",
             "shortcutParam": "cartId",
             "noBody": true

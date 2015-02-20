@@ -198,7 +198,7 @@
                             }, xhr, e);
                         }
                     }
-                    if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+                    if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 || xhr.status === 1223) { // IE8 reports 204 as 1223
                         success(json, xhr);
                     } else {
                         failure(json || {

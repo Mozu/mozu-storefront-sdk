@@ -27,8 +27,10 @@ module.exports = (function () {
         },
         deletePaymentCard: function (id) {
             var self = this;
-            return this.deleteCard(id).then(function () {
-                return self.api.del('creditcard', id);
+            return this.deleteCard(id).then(function() {
+                // TODO: until paymentservice enables a DELETE tunnelling handler
+                // we'll just leave these cards orphaned
+                //return self.api.del('creditcard', id);
             });
         },
         getStoreCredits: function() {

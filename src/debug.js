@@ -7,6 +7,8 @@ _init.ApiInterface = require('./interface');
 _init.ApiObject = require('./object');
 _init.ApiCollection = require('./collection');
 _init.ApiReference = require('./reference');
+_init.when = require('when');
+require('when/monitor/console');
 
 _init._expose = function (r) {
     _init.lastResult = r;

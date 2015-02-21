@@ -13,9 +13,6 @@ var utils = require('./utils');
  */
 var ApiContextConstructor = function(conf) {
     utils.extend(this, conf);
-    if (ApiContextConstructor.__debug__ === true) {
-        ApiContextConstructor.__debug__ = require('when/monitor/console');
-    }
 },
     mutableAccessors = ['app-claims', 'user-claims', 'callchain', 'currency', 'locale','dataview-mode'], //, 'bypass-cache'],
     immutableAccessors = ['tenant', 'site', 'master-catalog', 'catalog'],

@@ -49,7 +49,7 @@ module.exports = function (grunt) {
         browserify: {
             debug: {
                 files: {
-                    '<%= testPlatform %>': ['./src/init_debug.js']
+                    '<%= testPlatform %>': ['./src/debug.js']
                 },
                 options: {
                     //debug: true,

@@ -41,5 +41,5 @@
     "swig": "git://github.com/zetlen/swig",
     "through": "~2.3.4"
   },
-  "main": "./src/init_debug"
+  "main": "./src/init"
 }

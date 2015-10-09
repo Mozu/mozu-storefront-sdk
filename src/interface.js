@@ -41,11 +41,13 @@ ApiInterfaceConstructor.prototype = {
      * @memberof ApiInterface#
      * @returns {external:Promise#}
      */
-    request: function(method, requestConf, conf) {
+    request: function(method, requestConf, conf, runningOptions) {
         var me = this,
             url = typeof requestConf === "string" ? requestConf : requestConf.url;
         if (requestConf.verb)
             method = requestConf.verb;
+
+        if (!runningOptions) runningOptions = {};
 
         var deferred = me.defer();
 
@@ -53,7 +55,7 @@ ApiInterfaceConstructor.prototype = {
         if (requestConf.overridePostData) {
             data = requestConf.overridePostData;
         } else if (conf && !requestConf.noBody) {
-            data = conf.data || conf;
+            data = conf instanceof ApiObject ? conf.data : conf;
         }
 
         var xhr;
@@ -61,8 +63,14 @@ ApiInterfaceConstructor.prototype = {
         var makeRequest = function () {
             var contextHeaders = me.getRequestHeaders();
             xhr = utils.request(method, url, contextHeaders, data, function (rawJSON) {
-            // update context with response headers
-            me.fire('success', rawJSON, xhr, requestConf);
+                // update context with response headers
+                var newUserClaims = xhr.getResponseHeader && xhr.getResponseHeader('x-vol-user-claims');
+                if (newUserClaims) {
+                    me.context.UserClaims(newUserClaims);
+                }
+                if (!runningOptions.silent) {
+                    me.fire('success', rawJSON, xhr, requestConf);
+                }
             deferred.resolve(rawJSON, xhr);
             }, function (error) {
 
@@ -87,12 +95,16 @@ ApiInterfaceConstructor.prototype = {
             };
 
         makeRequest();
-        this.fire('request', xhr, canceller, deferred.promise, requestConf, conf);
+        if (!runningOptions.silent) {
+            this.fire('request', xhr, canceller, deferred.promise, requestConf, conf);
+        }
 
         deferred.promise.otherwise(function(error) {
             var res;
             if (!cancelled) {
-                me.fire('error', error, xhr, requestConf);
+                if (!runningOptions.silent) {
+                    me.fire('error', error, xhr, requestConf);
+                }
                 throw error;
             }
         });
@@ -119,37 +131,47 @@ ApiInterfaceConstructor.prototype = {
      * @memberof ApiInterface#
      * @returns external:Promise#
      */
-    action: function(instanceOrType, actionName, data) {
+    action: function(instanceOrType, actionName, data, runningOptions) {
         var me = this,
-            obj = instanceOrType instanceof ApiObject ? instanceOrType : me.createSync(instanceOrType),
+            obj = instanceOrType instanceof ApiObject ? instanceOrType : me.createSync(instanceOrType, null, runningOptions),
             type = obj.type;
 
-        obj.fire('action', actionName, data);
-        me.fire('action', obj, actionName, data);
+        if (!runningOptions) runningOptions = {};
+
+        if (!runningOptions.silent) {
+            obj.fire('action', actionName, data);
+            me.fire('action', obj, actionName, data);
+        }
         var requestConf = ApiReference.getRequestConfig(actionName, type, data || obj.data, me.context, obj);
 
         if ((actionName == "update" || actionName == "create") && !data) {
             data = obj.data;
         }
 
-        return me.request(ApiReference.basicOps[actionName], requestConf, data).then(function(rawJSON) {
+        return me.request(ApiReference.basicOps[actionName], requestConf, data, runningOptions).then(function(rawJSON) {
             if (requestConf.returnType) {
                 var returnObj = ApiObject.create(requestConf.returnType, rawJSON, me);
-                obj.fire('spawn', returnObj);
-                me.fire('spawn', returnObj, obj);
+                if (!runningOptions.silent) {
+                    obj.fire('spawn', returnObj);
+                    me.fire('spawn', returnObj, obj);
+                }
                 return returnObj;
             } else {
                 if (rawJSON || rawJSON === 0 || rawJSON === false)
                     obj.data = utils.clone(rawJSON);
                 delete obj.unsynced;
-                obj.fire('sync', rawJSON, obj.data);
-                me.fire('sync', obj, rawJSON, obj.data);
+                if (!runningOptions.silent) {
+                    obj.fire('sync', rawJSON, obj.data);
+                    me.fire('sync', obj, rawJSON, obj.data);
+                }
                 return obj;
             }
         }, function(errorJSON) {
             if (!requestConf.suppressErrors) {
-            obj.fire('error', errorJSON);
-            me.fire('error', errorJSON, obj);
+                if (!runningOptions.silent) {
+                    obj.fire('error', errorJSON);
+                    me.fire('error', errorJSON, obj);
+                }
             }
             throw errorJSON;
         });
@@ -187,10 +209,12 @@ for (var i in ApiReference.basicOps) {
 }
 
 // add createSync method for a different style of development
-ApiInterfaceConstructor.prototype.createSync = function(type, conf) {
+ApiInterfaceConstructor.prototype.createSync = function(type, conf, runningOptions) {
     var newApiObject = ApiObject.create(type, conf, this);
     newApiObject.unsynced = true;
-    this.fire('spawn', newApiObject);
+    if (!runningOptions || !runningOptions.silent) {
+        this.fire('spawn', newApiObject);
+    }
     return newApiObject;
 };
 

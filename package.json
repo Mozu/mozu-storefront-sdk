@@ -1,6 +1,6 @@
 {
-  "name": "mozu-storefront-sdk",
-  "title": "Mozu Storefront SDK",
+  "name": "mozu-javascript-sdk",
+  "title": "Mozu JavaScript SDK",
   "author": "Volusion, Inc.",
   "contributors": [
     {
@@ -8,14 +8,14 @@
       "email": "james_zetlen@volusion.com"
     }
   ],
-  "version": "0.5.1",
+  "version": "0.3.0",
   "scripts": {
     "make": "grunt",
     "test": "grunt test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Mozu/mozu-storefront-sdk.git"
+    "url": "https://github.com/Mozu/mozu-javascript-sdk.git"
   },
   "dependencies": {
     "microevent": "~1",
@@ -32,14 +32,14 @@
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-concat": "~0.1.2",
     "grunt-contrib-connect": "~0.5.0",
-    "grunt-contrib-uglify": "~0.1.1",
+    "grunt-contrib-uglify": "~0.9.1",
     "grunt-jsdoc": "~0.5.1",
     "grunt-mocha": "~0.4.1",
     "mocha-as-promised": "~1.4.0",
     "sinon": "~1.7.3",
     "sinon-chai": "~2.4.0",
-    "swig": "git://github.com/zetlen/swig",
+    "swig": "^1.4.2",
     "through": "~2.3.4"
   },
-  "main": "./src/init"
+  "main": "./dist/mozu-javascript-sdk.min"
 }

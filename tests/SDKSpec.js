@@ -1,4 +1,69 @@
-describe('Mozu SDK', function () {
+﻿
+/*\
+|*|
+|*|  :: cookies.js ::
+|*|
+|*|  A complete cookies reader/writer framework with full unicode support.
+|*|
+|*|  Revision #1 - September 4, 2014
+|*|
+|*|  https://developer.mozilla.org/en-US/docs/Web/API/document.cookie
+|*|  https://developer.mozilla.org/User:fusionchess
+|*|
+|*|  This framework is released under the GNU Public License, version 3 or later.
+|*|  http://www.gnu.org/licenses/gpl-3.0-standalone.html
+|*|
+|*|  Syntaxes:
+|*|
+|*|  * docCookies.setItem(name, value[, end[, path[, domain[, secure]]]])
+|*|  * docCookies.getItem(name)
+|*|  * docCookies.removeItem(name[, path[, domain]])
+|*|  * docCookies.hasItem(name)
+|*|  * docCookies.keys()
+|*|
+\*/
+
+var docCookies = {
+    getItem: function(sKey) {
+        if (!sKey) { return null; }
+        return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+    },
+    setItem: function(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+        if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+        var sExpires = "";
+        if (vEnd) {
+            switch (vEnd.constructor) {
+                case Number:
+                    sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
+                    break;
+                case String:
+                    sExpires = "; expires=" + vEnd;
+                    break;
+                case Date:
+                    sExpires = "; expires=" + vEnd.toUTCString();
+                    break;
+            }
+        }
+        document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+        return true;
+    },
+    removeItem: function(sKey, sPath, sDomain) {
+        if (!this.hasItem(sKey)) { return false; }
+        document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
+        return true;
+    },
+    hasItem: function(sKey) {
+        if (!sKey) { return false; }
+        return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+    },
+    keys: function() {
+        var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
+        for (var nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
+        return aKeys;
+    }
+};
+
+describe('Mozu SDK', function() {
 
     var Mozu = MozuSDK;
 
@@ -136,6 +201,39 @@ describe('Mozu SDK', function () {
         });
     });
 
+    describe("the collection of URL templates", function() {
+        it("should all parse successfully", function() {
+            var methods = Mozu.ApiReference.methods;
+
+            function testTemplate(name, str) {
+                    try {
+                        Mozu.Utils.uritemplate.parse(str);
+                    } catch (e) {
+                        throw new Error('Error in ' + name + ' template: ' + e.toString());
+                    }
+            }
+
+            function walkTemplateStrings(name, obj) {
+                Object.keys(obj).forEach(function(k) {
+                    if (typeof obj[k] === "object") {
+                        walkTemplateStrings(name + '.' + k, obj[k])
+                    } else if (k === "template" || k === "useIframeTransport") {
+                        expect(testTemplate(name + '.' + k, obj[k])).not.to.throw;
+                    }
+                })
+            }
+
+            Object.keys(methods).forEach(function(name) {
+                if (typeof methods[name] === "string") {
+                    expect(testTemplate(name, methods[name])).not.to.throw;
+                } else {
+                    walkTemplateStrings(name, methods[name])
+                }
+            });
+
+        });
+    });
+
     describe("the ApiContext object", function() {
         var tenant = Mozu.Tenant(1);
         
@@ -193,6 +291,20 @@ describe('Mozu SDK', function () {
         });
 
         var api = completeContext.api();
+
+        it("should not throw errors when you call the setAffiliateTrackingParameters function", function() {
+            function setParams() { return api.setAffiliateTrackingParameters(['affiliateId', 'campaignId']); }
+            expect(setParams).not.to.throw;
+
+            setParams();
+            var affs = JSON.parse(docCookies.getItem('MOZU_AFFILIATE_IDS'));
+            expect(affs).to.have.length(1);
+            expect(affs[0]).to.have.property('key','affiliateId');
+            expect(affs[0]).to.have.property('value','hi');
+
+
+        });
+        
 
         it("should have request, get, update, create, and delete methods", function () {
             expect(api.request).to.be.a("function");

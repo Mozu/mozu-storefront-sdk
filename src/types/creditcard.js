@@ -66,20 +66,25 @@ module.exports = (function() {
 
     function makePayload(obj) {
         var data = obj.data, maskCharacter = obj.maskCharacter, maskedData;
+        var cardNumber;
+
         if (!data.paymentOrCardType) errors.throwOnObject(obj, 'CARD_TYPE_MISSING');
         if (!data.cardNumberPartOrMask) errors.throwOnObject(obj, 'CARD_NUMBER_MISSING');
-        if (!data.cvv && !data.isCvvOptional) errors.throwOnObject(obj, 'CVV_MISSING');
-        maskedData = transform.toCardData(data)
-        var cardNumber = maskedData.cardNumber.replace(charsInCardNumberRE, '');
+        // SDK shouldn't check for CVV anymore because we now check for it in the theme.
+        //if (!data.cvv && !data.isCvvOptional) errors.throwOnObject(obj, 'CVV_MISSING');
+
+        maskedData = transform.toCardData(data);
+        cardNumber = maskedData.cardNumber.replace(charsInCardNumberRE, '');
         if (!validateCardNumber(obj, cardNumber)) errors.throwOnObject(obj, 'CARD_NUMBER_UNRECOGNIZED');
 
         // only add numberPart if the current card number isn't already masked
-        if (cardNumber.indexOf(maskCharacter) === -1) maskedData.numberPart = createCardNumberMask(obj, cardNumber);
-        delete maskedData.cardNumber;
+        // if (cardNumber.indexOf(maskCharacter) === -1) maskedData.numberPart = createCardNumberMask(obj, cardNumber);
+        maskedData.cardNumber = cardNumber;
+
+        if (maskedData && maskedData.cvv && maskedData.cvv.indexOf('*') !== -1) delete maskedData.cvv;
 
         return maskedData;
     }
-
 
     var transform = {
         fields: {
@@ -115,9 +120,9 @@ module.exports = (function() {
                 isUpdate = this.prop(transform.fields.cardId);
             return this.api.action(this, (isUpdate ? 'update' : 'save'), makePayload(this)).then(function (res) {
                 self.prop(transform.toStorefrontData({
-                    cardNumber: self.maskedCardNumber,
+                    cardNumber: res.numberPart,
                     cvv: !!(self.prop('cvv'))? self.prop('cvv').replace(/\d/g, self.maskCharacter) : '',
-                    cardId: isUpdate || res
+                    cardId: isUpdate || res.id
                 }));
                 self.fire('sync', utils.clone(self.data), self.data);
                 return self;

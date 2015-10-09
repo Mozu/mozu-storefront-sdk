@@ -113,6 +113,15 @@ module.exports = (function(window, document, undefined) {
         setRequestHeader: function (key, value) {
             this.headers[key] = value;
         },
+        getResponseHeader: function() {
+            return null;
+        },
+        getAllResponseHeaders: function() {
+            return "";
+        },
+        overrideMimeType: function() {
+            return null;
+        },
         getMessage: function () {
             var msg = [this.url, this.messageBody, this.method];
             for (var header in this.headers) {

@@ -27,6 +27,9 @@ module.exports = (function () {
     OrderStatus2IsReady[CONSTANTS.ORDER_ACTIONS.SUBMIT_ORDER] = true;
     OrderStatus2IsReady[CONSTANTS.ORDER_ACTIONS.ACCEPT_ORDER] = true;
 
+    function getPaymentDate(p) {
+        return new Date(p.auditInfo.createDate);
+    }
 
     var PaymentStrategies = {
         "PaypalExpress": function (order, billingInfo) {
@@ -81,12 +84,53 @@ module.exports = (function () {
                 errors.throwOnObject(self, 'ADD_CUSTOMER_FAILED', reason.message);
             });
         },
-        createPayment: function(extraProps) {
-            return this.api.action(this, 'createPayment', utils.extend({
-                currencyCode: this.api.context.Currency().toUpperCase(),
-                amount: this.prop('amountRemainingForPayment'),
-                newBillingInfo: this.prop('billingInfo')
-            }, extraProps || {}));
+        createPayment: function (extraProps) {
+            var self = this;
+
+            return self.api.action(self, 'createPayment', utils.extend({
+                currencyCode: self.api.context.Currency().toUpperCase(),
+                amount: self.prop('amountRemainingForPayment'),
+                newBillingInfo: self.prop('billingInfo')
+            }, extraProps || {}))/*.then(function (updatedOrder) {
+                
+
+                // creating a payment can trigger a discount (discounts now support payment types)
+                // this would mean the order total can change, and the previous 'amountRemainingForPayment' which we used
+                // to create the payment might not be valid. 
+                return self.get().then(function () {
+
+                    var payment = self.getActivePayments().sort(function(a, b) {
+                        var aDate = getPaymentDate(a),
+                            bDate = getPaymentDate(b);
+                        if (aDate > bDate) return -1;
+                        if (bDate > aDate) return 1;
+                        return 0;
+                    })[0];
+                    if (payment.paymentType === "StoreCredit" || payment.paymentType === "GiftCard") {
+                        return self;
+                    }
+
+                    var newRemainingBalance = self.prop('amountRemainingForPayment');
+
+                    if (newRemainingBalance === 0) {
+                        return self;
+                    }
+
+                    var newAmount = payment.amountRequested + newRemainingBalance;
+
+                    self.voidPayment(payment.id);
+
+                    var billingInfo = payment.billingInfo;
+
+                    return self.api.action(self, 'createPayment', utils.extend({
+                        currencyCode: self.api.context.Currency().toUpperCase(),
+                        amount: newAmount,
+                        newBillingInfo: billingInfo
+                    }, extraProps || {}));
+                    
+                });
+            })*/;
+
         },
         addStoreCredit: function(payment) {
             return this.createPayment({
@@ -106,7 +150,7 @@ module.exports = (function () {
         getActivePayments: function() {
             var payments = this.prop('payments'),
                 activePayments = [];
-            if (payments.length !== 0) {
+            if (payments && payments.length !== 0) {
                 for (var i = payments.length - 1; i >= 0; i--) {
                     if (payments[i].status === CONSTANTS.PAYMENT_STATUSES.NEW)
                         activePayments.push(utils.clone(payments[i]))
@@ -152,7 +196,7 @@ module.exports = (function () {
                     if (availableActions[i] in OrderStatus2IsReady) return this.performOrderAction(availableActions[i]).otherwise(function(e) {
                         return self.get().ensure(function() {
                             throw e;
-                        })
+                        });
                     });
                 }
             }
@@ -160,6 +204,37 @@ module.exports = (function () {
         },
         isComplete: function () {
             return !!OrderStatus2IsComplete[this.prop('status')];
+        },
+
+        addExtendedProperty: function (extendedProperty) {
+            // Expect extendedPropert to contain a key/value pair, if it doesn't we need to fail with incorrect data.
+            if (!extendedProperty) {
+                errors.throwOnObject(this, '');
+            }
+
+            return this.api.action(this, 'addExtendedProperty', {
+                // Fill in the data from extendedProperty here!
+                'key': extendedProperty.key,
+                'value': extendedProperty.value
+            });
+        },
+
+        addExtendedProperties: function (extendedProperties) {
+            // Expect extendedProperties to contain a list of key/value pair, if it doesn't we need to fail with incorrect data.
+            if (!extendedProperties) {
+                extendedProperties = [];
+            }
+
+            return this.api.action(this, 'addExtendedProperties', extendedProperties);
+        },
+
+        removeExtendedProperties: function (extendedPropertyKeys) {
+            // Expect extendedPropertyKeys to contain a list of key/value pair, if it doesn't we need to fail with incorrect data.
+            if (!extendedPropertyKeys) {
+                extendedPropertyKeys = [];
+            }
+
+            return this.api.action(this, 'addExtendedProperties', extendedPropertyKeys);
         }
     };
 }());

@@ -1,8 +1,9 @@
-// SDK Gruntfile
+﻿// SDK Gruntfile
 'use strict';
 
 var port = 9001,
-    testurl = "http://127.0.0.1:" + port + "/tests/SpecRunner.html";
+    testAffiliate = "hi",
+    testurl = "http://127.0.0.1:" + port + "/tests/SpecRunner.html?affiliateId=" + testAffiliate;
 
 var through = require('through'),
     path = require('path'),
@@ -16,7 +17,7 @@ function bNormalizeLineEndingsTransform(file) {
 
     function write(buf) { data += buf }
     function end() {
-        var tag = "\n\n//# sourceUrl=" + path.relative(wd, file).replace(/\\/g,'/') + "\n\n";
+        var tag = "\n\n//# sourceUrl=" + path.relative(wd, file).replace(/\\/g, '/') + "\n\n";
         this.queue(tag + data.replace(crlfRE, normalizeTo));
         this.queue(null);
     }
@@ -34,7 +35,7 @@ module.exports = function (grunt) {
         toExport: "MozuSDK",
 
         testPlatform: './tests/sdk.js',
-       
+
         clean: {
             dist: {
                 src: ['dist']
@@ -49,7 +50,7 @@ module.exports = function (grunt) {
         browserify: {
             debug: {
                 files: {
-                    '<%= testPlatform %>': ['./src/debug.js']
+                    '<%= testPlatform %>': ['./src/init_debug.js']
                 },
                 options: {
                     //debug: true,
@@ -82,7 +83,8 @@ module.exports = function (grunt) {
         uglify: {
             dist: {
                 options: {
-                    banner: '<%= banner %>'
+                    banner: '<%= banner %>',
+                    report: 'min'
                 },
                 src: '<%= releasetemp %>',
                 dest: '<%= pkg.main %>.js'

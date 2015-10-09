@@ -62,9 +62,12 @@ var ApiObject = require('./object');
         },
         setIndex: function(newIndex, req) {
             var me = this;
+            // last in, only out
+            me.pendingIndex = newIndex;
             var p = this.get(utils.extend(req, { startIndex: newIndex}));
-            p.then(function () {
-                me.currentIndex = newIndex;
+            p.then(function() {
+                me.currentIndex = me.pendingIndex;
+                me.pendingIndex = null;
             });
             return p;
         },

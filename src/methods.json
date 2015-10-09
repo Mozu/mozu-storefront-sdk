@@ -22,7 +22,7 @@
             "pageSize": 15
         },
         "collectionOf": "document",
-        "useIframeTransport": "{{+storefrontUserService}../../receiver{?receiverVersion}"
+        "useIframeTransport": "{+storefrontUserService}../../receiver{?receiverVersion}"
     },
     "entityList": {
         "template": "{+entityListService}{listName}/entities{?_*}",
@@ -124,7 +124,7 @@
     "orders": {
         "template": "{+orderService}{?_*}",
         "defaultParams": {
-            "filter": "Status ne Created and Status ne Validated and Status ne Pending and Status ne Abandoned",
+            "filter": "Status ne Created and Status ne Validated and Status ne Pending and Status ne Abandoned and Status ne Errored",
             "startIndex": 0,
             "pageSize": 5
         },
@@ -190,11 +190,50 @@
             "verb": "DELETE",
             "template": "{+cartService}current/items/"
         },
+        "get-extended-properties": {
+            "template": "{+cartService}current/extendedproperties",
+            "returnType":  "json"
+        },
+        "add-extended-properties": {
+            "verb": "POST",
+            "template": "{+cartService}current/extendedproperties"
+        },
+        "update-extended-properties": {
+            "verb": "PUT",
+            "template": "{+cartService}current/extendedproperties"
+        },
+        "remove-extended-property": {
+            "verb": "DELETE",
+            "template": "{+cartService}current/extendedproperties/{key}"
+        },
+        "remove-extended-properties": {
+            "verb": "DELETE",
+            "template": "{+cartService}current/extendedproperties"
+        },
         "checkout": {
             "verb": "POST",
             "template": "{+orderService}?cartId={id}",
             "returnType": "order",
             "noBody": true,
+            "includeSelf": true
+        },
+        "apply-coupon": {
+            "verb": "PUT",
+            "template": "{+cartService}{id}/coupons/{couponCode}",
+            "shortcutParam": "couponCode",
+            "includeSelf": true,
+            "noBody": true,
+            "returnType": "coupon"
+        },
+        "remove-coupon": {
+            "verb": "DELETE",
+            "template": "{+cartService}{id}/coupons/{couponCode}",
+            "shortcutParam": "couponCode",
+            "includeSelf": true
+        },
+        "remove-all-coupons": {
+            "verb": "DELETE",
+            "template": "{+cartService}{id}/coupons",
             "includeSelf": true
         }
     },
@@ -234,7 +273,7 @@
     },
     "customer": {
         "template": "{+customerService}{id}",
-        "defaults": { 
+        "defaults": {
             "useIframeTransport": "{+storefrontUserService}../../receiver{?receiverVersion}"
         },
         "shortcutParam": "id",
@@ -258,6 +297,10 @@
             "verb": "POST",
             "template": "{+storefrontUserService}login",
             "returnType": "login"
+        },
+        "order-status-login": {
+            "verb": "POST",
+            "template": "{+storefrontUserService}anonymous-login"
         },
         "update": {
             "verb": "PUT",
@@ -503,6 +546,32 @@
             "template": "{+orderService}{id}/notes",
             "includeSelf": true,
             "returnType": "ordernote"
+        },
+        "get-extended-properties": {
+            "template": "{+orderService}{id}/extendedproperties",
+            "returnType":  "json"
+        },
+        "add-extended-properties": {
+            "verb": "POST",
+            "template": "{+orderService}{id}/extendedproperties"
+        },
+        "update-extended-properties": {
+            "verb": "PUT",
+            "template": "{+orderService}{id}/extendedproperties"
+        },
+        "remove-extended-property": {
+            "verb": "DELETE",
+            "template": "{+orderService}{id}/extendedproperties/{key}"
+        },
+        "remove-extended-properties": {
+            "verb": "DELETE",
+            "template": "{+orderService}{id}/extendedproperties"
+        },
+        "process-digital-wallet": {
+            "verb": "PUT",
+            "template": "{+orderService}{id}/digitalWallet/VisaCheckout",
+            "includeSelf": true,
+            "useIframeTransport": "{+storefrontUserService}../../receiver{?receiverVersion}"
         }
     },
     "rma": {
@@ -543,12 +612,12 @@
     },
     "creditcard": {
         "defaults": {
-            "useIframeTransport": "{+paymentService}../../Assets/mozu_receiver_v2.html"
+            "useIframeTransport": "{+paymentService}../../../Assets/mozu_receiver_v2.html"
         },
         "save": {
             "verb": "POST",
             "template": "{+paymentService}",
-            "returnType": "string"
+            "returnType": "json"
         },
         "update": {
             "verb": "PUT",

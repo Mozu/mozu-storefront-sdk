@@ -6,6 +6,13 @@ var ApiObject = require('./object');
 var objectTypes = require('./methods.json');
 var IframeXHR;
 
+function isCrossOrigin(str) {
+    var url = document.createElement('a');
+    var loc = window.location;
+    url.href = str;
+    return url.protocol + url.host !== loc.protocol + loc.host;
+}
+
 errors.register({
     'NO_REQUEST_CONFIG_FOUND': 'No request configuration was found for {0}.{1}',
     'NO_SHORTCUT_PARAM_FOUND': 'No shortcut parameter available for {0}. Please supply a configuration object instead of "{1}".'
@@ -40,6 +47,8 @@ var ApiReference = {
     urls: {},
 
     headerPrefix: 'x-vol-',
+
+    methods: objectTypes,
 
     getActionsFor: function(typeName) {
         ApiCollection = ApiCollection || require('./collection');
@@ -133,7 +142,7 @@ var ApiReference = {
         for (var j = 0; j < copyToConfLength; j++) {
             if (copyToConf[j] in oType) returnObj[copyToConf[j]] = oType[copyToConf[j]];
         }
-        if (oType.useIframeTransport) {
+        if (oType.useIframeTransport && isCrossOrigin(returnObj.url)) {
             // cache templates lazily
             if (typeof oType.useIframeTransport === "string") oType.useIframeTransport = utils.uritemplate.parse(oType.useIframeTransport);
             returnObj.iframeTransportUrl = oType.useIframeTransport.expand(fullTptContext);

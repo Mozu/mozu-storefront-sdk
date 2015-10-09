@@ -215,7 +215,7 @@ api.get('product','EXAMPLE-001').then(function(product) {   // ...
 Place a raw API request. This is the underlying method that all higher-level API calls use. It should be rare to call it directly.
 
 ```js
-api.request('POST', '/api/service/collection/', {
+api.request('POST', 'api/service/collection/', {
   some: 'new',
   payload: 'data'
 }).then(function(responseObject) {
@@ -229,7 +229,7 @@ A legal HTTP verb, like `'GET'`, `'POST'`, `'PUT'`, or `'DELETE'`. There is hard
   *Note: Due to several bugs and incompatibilities in popular software, the Storefront SDK tunnels the `DELETE` method through a `POST` with an `X-HTTP-Method-Override: DELETE` header.*
 
 - **Argument** *(object)* `requestConfig`
-  A [Request Config](#requestconfig) object, specifying the request URL, alternate transports, or behavior configuration for this API call. The simplest possible Request Config is a string representing the URL. The above example uses this style, which is equivalent to `api.request('POST', { url: '/api/service/collection/' } [...]`. Most Request Configs are simple object literals. The `.request()` method understands the following Request Config options:
+  A [Request Config](#requestconfig) object, specifying the request URL, alternate transports, or behavior configuration for this API call. The simplest possible Request Config is a string representing the URL. The above example uses this style, which is equivalent to `api.request('POST', { url: 'api/service/collection/' } [...]`. Most Request Configs are simple object literals. The `.request()` method understands the following Request Config options:
 
   *  `url` *(string)* The URL for the request.
 
@@ -304,6 +304,9 @@ Valid ApiObject type strings are as follows:
 * `cartsummary`
 * `cart`
 * `cartitem`
+* `attributedefinition`
+* `customerattribute`
+* `customerattributes`
 * `customer`
 * `storecredit`
 * `storecredits`
@@ -888,7 +891,7 @@ This method uses the iframe transport by default in order to be used across orig
 
 
 - **Default Parameters**
-  - **filter**: `Status ne Created and Status ne Validated and Status ne Pending`
+  - **filter**: `Status ne Created and Status ne Validated and Status ne Pending and Status ne Abandoned and Status ne Errored`
   - **startIndex**: `0`
   - **pageSize**: `5`
    
@@ -1072,6 +1075,61 @@ This method uses the iframe transport by default in order to be used across orig
 
 
   
+#### cart.getExtendedProperties
+
+##### `{+cartService}current/extendedproperties` 
+
+- **Returns** *json*
+
+
+
+
+
+  
+#### cart.addExtendedProperties
+
+
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/cart.js). 
+- **Returns** *cart*
+
+
+
+
+
+  
+#### cart.updateExtendedProperties
+
+##### `{+cartService}current/extendedproperties` 
+
+- **Returns** *cart*
+
+
+
+
+
+  
+#### cart.removeExtendedProperty
+
+##### `{+cartService}current/extendedproperties/{key}` 
+
+- **Returns** *cart*
+
+
+
+
+
+  
+#### cart.removeExtendedProperties
+
+
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/cart.js). 
+- **Returns** *cart*
+
+
+
+
+
+  
 #### cart.checkout
 
 ##### `{+orderService}?cartId={id}` 
@@ -1083,7 +1141,64 @@ This method uses the iframe transport by default in order to be used across orig
 
 
   
+#### cart.applyCoupon
+
+##### `{+cartService}{id}/coupons/{couponCode}` 
+
+- **Returns** *coupon*
+- **Shortcut Parameter** *couponCode*
+  You can use the shortcut `cart.applyCoupon(foo)` instead of `cart.applyCoupon({ couponCode: foo })`. 
+
+
+
+
+  
+#### cart.removeCoupon
+
+##### `{+cartService}{id}/coupons/{couponCode}` 
+
+- **Returns** *cart*
+- **Shortcut Parameter** *couponCode*
+  You can use the shortcut `cart.removeCoupon(foo)` instead of `cart.removeCoupon({ couponCode: foo })`. 
+
+
+
+
+  
+#### cart.removeAllCoupons
+
+##### `{+cartService}{id}/coupons` 
+
+- **Returns** *cart*
+
+
+
+
+
+  
 #### cart.count
+
+
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/cart.js). 
+- **Returns** *cart*
+
+
+
+
+
+  
+#### cart.addExtendedProperty
+
+
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/cart.js). 
+- **Returns** *cart*
+
+
+
+
+
+  
+#### cart.addCoupon
 
 
  This is a **method override** with special logic assigned to it, implemented [here](../src/types/cart.js). 
@@ -1127,6 +1242,49 @@ This method uses the iframe transport by default in order to be used across orig
 
 
 
+
+
+  
+## attributedefinition
+       
+#### attributedefinition.get
+
+##### `{+customerAttributeDefService}{attributeFQN}` 
+
+- **Returns** *attributedefinition*
+- **Shortcut Parameter** *attributeFQN*
+  You can use the shortcut `attributedefinition.get(foo)` instead of `attributedefinition.get({ attributeFQN: foo })`. 
+
+
+
+
+  
+## customerattribute
+     
+#### customerattribute.get
+
+##### `{+customerService}{accountId}/attributes/{attributeFQN}` 
+
+- **Returns** *customerattribute*
+
+
+
+
+
+  
+## customerattributes
+`customerattributes` is an ApiCollection of `customerattribute` ApiObjects.        
+#### customerattributes.get
+
+##### `{+customerService}{accountId}/attributes/{?_*}` 
+
+- **Returns** *customerattributes*
+
+
+- **Default Parameters**
+  - **startIndex**: `0`
+  - **pageSize**: `5`
+   
 
 
   
@@ -1180,6 +1338,18 @@ This method uses the iframe transport by default in order to be used across orig
 
 
   
+#### customer.orderStatusLogin
+
+##### `{+storefrontUserService}anonymous-login` 
+
+- **Returns** *customer*
+- **Shortcut Parameter** *id*
+  You can use the shortcut `customer.orderStatusLogin(foo)` instead of `customer.orderStatusLogin({ id: foo })`. 
+
+
+
+
+  
 #### customer.update
 
 ##### `{+customerService}{id}` 
@@ -1223,6 +1393,69 @@ This method uses the iframe transport by default in order to be used across orig
 - **Returns** *customer*
 - **Shortcut Parameter** *id*
   You can use the shortcut `customer.changePassword(foo)` instead of `customer.changePassword({ id: foo })`. 
+
+
+
+
+  
+#### customer.getAttributes
+
+##### `{+customerService}{customer.id}/attributes/{?startIndex,pageSize,sortBy,filter}` 
+
+- **Returns** *customerattributes*
+- **Shortcut Parameter** *id*
+  You can use the shortcut `customer.getAttributes(foo)` instead of `customer.getAttributes({ id: foo })`. 
+
+- **Default Parameters**
+  - **startIndex**: `0`
+  - **pageSize**: `5`
+   
+
+
+  
+#### customer.getAttribute
+
+##### `{+customerService}{customer.id}/attributes/{attributeFQN}` 
+
+- **Returns** *customerattribute*
+- **Shortcut Parameter** *attributeFQN*
+  You can use the shortcut `customer.getAttribute(foo)` instead of `customer.getAttribute({ attributeFQN: foo })`. 
+
+
+
+
+  
+#### customer.updateAttribute
+
+##### `{+customerService}{customer.id}/attributes/{attributeFQN}` 
+
+- **Returns** *customerattribute*
+- **Shortcut Parameter** *attributeFQN*
+  You can use the shortcut `customer.updateAttribute(foo)` instead of `customer.updateAttribute({ attributeFQN: foo })`. 
+
+
+
+
+  
+#### customer.getAttributeDefinition
+
+##### `{+customerAttributeDefService}{attributeFQN}` 
+
+- **Returns** *attributedefinition*
+- **Shortcut Parameter** *attributeFQN*
+  You can use the shortcut `customer.getAttributeDefinition(foo)` instead of `customer.getAttributeDefinition({ attributeFQN: foo })`. 
+
+
+
+
+  
+#### customer.getAttributeDefinitions
+
+##### `{+customerAttributeDefService}` 
+
+- **Returns** *customerattribute*
+- **Shortcut Parameter** *id*
+  You can use the shortcut `customer.getAttributeDefinitions(foo)` instead of `customer.getAttributeDefinitions({ id: foo })`. 
 
 
 
@@ -1556,13 +1789,13 @@ This method uses the iframe transport by default in order to be used across orig
   
 ## order
      
-#### order.create
+#### order.createFromCart
 
 ##### `{+orderService}{?cartId*}` 
 
 - **Returns** *order*
 - **Shortcut Parameter** *cartId*
-  You can use the shortcut `order.create(foo)` instead of `order.create({ cartId: foo })`. 
+  You can use the shortcut `order.createFromCart(foo)` instead of `order.createFromCart({ cartId: foo })`. 
 
 
 
@@ -1693,6 +1926,72 @@ This method uses the iframe transport by default in order to be used across orig
 
 
   
+#### order.getExtendedProperties
+
+##### `{+orderService}{id}/extendedproperties` 
+
+- **Returns** *json*
+
+
+
+
+
+  
+#### order.addExtendedProperties
+
+##### `{+orderService}{id}` 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
+- **Returns** *order*
+
+
+
+
+
+  
+#### order.updateExtendedProperties
+
+##### `{+orderService}{id}/extendedproperties` 
+
+- **Returns** *order*
+
+
+
+
+
+  
+#### order.removeExtendedProperty
+
+##### `{+orderService}{id}/extendedproperties/{key}` 
+
+- **Returns** *order*
+
+
+
+
+
+  
+#### order.removeExtendedProperties
+
+##### `{+orderService}{id}` 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
+- **Returns** *order*
+
+
+
+
+
+  
+#### order.processDigitalWallet
+
+##### `{+orderService}{id}/digitalWallet/VisaCheckout` 
+
+- **Returns** *order*
+
+
+
+
+This method uses the iframe transport by default in order to be used across origins (such as secure and unsecure pages). 
+  
 #### order.getShippingMethodsFromContact
 
 ##### `{+orderService}{id}` 
@@ -1804,6 +2103,17 @@ This method uses the iframe transport by default in order to be used across orig
 
   
 #### order.isComplete
+
+##### `{+orderService}{id}` 
+ This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
+- **Returns** *order*
+
+
+
+
+
+  
+#### order.addExtendedProperty
 
 ##### `{+orderService}{id}` 
  This is a **method override** with special logic assigned to it, implemented [here](../src/types/order.js). 
